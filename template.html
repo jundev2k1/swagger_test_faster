@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div id="jun-tool">
+    <aside id="tool-sidebar">
+      <div class="sidebar-header">
+        <button class="btn-control icon-badge" id="btn-toggle-sidebar">≡</button>
+        <h1>Jun's Tool</h1>
+      </div>
+      <div class="sidebar-content">
+        <h3>Environment</h3>
+        <div class="form-group">
+          <select name="environment" class="form-select" control="ddl-select-environment">
+            <option value="local">Local</option>
+            <option value="staging">Staging</option>
+            <option value="production">Production</option>
+          </select>
+        </div>
+
+        <h3>API Action</h3>
+        <ul class="api-action-group overflow-scroll-y mh-50vh">
+          <li class="api-action-group-item">
+            <a href="#" class="btn-control api-action-control" data-api="1">Login Admin</a>
+          </li>
+          <li class="api-action-group-item">
+            <a href="#" class="btn-control action-control" data-api="2">Login Staff</a>
+          </li>
+          <li class="api-action-group-item">
+            <a href="#" class="btn-control action-control" data-api="3">Login User</a>
+          </li>
+          <li class="api-action-group-item">
+            <a href="#" class="btn-control action-control" data-api="3">Login User</a>
+          </li>
+          <li class="api-action-group-item">
+            <a href="#" class="btn-control action-control" data-api="3">Login User</a>
+          </li>
+          <li class="api-action-group-item">
+            <a href="#" class="btn-control action-control" data-api="3">Login User</a>
+          </li>
+          <li class="api-action-group-item">
+            <a href="#" class="btn-control action-control" data-api="3">Login User</a>
+          </li>
+        </ul>
+        <div class="response-result">
+          <h3>Response Result
+            <button class="btn-control icon-badge" id="btn-copy" title="Copy full response">📃</button>
+          </h3>
+          <div class="card">
+            <p class="key">Key</p>
+            <p class="value copyable truncate">No response yet.</p>
+
+            <p class="key">Key 2</p>
+            <div class="value">
+              <p class="key">Key 2-1</p>
+              <p class="value copyable truncate">No object yet.</p>
+              <p class="key">Key 2-1</p>
+              <p class="value copyable truncate">No object yet.</p>
+              <p class="key">Key 2-1</p>
+              <p class="value copyable truncate">No object yet.</p>
+              <div class="value">
+                <p class="key">Key 2-1</p>
+                <p class="value copyable truncate">No object yet.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tool-setting">
+          <a href="#" class="btn-control action-control">Setting</a>
+        </div>
+      </div>
+    </aside>
+
+    <div class="modal">
+      <div class="modal-overlay">
+      </div>
+      <div class="modal-container">
+        <div class="modal-header">
+          <button class="btn-back" style="display: inherit;">⮜ Back</button>
+          <h2 id="title-modal">Jun Tool Settings</h2>
+        </div>
+        <div class="modal-tabs">
+          <button class="tab-button active" data-tab="environment">Environment Settings</button>
+          <button class="tab-button" data-tab="api">API Settings</button>
+        </div>
+        <div class="modal-content">
+          <div id="enviroment-setting-layout" class="active">
+            <form id="enviroment-management-form" data-form-type="environment-management">
+              <h3>Environment Manager Settings</h3>
+              <div class="enviroment-manager mb-2">
+                <div class="form-group grid-6 gap-1">
+                  <label class="form-label span-2">Name:</label>
+                  <input type="text" class="form-input span-3" required>
+                  <button class="btn-control icon-badge" data-action="delete-environment" title="Delete this environment">🗑️</button>
+                </div>
+                <a href="#" class="btn-control" data-action="add-environment">Add new</a>
+              </div>
+            </form>
+            <form id="enviroment-variable-form" data-form-type="environment-variable">
+              <div class="form-group grid-3 mb-2">
+                <label for="ddl-select-environment" class="form-label">Environment:</label>
+                <select id="ddl-select-environment" class="form-select span-2" control="ddl-select-environment" required>
+                  <option value="">Select Environment</option>
+                  <option value="local">Local</option>
+                  <option value="staging">Staging</option>
+                  <option value="production">Production</option>
+                </select>
+              </div>
+              <h3>Environment Variables</h3>
+              <div class="hard-settings">
+                <div class="form-group grid-3 gap-1">
+                  <label class="form-label">Host setting:</label>
+                  <input type="text" class="form-input host-name" required>
+                  <input type="text" class="form-input host-value" required>
+                </div>
+              </div>
+              <h3>Your Variables</h3>
+              <div class="custom-settings mb-2">
+                <div class="form-group grid-6 gap-1">
+                  <input class="form-input custom-name-input span-2" required>
+                  <input class="form-input custom-value-input span-3" required>
+                  <button class="btn-control icon-badge" data-action="delete-variable" title="Delete this variable">🗑️</button>
+                </div>
+                <a href="#" class="btn-control" data-action="add-environment">Add new</a>
+              </div>
+            </form>
+          </div>
+
+          <div id="api-list-layout">
+            <h3>API List</h3>
+            <ul class="api-list">
+              <li class="api-list-item">
+                <a href="#" data-api="api1">API 1</a>
+              </li>
+              <li class="api-list-item">
+                <a href="#" data-api="api2">API 2</a>
+              </li>
+              <li class="api-list-item">
+                <a href="#" data-api="api3">API 3</a>
+              </li>
+            </ul>
+          </div>
+
+          <div id="api-setting-layout">
+            <form id="api-setting-form" data-form-type="api-request-setting">
+              <h3>API Settings</h3>
+              <p>Select an API to configure its settings.</p>
+              <div class="form-group">
+                <label for="api-name" class="form-label">API Name</label>
+                <input id="api-name" class="form-input" required>
+              </div>
+              <div class="form-group">
+                <label for="api-description" class="form-label">Description</label>
+                <textarea id="api-description"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="request-setting" class="form-label">Request</label>
+                <textarea id="request-setting"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="response-setting" class="form-label">Response</label>
+                <textarea id="response-setting"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="is-auth-api">Color</label>
+                <select class="form-select">
+                  <option value="Primary">Primary</option>
+                  <option value="secondary">Secondary</option>
+                  <option value="warning">Warning</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <input type="checkbox" id="is-auth-api" class="form-checkbox" />
+                <label for="is-auth-api">Set token?</label>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit">Save Changes</button>
+          <button class="close-modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

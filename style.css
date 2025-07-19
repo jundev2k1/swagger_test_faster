@@ -1,0 +1,1024 @@
+#jun-tool {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: var(--jun-tool-text-color, #1a1a1a);
+  --jun-tool-primary-color: #007bff;
+  --jun-tool-primary-hover: #0056b3;
+  --jun-tool-secondary-color: #6c757d;
+  --jun-tool-secondary-hover: #5a6268;
+  --jun-tool-success-color: #28a745;
+  --jun-tool-success-hover: #218838;
+  --jun-tool-danger-color: #dc3545;
+  --jun-tool-danger-hover: #c82333;
+  --jun-tool-warning-color: #ffc107;
+  --jun-tool-warning-hover: #e0a800;
+  --jun-tool-info-color: #17a2b8;
+  --jun-tool-info-hover: #117a8b;
+  --jun-tool-light-color: #f8f9fa;
+  --jun-tool-light-hover: #e2e6ea;
+  --jun-tool-dark-color: #343a40;
+  --jun-tool-dark-hover: #23272b;
+  --jun-tool-background: rgba(255, 255, 255, 0.95);
+  --jun-tool-backdrop-blur: blur(8px);
+  --jun-tool-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+  --jun-tool-border-color: rgba(0, 0, 0, 0.1);
+  --jun-tool-subtle-bg: rgba(0, 0, 0, 0.05);
+  --jun-tool-subtle-bg-light: rgba(0, 0, 0, 0.02);
+  --jun-tool-key-color: #555;
+  --jun-tool-spacing-sm: 8px;
+  --jun-tool-spacing-md: 12px;
+  --jun-tool-spacing-lg: 16px;
+  --jun-tool-border-radius: 4px;
+  --jun-tool-font-size-sm: 0.85rem;
+  --jun-tool-font-size-md: 0.9rem;
+  --jun-tool-font-size-lg: 1rem;
+  --jun-tool-font-size-xl: 1.25rem;
+  --jun-tool-font-size-xxl: 1.3rem;
+  --jun-tool-primary-color: #007bff;
+  --jun-tool-primary-hover: #0056b3;
+  --jun-tool-secondary-color: #6c757d;
+  --jun-tool-secondary-hover: #5a6268;
+  --jun-tool-success-color: #28a745;
+  --jun-tool-success-hover: #218838;
+  --jun-tool-danger-color: #dc3545;
+  --jun-tool-danger-hover: #c82333;
+  --jun-tool-warning-color: #ffc107;
+  --jun-tool-warning-hover: #e0a800;
+  --jun-tool-info-color: #17a2b8;
+  --jun-tool-info-hover: #117a8b;
+  --jun-tool-light-color: #f8f9fa;
+  --jun-tool-light-hover: #e2e6ea;
+  --jun-tool-dark-color: #343a40;
+  --jun-tool-dark-hover: #23272b;
+}
+
+#jun-tool .grid-1 {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+#jun-tool .grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+#jun-tool .grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+#jun-tool .grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+#jun-tool .grid-5 {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+}
+
+#jun-tool .grid-6 {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+}
+
+#jun-tool .grid-cols-1-2 {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+}
+
+#jun-tool .grid-cols-1-3 {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+}
+
+#jun-tool .grid-cols-2-1 {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+}
+
+#jun-tool .grid-cols-1-2-1-1 {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr 1fr;
+}
+
+#jun-tool .span-1 {
+  grid-column: span 1;
+}
+
+#jun-tool .span-2 {
+  grid-column: span 2;
+}
+
+#jun-tool .span-3 {
+  grid-column: span 3;
+}
+
+#jun-tool .span-4 {
+  grid-column: span 4;
+}
+
+#jun-tool .gap-0 {
+  gap: 0;
+}
+
+#jun-tool .gap-1 {
+  gap: 4px;
+}
+
+#jun-tool .gap-2 {
+  gap: var(--jun-tool-spacing-sm);
+}
+
+#jun-tool .gap-3 {
+  gap: var(--jun-tool-spacing-md);
+}
+
+#jun-tool .gap-4 {
+  gap: var(--jun-tool-spacing-lg);
+}
+
+#jun-tool .flex {
+  display: flex;
+}
+
+#jun-tool .flex-row {
+  flex-direction: row;
+}
+
+#jun-tool .flex-col {
+  flex-direction: column;
+}
+
+#jun-tool .flex-wrap {
+  flex-wrap: wrap;
+}
+
+#jun-tool .flex-nowrap {
+  flex-wrap: nowrap;
+}
+
+#jun-tool .items-start {
+  align-items: flex-start;
+}
+
+#jun-tool .items-center {
+  align-items: center;
+}
+
+#jun-tool .items-end {
+  align-items: flex-end;
+}
+
+#jun-tool .justify-start {
+  justify-content: flex-start;
+}
+
+#jun-tool .justify-center {
+  justify-content: center;
+}
+
+#jun-tool .justify-end {
+  justify-content: flex-end;
+}
+
+#jun-tool .justify-between {
+  justify-content: space-between;
+}
+
+#jun-tool .justify-around {
+  justify-content: space-around;
+}
+
+#jun-tool .flex-1 {
+  flex: 1;
+}
+
+#jun-tool .flex-auto {
+  flex: auto;
+}
+
+#jun-tool .flex-none {
+  flex: none;
+}
+
+#jun-tool .mb-0 {
+  margin-bottom: 0;
+}
+
+#jun-tool .mb-1 {
+  margin-bottom: 4px;
+}
+
+#jun-tool .mb-2 {
+  margin-bottom: var(--jun-tool-spacing-sm);
+}
+
+#jun-tool .mb-3 {
+  margin-bottom: var(--jun-tool-spacing-md);
+}
+
+#jun-tool .mb-4 {
+  margin-bottom: var(--jun-tool-spacing-lg);
+}
+
+#jun-tool .mt-0 {
+  margin-top: 0;
+}
+
+#jun-tool .mt-1 {
+  margin-top: 4px;
+}
+
+#jun-tool .mt-2 {
+  margin-top: var(--jun-tool-spacing-sm);
+}
+
+#jun-tool .mt-3 {
+  margin-top: var(--jun-tool-spacing-md);
+}
+
+#jun-tool .mt-4 {
+  margin-top: var(--jun-tool-spacing-lg);
+}
+
+#jun-tool .ml-0 {
+  margin-left: 0;
+}
+
+#jun-tool .ml-1 {
+  margin-left: 4px;
+}
+
+#jun-tool .ml-2 {
+  margin-left: var(--jun-tool-spacing-sm);
+}
+
+#jun-tool .ml-3 {
+  margin-left: var(--jun-tool-spacing-md);
+}
+
+#jun-tool .ml-4 {
+  margin-left: var(--jun-tool-spacing-lg);
+}
+
+#jun-tool .mr-0 {
+  margin-right: 0;
+}
+
+#jun-tool .mr-1 {
+  margin-right: 4px;
+}
+
+#jun-tool .mr-2 {
+  margin-right: var(--jun-tool-spacing-sm);
+}
+
+#jun-tool .mr-3 {
+  margin-right: var(--jun-tool-spacing-md);
+}
+
+#jun-tool .mr-4 {
+  margin-right: var(--jun-tool-spacing-lg);
+}
+
+#jun-tool .p-0 {
+  padding: 0;
+}
+
+#jun-tool .p-1 {
+  padding: 4px;
+}
+
+#jun-tool .p-2 {
+  padding: var(--jun-tool-spacing-sm);
+}
+
+#jun-tool .p-3 {
+  padding: var(--jun-tool-spacing-md);
+}
+
+#jun-tool .p-4 {
+  padding: var(--jun-tool-spacing-lg);
+}
+
+#jun-tool .text-center {
+  text-align: center;
+}
+
+#jun-tool .text-left {
+  text-align: left;
+}
+
+#jun-tool .text-right {
+  text-align: right;
+}
+
+#jun-tool .d-none {
+  display: none !important;
+}
+
+#jun-tool .d-block {
+  display: block !important;
+}
+
+#jun-tool .badge {
+  display: inline-block;
+  padding: 2px 6px;
+  font-size: 0.75rem;
+  border-radius: var(--jun-tool-border-radius);
+  font-weight: 600;
+  text-transform: uppercase;
+  line-height: 1;
+  transition: background 0.2s ease;
+}
+
+#jun-tool .badge.primary {
+  background: var(--jun-tool-primary-color);
+  color: #fff;
+}
+
+#jun-tool .badge.primary:hover {
+  background: var(--jun-tool-primary-hover);
+}
+
+#jun-tool .badge.secondary {
+  background: var(--jun-tool-secondary-color);
+  color: #fff;
+}
+
+#jun-tool .badge.secondary:hover {
+  background: var(--jun-tool-secondary-hover);
+}
+
+#jun-tool .badge.success {
+  background: var(--jun-tool-success-color);
+  color: #fff;
+}
+
+#jun-tool .badge.success:hover {
+  background: var(--jun-tool-success-hover);
+}
+
+#jun-tool .badge.danger {
+  background: var(--jun-tool-danger-color);
+  color: #fff;
+}
+
+#jun-tool .badge.danger:hover {
+  background: var(--jun-tool-danger-hover);
+}
+
+#jun-tool .badge.warning {
+  background: var(--jun-tool-warning-color);
+  color: #212529;
+}
+
+#jun-tool .badge.warning:hover {
+  background: var(--jun-tool-warning-hover);
+}
+
+#jun-tool .badge.info {
+  background: var(--jun-tool-info-color);
+  color: #fff;
+}
+
+#jun-tool .badge.info:hover {
+  background: var(--jun-tool-info-hover);
+}
+
+#jun-tool .badge.light {
+  background: var(--jun-tool-light-color);
+  color: #212529;
+}
+
+#jun-tool .badge.light:hover {
+  background: var(--jun-tool-light-hover);
+}
+
+#jun-tool .badge.dark {
+  background: var(--jun-tool-dark-color);
+  color: #fff;
+}
+
+#jun-tool .badge.dark:hover {
+  background: var(--jun-tool-dark-hover);
+}
+
+#jun-tool aside#tool-sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 300px;
+  height: 100vh;
+  z-index: 10000;
+  background: var(--jun-tool-background);
+  backdrop-filter: var(--jun-tool-backdrop-blur);
+  box-shadow: var(--jun-tool-shadow);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#jun-tool #tool-sidebar.collapsed {
+  height: inherit;
+  width: inherit;
+}
+
+#jun-tool .sidebar-header {
+  display: flex;
+  align-items: center;
+  padding: var(--jun-tool-spacing-md) var(--jun-tool-spacing-lg);
+  border-bottom: 1px solid var(--jun-tool-border-color);
+  gap: 1rem;
+}
+
+#jun-tool .sidebar-header h1 {
+  font-size: var(--jun-tool-font-size-xl);
+  font-weight: 600;
+  margin: 0;
+  flex: 1;
+  text-align: center;
+}
+
+#jun-tool #tool-sidebar.collapsed .sidebar-content {
+  display: none !important;
+}
+
+#jun-tool .sidebar-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+#jun-tool h3 {
+  font-size: var(--jun-tool-font-size-lg);
+  font-weight: 500;
+  padding: var(--jun-tool-spacing-sm) var(--jun-tool-spacing-lg);
+  margin: 0;
+}
+
+#jun-tool .btn-control {
+  background: none;
+  border: none;
+  padding: var(--jun-tool-spacing-sm) var(--jun-tool-spacing-md);
+  cursor: pointer;
+  font-size: var(--jun-tool-font-size-md);
+  color: var(--jun-tool-primary-color);
+  transition: background 0.2s, color 0.2s;
+}
+
+#jun-tool .btn-control:hover {
+  background: rgba(0, 123, 255, 0.1);
+  border-radius: var(--jun-tool-border-radius);
+}
+
+#jun-tool .btn-control.primary {
+  background: var(--jun-tool-primary-color);
+  color: #fff;
+  font-weight: 500;
+  text-align: center;
+  padding: var(--jun-tool-spacing-sm) var(--jun-tool-spacing-md);
+  border-radius: var(--jun-tool-border-radius);
+  transition: background 0.2s, transform 0.1s;
+}
+
+#jun-tool .btn-control.primary:hover {
+  background: var(--jun-tool-primary-hover);
+  transform: translateY(-1px);
+}
+
+#jun-tool .btn-control.primary:active {
+  transform: translateY(0);
+}
+
+#jun-tool .btn-control.secondary {
+  background: var(--jun-tool-secondary-color);
+  color: #fff;
+  font-weight: 500;
+  text-align: center;
+  padding: var(--jun-tool-spacing-sm) var(--jun-tool-spacing-md);
+  border-radius: var(--jun-tool-border-radius);
+  transition: background 0.2s, transform 0.1s;
+}
+
+#jun-tool .btn-control.secondary:hover {
+  background: var(--jun-tool-secondary-hover);
+  transform: translateY(-1px);
+}
+
+#jun-tool .btn-control.secondary:active {
+  transform: translateY(0);
+}
+
+#jun-tool .btn-control.success {
+  background: var(--jun-tool-success-color);
+  color: #fff;
+  font-weight: 500;
+  text-align: center;
+  padding: var(--jun-tool-spacing-sm) var(--jun-tool-spacing-md);
+  border-radius: var(--jun-tool-border-radius);
+  transition: background 0.2s, transform 0.1s;
+}
+
+#jun-tool .btn-control.success:hover {
+  background: var(--jun-tool-success-hover);
+  transform: translateY(-1px);
+}
+
+#jun-tool .btn-control.success:active {
+  transform: translateY(0);
+}
+
+#jun-tool .btn-control.danger {
+  background: var(--jun-tool-danger-color);
+  color: #fff;
+  font-weight: 500;
+  text-align: center;
+  padding: var(--jun-tool-spacing-sm) var(--jun-tool-spacing-md);
+  border-radius: var(--jun-tool-border-radius);
+  transition: background 0.2s, transform 0.1s;
+}
+
+#jun-tool .btn-control.danger:hover {
+  background: var(--jun-tool-danger-hover);
+  transform: translateY(-1px);
+}
+
+#jun-tool .btn-control.danger:active {
+  transform: translateY(0);
+}
+
+#jun-tool .btn-control.warning {
+  background: var(--jun-tool-warning-color);
+  color: #212529;
+  font-weight: 500;
+  text-align: center;
+  padding: var(--jun-tool-spacing-sm) var(--jun-tool-spacing-md);
+  border-radius: var(--jun-tool-border-radius);
+  transition: background 0.2s, transform 0.1s;
+}
+
+#jun-tool .btn-control.warning:hover {
+  background: var(--jun-tool-warning-hover);
+  transform: translateY(-1px);
+}
+
+#jun-tool .btn-control.warning:active {
+  transform: translateY(0);
+}
+
+#jun-tool .btn-control.info {
+  background: var(--jun-tool-info-color);
+  color: #fff;
+  font-weight: 500;
+  text-align: center;
+  padding: var(--jun-tool-spacing-sm) var(--jun-tool-spacing-md);
+  border-radius: var(--jun-tool-border-radius);
+  transition: background 0.2s, transform 0.1s;
+}
+
+#jun-tool .btn-control.info:hover {
+  background: var(--jun-tool-info-hover);
+  transform: translateY(-1px);
+}
+
+#jun-tool .btn-control.info:active {
+  transform: translateY(0);
+}
+
+#jun-tool .btn-control.light {
+  background: var(--jun-tool-light-color);
+  color: #212529;
+  font-weight: 500;
+  text-align: center;
+  padding: var(--jun-tool-spacing-sm) var(--jun-tool-spacing-md);
+  border-radius: var(--jun-tool-border-radius);
+  transition: background 0.2s, transform 0.1s;
+}
+
+#jun-tool .btn-control.light:hover {
+  background: var(--jun-tool-light-hover);
+  transform: translateY(-1px);
+}
+
+#jun-tool .btn-control.light:active {
+  transform: translateY(0);
+}
+
+#jun-tool .btn-control.dark {
+  background: var(--jun-tool-dark-color);
+  color: #fff;
+  font-weight: 500;
+  text-align: center;
+  padding: var(--jun-tool-spacing-sm) var(--jun-tool-spacing-md);
+  border-radius: var(--jun-tool-border-radius);
+  transition: background 0.2s, transform 0.1s;
+}
+
+#jun-tool .btn-control.dark:hover {
+  background: var(--jun-tool-dark-hover);
+  transform: translateY(-1px);
+}
+
+#jun-tool .btn-control.dark:active {
+  transform: translateY(0);
+}
+
+#jun-tool .icon-badge {
+  padding: var(--jun-tool-spacing-sm);
+}
+
+#jun-tool .dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+#jun-tool .dropdown-toggle {
+  padding: 8px 16px;
+  font-size: 1rem;
+  cursor: pointer;
+  color: white;
+  border: none;
+  border-radius: 4px;
+}
+
+#jun-tool .dropdown-menu {
+  position: absolute;
+  top: 110%;
+  right: 0;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  list-style: none;
+  padding: 8px 0;
+  margin: 0;
+  display: none;
+  min-width: 160px;
+  border-radius: 4px;
+  z-index: 1000;
+  transition: all 0.2s ease-in-out;
+}
+
+#jun-tool .dropdown-menu.show {
+  display: block;
+}
+
+#jun-tool .dropdown-menu li a {
+  display: block;
+  padding: .5rem 1rem;
+  color: #333;
+  text-decoration: none;
+  font-size: .875rem;
+}
+
+#jun-tool .dropdown-menu li a:hover {
+  background-color: #f0f0f0;
+}
+
+#jun-tool .form-group {
+  margin-bottom: var(--jun-tool-spacing-md);
+  padding: 0 var(--jun-tool-spacing-lg);
+}
+
+#jun-tool .form-label {
+  font-size: var(--jun-tool-font-size-md);
+  font-weight: 500;
+  align-self: center;
+}
+
+#jun-tool .form-input,
+#jun-tool .form-select,
+#jun-tool textarea {
+  padding: var(--jun-tool-spacing-sm);
+  border: 1px solid var(--jun-tool-secondary-color);
+  border-radius: var(--jun-tool-border-radius);
+  font-size: var(--jun-tool-font-size-md);
+  width: 100%;
+  box-sizing: border-box;
+  background: #fff;
+}
+
+#jun-tool .form-input.span-2,
+#jun-tool .form-select.span-2 {
+  grid-column: span 2;
+}
+
+#jun-tool .form-select {
+  cursor: pointer;
+  resize: none;
+}
+
+#jun-tool .form-select:focus,
+#jun-tool .form-input:focus,
+#jun-tool textarea:focus {
+  outline: none;
+  border-color: var(--jun-tool-primary-color);
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+}
+
+#jun-tool textarea {
+  resize: vertical;
+}
+
+#jun-tool textarea#request-setting,
+#jun-tool textarea#response-setting {
+  min-height: 8em;
+}
+
+#jun-tool .form-checkbox {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--jun-tool-primary-color);
+  cursor: pointer;
+  margin: 0;
+}
+
+#jun-tool .api-action-group {
+  max-height: 50vh;
+  overflow-y: auto;
+  padding: 0 var(--jun-tool-spacing-lg);
+  margin: 0;
+  list-style: none;
+}
+
+#jun-tool .api-action-group-item {
+  margin-bottom: var(--jun-tool-spacing-sm);
+}
+
+#jun-tool .api-action-group-item a {
+  display: block;
+  text-decoration: none;
+  color: #fff;
+  background: var(--jun-tool-primary-color);
+  border-radius: var(--jun-tool-border-radius);
+  font-weight: 500;
+  text-align: center;
+  padding: var(--jun-tool-spacing-sm) var(--jun-tool-spacing-md);
+  transition: background 0.2s, transform 0.1s;
+}
+
+#jun-tool .api-action-group-item a:hover {
+  background: var(--jun-tool-primary-hover);
+  transform: translateY(-1px);
+}
+
+#jun-tool .api-action-group-item a:active {
+  transform: translateY(0);
+}
+
+#jun-tool .response-result {
+  padding: 0 var(--jun-tool-spacing-lg) var(--jun-tool-spacing-lg);
+}
+
+#jun-tool .response-result h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--jun-tool-spacing-sm);
+  flex-wrap: nowrap;
+  padding-left: 0;
+}
+
+#jun-tool .response-result #btn-copy {
+  line-height: 1;
+}
+
+#jun-tool .card {
+  background: var(--jun-tool-subtle-bg);
+  padding: var(--jun-tool-spacing-md);
+  border-radius: var(--jun-tool-border-radius);
+  max-height: 30vh;
+  overflow-y: auto;
+}
+
+#jun-tool .key {
+  font-size: var(--jun-tool-font-size-sm);
+  color: var(--jun-tool-key-color);
+  margin: var(--jun-tool-spacing-sm) 0;
+  display: block;
+}
+
+#jun-tool .value {
+  font-size: var(--jun-tool-font-size-md);
+  margin: var(--jun-tool-spacing-sm) 0;
+  word-break: break-all;
+  display: block;
+}
+
+#jun-tool .value.copyable {
+  cursor: pointer;
+  padding: 4px var(--jun-tool-spacing-sm);
+  border-radius: var(--jun-tool-border-radius);
+  transition: background 0.2s;
+}
+
+#jun-tool .value.copyable:hover {
+  background: rgba(0, 123, 255, 0.1);
+}
+
+#jun-tool .value .key,
+#jun-tool .value .value {
+  margin-left: var(--jun-tool-spacing-lg);
+}
+
+#jun-tool .truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+#jun-tool .tool-setting {
+  padding: var(--jun-tool-spacing-sm) var(--jun-tool-spacing-lg);
+  border-top: 1px solid var(--jun-tool-border-color);
+}
+
+#jun-tool .tool-setting a.btn-control {
+  display: block;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.1s;
+}
+
+#jun-tool .modal {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10001;
+  align-items: center;
+  justify-content: center;
+}
+
+#jun-tool .modal-overlay {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#jun-tool .modal-container {
+  background: #fff;
+  border-radius: var(--jun-tool-border-radius);
+  max-width: 720px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+}
+
+#jun-tool .modal-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: var(--jun-tool-spacing-lg);
+  border-bottom: 1px solid var(--jun-tool-border-color);
+}
+
+#jun-tool .modal-header h2 {
+  font-size: var(--jun-tool-font-size-xxl);
+  font-weight: 600;
+  margin: 0;
+  flex: 1;
+  text-align: center;
+}
+
+#jun-tool .modal-header .btn-back {
+  position: absolute;
+  left: .875rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: var(--jun-tool-font-size-md);
+  color: var(--jun-tool-primary-color);
+  cursor: pointer;
+  padding: var(--jun-tool-spacing-sm);
+}
+
+#jun-tool .modal-header .btn-back:hover {
+  background: rgba(0, 123, 255, 0.1);
+  border-radius: var(--jun-tool-border-radius);
+}
+
+#jun-tool .modal-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--jun-tool-border-color);
+  padding: 0 var(--jun-tool-spacing-lg);
+}
+
+#jun-tool .modal-tabs button {
+  flex: 1;
+  padding: 10px var(--jun-tool-spacing-md);
+  border: none;
+  background: none;
+  font-size: var(--jun-tool-font-size-md);
+  font-weight: 500;
+  color: var(--jun-tool-primary-color);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+#jun-tool .modal-tabs button.active {
+  color: var(--jun-tool-primary-hover);
+  border-bottom: 2px solid var(--jun-tool-primary-color);
+}
+
+#jun-tool .modal-tabs button:hover {
+  background: rgba(0, 123, 255, 0.1);
+}
+
+#jun-tool .modal-content {
+  padding: var(--jun-tool-spacing-lg);
+  flex: 1;
+  overflow-y: auto;
+}
+
+#jun-tool .api-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--jun-tool-spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--jun-tool-spacing-sm);
+}
+
+#jun-tool .api-list-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: var(--jun-tool-subtle-bg-light);
+  border-radius: var(--jun-tool-border-radius);
+  padding: var(--jun-tool-spacing-sm) var(--jun-tool-spacing-md);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+#jun-tool .api-list-item:hover {
+  background: rgba(0, 123, 255, 0.06);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+#jun-tool .api-list-item a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--jun-tool-text-color);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: var(--jun-tool-font-size-md);
+}
+
+#jun-tool .api-list-item a:hover {
+  color: var(--jun-tool-primary-color);
+}
+
+#jun-tool .api-list-item .api-method {
+  width: 40px;
+  text-align: center;
+}
+
+#jun-tool .api-action {
+  font-size: var(--jun-tool-font-size-sm);
+  color: var(--jun-tool-key-color);
+  padding-left: 62px;
+}
+
+#jun-tool .modal-footer {
+  padding: var(--jun-tool-spacing-md) var(--jun-tool-spacing-lg);
+  border-top: 1px solid var(--jun-tool-border-color);
+  display: flex;
+  gap: var(--jun-tool-spacing-sm);
+  justify-content: flex-end;
+}
+
+#jun-tool .modal-footer button {
+  padding: var(--jun-tool-spacing-sm) var(--jun-tool-spacing-lg);
+  border: none;
+  border-radius: var(--jun-tool-border-radius);
+  cursor: pointer;
+  font-size: var(--jun-tool-font-size-md);
+}
+
+#jun-tool .modal-footer button[type="submit"] {
+  background: var(--jun-tool-primary-color);
+  color: #fff;
+}
+
+#jun-tool .modal-footer button[type="submit"]:hover {
+  background: var(--jun-tool-primary-hover);
+}
+
+#jun-tool .modal-footer .close-modal {
+  background: var(--jun-tool-secondary-color);
+  color: #fff;
+}
+
+#jun-tool .modal-footer .close-modal:hover {
+  background: var(--jun-tool-secondary-hover);
+}
