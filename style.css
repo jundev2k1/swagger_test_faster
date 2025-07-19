@@ -717,8 +717,8 @@
   box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
 }
 
-#jun-tool textarea {
-  resize: vertical;
+#jun-tool textarea.resize-none {
+  resize: none;
 }
 
 #jun-tool textarea#request-setting,
@@ -987,6 +987,11 @@
   font-size: var(--jun-tool-font-size-sm);
   color: var(--jun-tool-key-color);
   padding-left: 62px;
+}
+
+#jun-tool .modal .error-message {
+  color: var(--jun-tool-danger-color);
+  font-size: .875rem;
 }
 
 #jun-tool .modal-footer {

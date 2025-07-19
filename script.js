@@ -62,6 +62,16 @@ const translate = Object.freeze({
     'vi': 'Đóng',
     'zh-TW': '關閉',
   },
+  'tooltip.copy': {
+    'en': 'Copy to clipboard',
+    'vi': 'Sao chép vào clipboard',
+    'zh-TW': '複製到剪貼簿',
+  },
+  'tooltip.delete': {
+    'en': 'Delete this item',
+    'vi': 'Xóa mục này',
+    'zh-TW': '刪除此項目',
+  },
   'ddl.select-environment': {
     'en': 'Select Environment',
     'vi': 'Chọn môi trường',
@@ -127,7 +137,7 @@ const translate = Object.freeze({
     'vi': 'Tên API',
     'zh-TW': 'API 名稱',
   },
-  'modal.api-setting.description': {
+  'modal.api-setting.desc': {
     'en': 'Description',
     'vi': 'Mô tả',
     'zh-TW': '描述',
@@ -401,7 +411,7 @@ const uiBuilder = (() => {
             <div class="form-group grid-6 gap-1">
               <label class="form-label span-2">Name:</label>
               <input type="text" class="form-input span-3" value="${env}" required>
-              <button class="btn-control icon-badge" data-action="delete-environment" title="Delete this environment">🗑️</button>
+              <button class="btn-control icon-badge" data-action="delete-environment" title="${t('tooltip.delete')}">🗑️</button>
             </div>
           `).join('')}
           <a href="#" class="btn-control" data-action="add-environment">${t('btn.add-new')}</a>
@@ -441,17 +451,18 @@ const uiBuilder = (() => {
         <div class="hard-settings">
           <div class="form-group grid-3 gap-1">
             <label class="form-label">Host setting:</label>
-            <input type="text" class="form-input host-name" required>
-            <input type="text" class="form-input host-value" required>
+            <input type="text" class="form-input span-2" required>
           </div>
         </div>
         <h3>Your Variables</h3>
         <div class="custom-settings mb-2">
-          <div class="form-group grid-6 gap-1">
-            <input class="form-input custom-name-input span-2" required>
-            <input class="form-input custom-value-input span-3" required>
-            <button class="btn-control icon-badge" data-action="delete-variable" title="Delete this variable">🗑️</button>
-          </div>
+          ${variables.map(({ id, name, value }) => `
+            <div class="form-group grid-6 gap-1">
+              <input class="form-input custom-name-input span-2" value="${name}" required>
+              <input class="form-input custom-value-input span-3" value="${value}" required>
+              <button class="btn-control icon-badge" data-targetId="${id}" title="Delete this variable">🗑️</button>
+            </div>
+          `)}
           <a href="#" class="btn-control" data-action="add-environment">${t('btn.add-new')}</a>
         </div>
       </form>
@@ -461,17 +472,19 @@ const uiBuilder = (() => {
   const createApiSettingForm = ({ name, desc, request, response, color, isAuthApi }) => {
     return `
       <form id="api-setting-form" data-form-type="api-request-setting">
-        <p>Select an API to configure its settings.</p>
         <div class="form-group">
           <label for="api-name" class="form-label">${t('modal.api-setting.name')}</label>
-          <input id="api-name" name="name" class="form-input" value="${name || ''}" required>
+          <div class="form-control">
+            <input id="api-name" name="name" class="form-input" value="${name || ''}" required>
+            <div class="error-message"></div>
+          </div>
         </div>
         <div class="form-group">
           <label for="api-description" class="form-label">${t('modal.api-setting.desc')}</label>
-          <textarea id="api-description" name="desc">${desc}</textarea>
+          <textarea class="resize-none" id="api-description" name="desc">${desc || ''}</textarea>
         </div>
         <div class="form-group">
-          <label for="api-setting-method">${t('modal.api-setting.http-method')}</label>
+          <label for="api-setting-method" class="form-label">${t('modal.api-setting.http-method')}</label>
           <select class="form-select" id="api-setting-method" name="method">
             ${Object.entries(httpMethods).map(([key, val]) => `
               <option value="${val}" ${color === val ? 'selected' : ''}>
@@ -481,7 +494,7 @@ const uiBuilder = (() => {
           </select>
         </div>
         <div class="form-group">
-          <label for="api-setting-color">${t('modal.api-setting.color')}</label>
+          <label for="api-setting-color" class="form-label">${t('modal.api-setting.color')}</label>
           <select class="form-select" id="api-setting-color" name="color">
             ${Object.entries(colorEnums).map(([key, val]) => `
               <option value="${val}" ${color === val ? 'selected' : ''}>
@@ -492,11 +505,17 @@ const uiBuilder = (() => {
         </div>
         <div class="form-group">
           <label for="request-setting" class="form-label">${t('modal.api-setting.request')}</label>
-          <textarea id="request-setting" name="request">${request}</textarea>
+          <div class="form-control">
+            <textarea id="request-setting" name="request" class="resize-none">${request || ''}</textarea>
+            <span class="error-message"></span>
+          </div>
         </div>
         <div class="form-group">
           <label for="response-setting" class="form-label">${t('modal.api-setting.response')}</label>
-          <textarea id="response-setting" name="response">${response}</textarea>
+          <div class="form-control">
+            <textarea id="response-setting" name="response" class="resize-none">${response || ''}</textarea>
+            <span class="error-message"></span>
+          </div>
         </div>
         <div class="form-group">
           <input type="checkbox" id="is-auth-api" class="form-checkbox" name="is-auth" ${isAuthApi ? 'checked' : ''} />
@@ -608,6 +627,8 @@ class SwaggerFaster {
   get wOverlayModal() { return $('#jun-tool .modal .modal-overlay'); }
   get btnLocale() { return $('#jun-tool #btn-change-language'); }
   get btnClose() { return $('#jun-tool #btn-close-modal'); }
+  get wApiSettingItems() { return $$('#jun-tool .modal .api-list-item'); }
+  get btnAddNewApi() { return $('#jun-tool #btn-add-new-api'); }
   get btnBack() { return $('#jun-tool #btn-modal-back'); }
   get btnSaveChanges() { return $('#jun-tool #btn-savechanges'); }
   get btnOpenSetting() { return $('#jun-tool #btn-open-setting'); }
@@ -734,6 +755,26 @@ class SwaggerFaster {
     this.wTabButtons.forEach((btn) => {
       btn.addEventListener('click', (e) => this.#onTabChange(e));
     });
+
+    // Set event for api list items, redirect to API setting page
+    this.wApiSettingItems.forEach((item) => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        const apiId = e.target.dataset['apiId'];
+        if (apiId) {
+          this.targetId = apiId;
+          this.currentAction = actionMode.API_SETTING;
+          this.#onPageBinding();
+        }
+      });
+    });
+
+    this.btnAddNewApi.addEventListener('click', (e) => {
+      e.preventDefault();
+      this.currentAction = actionMode.API_SETTING;
+      this.targetId = null;
+      this.#onPageBinding();
+    });
   }
 
   #setLocaleEvent() {
@@ -825,6 +866,8 @@ class SwaggerFaster {
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => SwaggerFaster.init());
+} else {
   SwaggerFaster.init();
-});
+}
