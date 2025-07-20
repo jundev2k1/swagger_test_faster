@@ -147,6 +147,11 @@ const translate = Object.freeze({
     'vi': 'Yêu cầu',
     'zh-TW': '請求',
   },
+  'modal.api-setting.endpoint': {
+    'en': 'Endpoint',
+    'vi': 'Endpoint',
+    'zh-TW': 'Endpoint',
+  },
   'modal.api-setting.response': {
     'en': 'Response',
     'vi': 'Phản hồi',
@@ -355,8 +360,8 @@ const uiBuilder = (() => {
           <div id="api-setting-layout"></div>
         </div>
         <div class="modal-footer">
-          <button id="btn-savechanges" type="button">${t('btn.save-changes')}</button>
-          <button id="btn-close-modal" class="close-modal">${t('btn.close')}</button>
+          <button id="btn-savechanges" type="submit">${t('btn.save-changes')}</button>
+          <button id="btn-close-modal" class="close-modal" type="button">${t('btn.close')}</button>
         </div>
       </div>
     </div>
@@ -403,18 +408,18 @@ const uiBuilder = (() => {
     }
   }
 
-  const createEnvSettingForm = ({ envSettings = [] }) => {
+  const createEnvSettingForm = (settings = []) => {
     return `
-      <form id="enviroment-management-form" data-form-type="environment-management">
+      <form id="enviroment-setting-form">
         <div class="enviroment-manager mb-2">
-          ${envSettings.map(env => `
+          ${settings.map(({ id, value }, index) => `
             <div class="form-group grid-6 gap-1">
-              <label class="form-label span-2">Name:</label>
-              <input type="text" class="form-input span-3" value="${env}" required>
-              <button class="btn-control icon-badge" data-action="delete-environment" title="${t('tooltip.delete')}">🗑️</button>
+              <label for="tb-env-${index}" class="form-label span-2">Environment Name:</label>
+              <input id="tb-env-${index}" type="text" class="form-input span-3" data-action="input" data-target-id="${id}" value="${value}" required />
+              <button type="button" class="btn-control icon-badge" data-action="delete-environment" title="${t('tooltip.delete')}">🗑️</button>
             </div>
           `).join('')}
-          <a href="#" class="btn-control" data-action="add-environment">${t('btn.add-new')}</a>
+          <a href="#" id="btn-add-new-env" class="btn-control">${t('btn.add-new')}</a>
         </div>
       </form>
     `;
@@ -425,9 +430,9 @@ const uiBuilder = (() => {
       <option value="" disabled ${!datasource || datasource.length == 0 ? 'selected' : ''}>
         ${t('ddl.select-environment')}
       </option>`;
-    const options = datasource.map(env => `
-      <option value="${env}" ${env === selectedValue ? 'selected' : ''}>
-        ${env}
+    const options = datasource.map(({ id, value }) => `
+      <option value="${id}" ${id === selectedValue ? 'selected' : ''}>
+        ${value}
       </option>
     `);
     const btnAddNew = `
@@ -440,7 +445,7 @@ const uiBuilder = (() => {
 
   const createEnvVariableForm = ({ envSettings = [], selectedEnv = '', variables = [] }) => {
     return `
-      <form id="enviroment-variable-form" data-form-type="environment-variable">
+      <form id="enviroment-variable-form">
         <div class="form-group grid-3 mb-2">
           <label for="ddl-select-environment" class="form-label">Environment:</label>
           <select id="ddl-select-environment" class="form-select span-2" control="ddl-select-environment" required>
@@ -469,9 +474,9 @@ const uiBuilder = (() => {
     `;
   }
 
-  const createApiSettingForm = ({ name, desc, request, response, color, isAuthApi }) => {
+  const createApiSettingForm = ({ name, desc, endpoint, request, color, isAuthApi }) => {
     return `
-      <form id="api-setting-form" data-form-type="api-request-setting">
+      <form id="api-setting-form">
         <div class="form-group">
           <label for="api-name" class="form-label">${t('modal.api-setting.name')}</label>
           <div class="form-control">
@@ -483,43 +488,45 @@ const uiBuilder = (() => {
           <label for="api-description" class="form-label">${t('modal.api-setting.desc')}</label>
           <textarea class="resize-none" id="api-description" name="desc">${desc || ''}</textarea>
         </div>
-        <div class="form-group">
-          <label for="api-setting-method" class="form-label">${t('modal.api-setting.http-method')}</label>
-          <select class="form-select" id="api-setting-method" name="method">
-            ${Object.entries(httpMethods).map(([key, val]) => `
-              <option value="${val}" ${color === val ? 'selected' : ''}>
-                ${key}
-              </option>
-            `)}
-          </select>
+        <div class="grid grid-2">
+          <div class="form-group">
+            <label for="api-setting-method" class="form-label">${t('modal.api-setting.http-method')}</label>
+            <select class="form-select" id="api-setting-method" name="method">
+              ${Object.entries(httpMethods).map(([key, val]) => `
+                <option value="${val}" ${color === val ? 'selected' : ''}>
+                  ${key}
+                </option>
+              `)}
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="api-setting-color" class="form-label">${t('modal.api-setting.color')}</label>
+            <select class="form-select" id="api-setting-color" name="color">
+              ${Object.entries(colorEnums).map(([key, val]) => `
+                <option value="${val}" ${color === val ? 'selected' : ''}>
+                  ${t(`color.${val}`, key)}
+                </option>
+              `)}
+            </select>
+          </div>
         </div>
         <div class="form-group">
-          <label for="api-setting-color" class="form-label">${t('modal.api-setting.color')}</label>
-          <select class="form-select" id="api-setting-color" name="color">
-            ${Object.entries(colorEnums).map(([key, val]) => `
-              <option value="${val}" ${color === val ? 'selected' : ''}>
-                ${t(`color.${val}`, key)}
-              </option>
-            `)}
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="request-setting" class="form-label">${t('modal.api-setting.request')}</label>
+          <label for="api-setting-endpoint" class="form-label">${t('modal.api-setting.endpoint')}</label>
           <div class="form-control">
-            <textarea id="request-setting" name="request" class="resize-none">${request || ''}</textarea>
+            <input id="api-setting-endpoint" name="endpoint" class="form-input" value="${endpoint || ''}" required}</textarea>
             <span class="error-message"></span>
           </div>
         </div>
         <div class="form-group">
-          <label for="response-setting" class="form-label">${t('modal.api-setting.response')}</label>
+          <label for="api-setting-request" class="form-label">${t('modal.api-setting.request')}</label>
           <div class="form-control">
-            <textarea id="response-setting" name="response" class="resize-none">${response || ''}</textarea>
+            <textarea id="api-setting-request" name="request" class="resize-none">${request || ''}</textarea>
             <span class="error-message"></span>
           </div>
         </div>
         <div class="form-group">
-          <input type="checkbox" id="is-auth-api" class="form-checkbox" name="is-auth" ${isAuthApi ? 'checked' : ''} />
-          <label for="is-auth-api">${t('modal.api-setting.is-auth-api')}</label>
+          <input type="checkbox" id="api-setting-is-auth" class="form-checkbox" name="is-auth" ${isAuthApi ? 'checked' : ''} />
+          <label for="api-setting-is-auth">${t('modal.api-setting.is-auth-api')}</label>
         </div>
       </form>
     `;
@@ -548,19 +555,20 @@ const uiBuilder = (() => {
     `).join('') || '';
   };
 
-  const createContainnerContent = (action = actionMode.LOBBY, dataSource) => {
+  const createContainnerContent = (action = actionMode.LOBBY, formData, envSettings = [], selectedEnv) => {
     switch (action) {
       case actionMode.API_LIST:
-        return createApiListItem(dataSource) || `<div class="empty-state">${t('api-list.empty')}</div>`;
+        return createApiListItem(formData.dataSource) || `<div class="empty-state">${t('api-list.empty')}</div>`;
 
       case actionMode.API_SETTING:
-        return createApiSettingForm(dataSource);
+        return createApiSettingForm(formData.dataSource);
 
       case actionMode.ENVIRONMENT_SETTINGS:
-        return createEnvSettingForm(dataSource);
+        return createEnvSettingForm(formData.dataSource);
 
       case actionMode.ENVIRONMENT_VARIABLES:
-        return createEnvVariableForm(dataSource);
+        const variables = formData.dataSource.filter(item => item.envId === selectedEnv);
+        return createEnvVariableForm({ envSettings, selectedEnv, variables: variables });
 
       default:
         return '';
@@ -592,31 +600,59 @@ const uiBuilder = (() => {
 })();
 
 class SwaggerFaster {
+  // ================================================
+  // Local variable
+  // ================================================
   #envSettingKey = 'juntool-enviroment-settings';
   #envVariableKey = 'juntool-enviroment-variables';
   #apiSettingsKey = 'juntool-api-settings';
   #currentEnvKey = 'juntool-env';
   #currentLangKey = 'juntool-lang';
 
+  #modalFormIds = Object.freeze({
+    [actionMode.ENVIRONMENT_SETTINGS]: '#jun-tool .modal-content #enviroment-setting-form',
+    [actionMode.ENVIRONMENT_VARIABLES]: '#jun-tool .modal-content #enviroment-variable-form',
+    [actionMode.API_SETTING]: '#jun-tool .modal-content #api-setting-form',
+  });
+
+  // ================================================
+  // Class constructor
+  // ================================================
   constructor() {
-    /** @type {any} Dynamic data, used when handling form */
-    this.formData = {};
-    /** @type {[]} Your enviroment settings */
-    this.envSettings = [];
-    /** @type {[]} Your enviroment variables */
-    this.envVariables = [];
-    /** @type {[]} Your api setting */
-    this.apiSettings = [];
-    /** @type {string} Selected environment */
-    this.currentEnv = '';
-    /** @type {string} Current language */
-    this.currentLang = defaultLang;
+    /** Dynamic data, used when handling form
+     *  @type {{ type: string, dataSource: any }} */
+    this.formData = { type: '', dataSource: {} };
     /** @type {actionMode} Current action mode */
     this.currentAction = actionMode.LOBBY;
     /** @type {string|null} Target API ID */
     this.targetId = null;
+    /** @type {boolean} Page change state */
+    this.isPageChange = false;
+    this.timeoutId = null;
   }
 
+  /** Your enviroment settings 
+   *  @type {{ id: string, name: string }[]} */
+  get envSettings() { return tryParseJSON(localStorage.getItem(this.#envSettingKey), []); }
+  set envSettings(value) { localStorage.setItem(this.#envSettingKey, JSON.stringify(value)); }
+  /** Your enviroment variables
+   *  @type {{ id: string, envId: string, name: string, value: string }[]} */
+  get envVariables() { return tryParseJSON(localStorage.getItem(this.#envVariableKey), []); }
+  set envVariables(value) { localStorage.setItem(this.#envVariableKey, JSON.stringify(value)); }
+  /** Your api setting
+   *  @type {{ id: string, name: string, desc: string, endpoint: string, method: httpMethods, color: colorEnums, req: Object, res: Object, isAuth: boolean }[]} */
+  get apiSettings() { return tryParseJSON(localStorage.getItem(this.#apiSettingsKey), []); }
+  set apiSettings(value) { localStorage.setItem(this.#apiSettingsKey, JSON.stringify(value)); }
+  /** @type {string} Selected environment */
+  get currentEnv() { return localStorage.getItem(this.#currentEnvKey) || ''; }
+  set currentEnv(value) { localStorage.setItem(this.#currentEnvKey, value); }
+  /** @type {string} Current language */
+  get currentLang() { return localStorage.getItem(this.#currentLangKey) || defaultLang; }
+  set currentLang(value) { localStorage.setItem(this.#currentEnvKey, value); }
+
+  // ================================================
+  // Properties to get elements in the page
+  // ================================================
   get btnToggleSidebar() { return $('#jun-tool #btn-toggle-sidebar'); }
   get wModal() { return $('#jun-tool .modal'); }
   get wHeaderModal() { return $('#jun-tool .modal .modal-header'); }
@@ -629,10 +665,20 @@ class SwaggerFaster {
   get btnClose() { return $('#jun-tool #btn-close-modal'); }
   get wApiSettingItems() { return $$('#jun-tool .modal .api-list-item'); }
   get btnAddNewApi() { return $('#jun-tool #btn-add-new-api'); }
+  get btnAddNewEnv() { return $('#jun-tool #btn-add-new-env'); }
+  get btnAddRemoveEnvs() { return $$('#jun-tool button[data-action="delete-environment"]'); }
   get btnBack() { return $('#jun-tool #btn-modal-back'); }
   get btnSaveChanges() { return $('#jun-tool #btn-savechanges'); }
   get btnOpenSetting() { return $('#jun-tool #btn-open-setting'); }
 
+  // ================================================
+  // Event Functions
+  // ================================================
+
+  /**
+   * Execute the event every time you open modal
+   * @param {actionMode} mode The page will open
+   */
   #onOpenModal(mode = actionMode.API_LIST) {
     if (mode)
       this.currentAction = mode;
@@ -640,11 +686,18 @@ class SwaggerFaster {
     this.#onPageBinding();
   }
 
+  /**
+   * Execute the event every time you close modal
+   */
   #onCloseModal() {
     this.currentAction = actionMode.LOBBY;
     this.#onPageBinding();
   }
 
+  /**
+   * Execute the event every time you switch tabs.
+   * @param {MouseEvent} event Click event
+   */
   #onTabChange(event) {
     event.preventDefault();
     const isActiveTab = event.target.classList.contains('active');
@@ -657,16 +710,24 @@ class SwaggerFaster {
     this.#onPageBinding();
   }
 
+  /**
+   * Execute the event every time you switch language.
+   * @param {MouseEvent} event Click event
+   */
   #onLanguageChange(event) {
     event.preventDefault();
     const selectedLang = event.target.dataset['lang'] || defaultLang;
     this.currentLang = selectedLang;
     localStorage.setItem(this.#currentLangKey, selectedLang);
 
-    event.srcElement.closest('.dropdown-menu')?.classList.remove('show');
+    event.target.closest('.dropdown-menu')?.classList.remove('show');
     this.refreshPage();
   }
 
+  /**
+   * Execute the event every time you switch environment.
+   * @param {InputEvent} event Select input change event
+   */
   #onEnvironmentChange(event) {
     const value = event.target.value;
     const targetOption = event.target.selectedOptions[0];
@@ -675,19 +736,86 @@ class SwaggerFaster {
     if (isAddNewEnvCommand) {
       event.target.value = this.currentEnv || '';
       this.currentAction = actionMode.ENVIRONMENT_SETTINGS;
+      this.isPageChange = true;
+    } else {
+      this.currentEnv = event.target.value;
     }
 
     this.#onPageBinding();
   }
 
+  /**
+   * Environment input change event
+   * @param {InputEvent} event Text input event
+   */
+  #onEnvInputChange(event) {
+    const envId = event.target.dataset['targetId'] || '';
+    if (!envId) return;
+
+    clearTimeout(this.timeoutId);
+    this.timeoutId = setTimeout(() => {
+      const targetItem = this.formData.dataSource.find(item => item.id === envId);
+      targetItem.value = event.target.value;
+    }, 300);
+  }
+
+  /**
+   * Save changes form event in modal
+   * @param {MouseEvent} event Click event
+   */
+  #onSaveChanges(event) {
+    event.preventDefault();
+    if (!confirm('Do you want to save changes?')) return;
+
+    switch (this.formData.type) {
+      case actionMode.ENVIRONMENT_SETTINGS:
+        this.envSettings = this.formData.dataSource;
+        break;
+
+      case actionMode.ENVIRONMENT_VARIABLES:
+        this.envVariables = this.formData.dataSource;
+        break;
+
+      case actionMode.API_SETTING:
+        if (!this.targetId) {
+          this.apiSettings = [...this.apiSettings, this.formData.dataSource];
+          return;
+        }
+
+        const currentSettings = this.apiSettings;
+        const itemIndex = currentSettings.findIndex(setting => setting.id === this.targetId);
+        if (itemIndex < 0) throw new Error(`Fail to save changes (action: ${this.formData.type})`);
+
+        currentSettings[itemIndex] = this.formData.dataSource;
+        this.apiSettings = currentSettings;
+        break;
+
+      default:
+        throw new Error(`Fail to save changes (action: ${this.formData.type})`);
+    }
+  }
+
+  /**
+   * Execute function when binding page, reset data from local storage data
+   */
   #onPageChange() {
-    this.#setFormData();
+    if (this.isPageChange)
+      this.#setFormData();
 
     this.btnBack.classList.toggle(
       'd-none',
       this.currentAction === actionMode.API_LIST || this.currentAction === actionMode.ENVIRONMENT_VARIABLES);
+
+    this.btnSaveChanges.classList.toggle(
+      'd-none',
+      ![actionMode.API_SETTING, actionMode.ENVIRONMENT_SETTINGS, actionMode.ENVIRONMENT_VARIABLES].includes(this.currentAction));
+
+    this.isPageChange = false;
   }
 
+  /**
+   * The function use to bind all of action
+   */
   #onPageBinding() {
     // Show or hide the modal based on the current action
     if (this.currentAction === actionMode.LOBBY) {
@@ -705,7 +833,7 @@ class SwaggerFaster {
     this.wTabModal.innerHTML = tabHTML;
 
     // Set the content of the modal container based on the current action
-    const modalContent = uiBuilder.createContainnerContent(this.currentAction, this.formData)
+    const modalContent = uiBuilder.createContainnerContent(this.currentAction, this.formData, this.envSettings, this.currentEnv);
     const modalContainerUi = uiBuilder.createModalContentContainer(this.currentAction, modalContent);
     this.wContentModal.innerHTML = modalContainerUi;
 
@@ -714,6 +842,21 @@ class SwaggerFaster {
     this.#setModalEvent();
   }
 
+  // ================================================
+  // Binding Functions
+  // ================================================
+
+  #setFormChanges() {
+    const targetForm = this.wContentModal.querySelector('form');
+    if (!targetForm) return;
+
+    const envInputs = targetForm.querySelectorAll('[data-action="input"]');
+    envInputs.forEach(element => element.addEventListener('keyup', (e) => this.#onEnvInputChange(e)));
+  }
+
+  /**
+   * Load all of environment dropdown list
+   */
   #loadEnvDropdownList() {
     const envControls = $$('select[control="ddl-select-environment"]');
     const envSelections = uiBuilder.createEnvDropdownItems(this.envSettings, this.currentEnv);
@@ -727,26 +870,41 @@ class SwaggerFaster {
     switch (this.currentAction) {
       case actionMode.API_LIST:
         this.targetId = null;
-        this.formData = [...this.apiSettings];
+        this.formData = {
+          type: actionMode.API_LIST,
+          dataSource: [...this.apiSettings],
+        };
         break;
 
       case actionMode.API_SETTING:
-        this.formData = this.apiSettings.find(api => api.id === this.targetId) || {};
+        this.formData = {
+          type: actionMode.API_SETTING,
+          dataSource: this.apiSettings.find(api => api.id === this.targetId) || {},
+        };
         break;
 
       case actionMode.ENVIRONMENT_SETTINGS:
         this.targetId = null;
-        this.formData = [...this.envSettings];
+        this.formData = {
+          type: actionMode.ENVIRONMENT_SETTINGS,
+          dataSource: [...this.envSettings],
+        };
         break;
 
       case actionMode.ENVIRONMENT_VARIABLES:
         this.targetId = null;
-        this.formData = [...this.envVariables];
+        this.formData = {
+          type: actionMode.ENVIRONMENT_VARIABLES,
+          dataSource: [...this.envVariables],
+        };
         break;
 
       default:
         this.targetId = null;
-        this.formData = {};
+        this.formData = {
+          type: '',
+          datasource: {},
+        };
         break;
     };
   }
@@ -764,17 +922,47 @@ class SwaggerFaster {
         if (apiId) {
           this.targetId = apiId;
           this.currentAction = actionMode.API_SETTING;
+
+          this.isPageChange = true;
           this.#onPageBinding();
         }
       });
     });
 
-    this.btnAddNewApi.addEventListener('click', (e) => {
+    this.btnAddNewApi?.addEventListener('click', (e) => {
       e.preventDefault();
       this.currentAction = actionMode.API_SETTING;
       this.targetId = null;
+      this.isPageChange = true;
+
       this.#onPageBinding();
     });
+
+    this.btnAddNewEnv?.addEventListener('click', (e) => {
+      e.preventDefault();
+
+      const newItem = {
+        id: crypto.randomUUID(),
+        value: '',
+      };
+      this.formData.dataSource = [...this.formData.dataSource, newItem];
+
+      this.#onPageBinding(false);
+    });
+
+    this.btnAddRemoveEnvs.forEach(element => {
+      element.addEventListener('click', (event) => {
+        const targetId = event.target.parentElement
+          .querySelector('input[data-action="input"]')
+          ?.dataset['targetId'] || '';
+        const newForms = this.formData.dataSource.filter(data => data.id !== targetId);
+        this.formData.dataSource = [...newForms];
+
+        this.#onPageBinding();
+      });
+    });
+
+    this.#setFormChanges();
   }
 
   #setLocaleEvent() {
@@ -808,6 +996,7 @@ class SwaggerFaster {
     this.btnOpenSetting.addEventListener('click', (e) => {
       e.preventDefault();
 
+      this.isPageChange = true;
       this.#onOpenModal();
     });
     this.btnClose.addEventListener('click', (e) => {
@@ -827,32 +1016,26 @@ class SwaggerFaster {
         : actionMode.ENVIRONMENT_VARIABLES;
 
       // Refresh the modal with the new action
+      this.isPageChange = true;
       this.#onOpenModal(redirectAction);
     });
-    this.btnSaveChanges.addEventListener('click', (e) => {
-      e.preventDefault();
-      // Handle save changes logic here
-    });
+    this.btnSaveChanges.addEventListener('click', (e) => this.#onSaveChanges(e));
     this.#setLocaleEvent();
   }
 
   #renderUI() {
-    const rootNode = $('#jun-tool') || document.createElement('div');
+    const rootElement = $('#jun-tool');
+    const rootNode = rootElement || document.createElement('div');
     rootNode.id = 'jun-tool';
     rootNode.innerHTML = uiBuilder.createDefaultUI();
-    document.body.appendChild(rootNode);
+
+    if (!rootElement) document.body.appendChild(rootNode);
   }
 
-  #setInitSetting() {
-    this.envSettings = tryParseJSON(localStorage.getItem(this.#envSettingKey), []);
-    this.envVariables = tryParseJSON(localStorage.getItem(this.#envVariableKey), []);
-    this.apiSettings = tryParseJSON(localStorage.getItem(this.#apiSettingsKey), []);
-    this.currentEnv = localStorage.getItem(this.#currentEnvKey) || '';
-    this.currentLang = localStorage.getItem(this.#currentLangKey) || defaultLang;
-  }
-
+  // ================================================
+  // Public
+  // ================================================
   refreshPage() {
-    this.#setInitSetting();
     this.#renderUI();
     this.#setUiEvent();
     this.#onPageBinding();
@@ -866,6 +1049,7 @@ class SwaggerFaster {
   }
 }
 
+// Execute class
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => SwaggerFaster.init());
 } else {

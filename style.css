@@ -721,9 +721,8 @@
   resize: none;
 }
 
-#jun-tool textarea#request-setting,
-#jun-tool textarea#response-setting {
-  min-height: 8em;
+#jun-tool textarea#api-setting-request {
+  min-height: 12em;
 }
 
 #jun-tool .form-checkbox {
