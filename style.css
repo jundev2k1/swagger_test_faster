@@ -709,12 +709,29 @@
   resize: none;
 }
 
+#jun-tool .form-select:disabled,
+#jun-tool .form-input:disabled,
+#jun-tool textarea:disabled {
+  background: var(--jun-tool-subtle-bg);
+  color: var(--jun-tool-secondary-color);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
 #jun-tool .form-select:focus,
 #jun-tool .form-input:focus,
 #jun-tool textarea:focus {
   outline: none;
   border-color: var(--jun-tool-primary-color);
   box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+}
+
+#jun-tool .form-select.has-error,
+#jun-tool .form-input.has-error,
+#jun-tool textarea.has-error {
+  background: var(--jun-tool-danger-color);
+  color: var(--jun-tool-light-color);
+  opacity: 0.6;
 }
 
 #jun-tool textarea.resize-none {
