@@ -350,6 +350,17 @@ const colorEnums = Object.freeze({
   Info: 'info',
 });
 
+/** Color mapping for HTTP methods, used in UI elements. */
+const methodColors = Object.freeze({
+  [httpMethods.GET]: 'primary',
+  [httpMethods.POST]: 'success',
+  [httpMethods.PUT]: 'warning',
+  [httpMethods.PATCH]: 'info',
+  [httpMethods.DELETE]: 'danger',
+  [httpMethods.OPTIONS]: 'secondary',
+  [httpMethods.HEAD]: 'secondary',
+});
+
 /** Color options for Api actions, used in dropdowns or UI elements. */
 const colorOptions = Object.freeze([
   { value: colorEnums.Primary, translateKey: 'color.primary', },
@@ -552,8 +563,7 @@ const uiBuilder = (() => {
         </div>
   
         <h3>${t('sidebar.api.title')}</h3>
-        <ul class="api-action-group overflow-scroll-y mh-50vh">
-        </ul>
+        <ul class="api-action-group overflow-scroll-y mh-50vh"></ul>
         <div class="response-result">
           <h3>
             ${t('sidebar.response.title')}
@@ -583,6 +593,17 @@ const uiBuilder = (() => {
       </div>
     </div>
   `;
+
+  const createApiActionGroupItems = (datasource = []) => {
+    return datasource.map(({ id, name, method, color }) => `
+      <li class="api-action-group-item">
+        <a href="#" class="btn-control api-action-control" data-api-id="${id}">
+          <span class="api-method badge ${methodColors[method] || methodColors[httpMethods.GET]}">${method}</span>
+          ${name}
+        </a>
+      </li>
+    `).join('') || '';
+  }
 
   const createTabSettingElement = (action = actionMode.LOBBY) => {
     const isApiSetting = action === actionMode.API_SETTING
@@ -679,8 +700,10 @@ const uiBuilder = (() => {
         <div class="list-wrapper" data-env-type="hard-setting">
           <div class="form-group grid-3 gap-1">
             <label for="tb-env-host" class="form-label">${t('modal.env-var.hard-setting.host')}:</label>
-            <input id="tb-env-host" name="host" class="form-input span-2" value="${hostSetting}" data-env-input-type="value" required ${!selectedEnv ? 'disabled' : ''}>
-            <span class="error-message"></span>
+            <div class="form-control span-2">
+              <input id="tb-env-host" name="host" class="form-input" value="${hostSetting}" data-env-input-type="value" required ${!selectedEnv ? 'disabled' : ''}>
+              <span class="error-message"></span>
+            </div>
           </div>
         </div>
         <h3>${t('modal.title.your-env-var')}</h3>
@@ -763,19 +786,10 @@ const uiBuilder = (() => {
   }
 
   const createApiListItem = (datasource = []) => {
-    const methods = Object.freeze({
-      [httpMethods.GET]: 'primary',
-      [httpMethods.POST]: 'success',
-      [httpMethods.PUT]: 'warning',
-      [httpMethods.PATCH]: 'info',
-      [httpMethods.DELETE]: 'danger',
-      [httpMethods.OPTIONS]: 'secondary',
-      [httpMethods.HEAD]: 'secondary',
-    });
     return datasource.map(({ id, name, method, desc }) => `
       <li class="api-list-item">
         <a href="#" data-api-id="${id}">
-          <span class="api-method badge ${methods[method] || 'secondary'}">${method}</span>
+          <span class="api-method badge ${methodColors[method] || methodColors[httpMethods.GET]}">${method}</span>
           ${name}
         </a>
         <span class="api-action">
@@ -817,6 +831,7 @@ const uiBuilder = (() => {
 
   return {
     createDefaultUI,
+    createApiActionGroupItems,
     getHeaderModal,
     createTabSettingElement,
     createModalContentContainer,
@@ -898,10 +913,16 @@ class SwaggerFaster {
     /** @type {boolean} Page change state */
     this.isPageChange = false;
     this.timeoutId = null;
+    /** @type {Array<[string, string]>} Environment variables to replace in API requests */
     this.envReplacer = this.envVariables
       .find(env => env.envId === this.currentEnv)
       ?.items
       .map(env => [env.name, env.value]) || [];
+    /** @type {string} Pre-authentication token, used to store the token before login */
+    this.preAuthToken = '';
+    /** @type {string} Pre-session key, used to store the session key before login */
+    this.preSessionKey = '';
+    this.isFetching = false;
   }
 
   /** Your enviroment settings 
@@ -913,7 +934,7 @@ class SwaggerFaster {
   get envVariables() { return tryParseJSON(localStorage.getItem(this.#envVariableKey), []); }
   set envVariables(value) { localStorage.setItem(this.#envVariableKey, JSON.stringify(value)); }
   /** Your api setting
-   *  @type {{ id: string, name: string, desc: string, endpoint: string, method: httpMethods, color: colorEnums, req: Object, res: Object, isAuth: boolean }[]} */
+   *  @type {{ id: string, name: string, desc: string, endpoint: string, method: httpMethods, color: colorEnums, req: Object, isAuth: boolean }[]} */
   get apiSettings() { return tryParseJSON(localStorage.getItem(this.#apiSettingsKey), []); }
   set apiSettings(value) { localStorage.setItem(this.#apiSettingsKey, JSON.stringify(value)); }
   /** @type {string} Selected environment */
@@ -934,6 +955,7 @@ class SwaggerFaster {
   // Properties to get elements in the page
   // ================================================
   get btnToggleSidebar() { return $('#jun-tool #btn-toggle-sidebar'); }
+  get wApiActionGroup() { return $('#jun-tool .api-action-group'); }
   get wModal() { return $('#jun-tool .modal'); }
   get wHeaderModal() { return $('#jun-tool .modal .modal-header'); }
   get hTitleModal() { return $('#jun-tool .modal #title-modal'); }
@@ -954,7 +976,79 @@ class SwaggerFaster {
   get btnOpenSetting() { return $('#jun-tool #btn-open-setting'); }
 
   // ================================================
-  // Event Functions
+  // Api Functions
+  // ================================================
+
+  /**
+   * Fetch API settings from the server.
+   * @param {{
+   *  id: string,
+   *  name: string,
+   *  desc: string,
+   *  endpoint: string,
+   *  method: httpMethods,
+   *  color: colorEnums,
+   *  req: Object,
+   *  isAuth: boolean }} apiSetting API setting object to fetch 
+   */
+  async #fetchApiSettings(apiSetting) {
+    const { name, endpoint, method, req, isAuth } = apiSetting || {};
+    if (!endpoint) {
+      console.warn('No API endpoint provided for fetching settings.');
+      return;
+    }
+
+    try {
+      const response = await fetch(endpoint, {
+        method: method,
+        headers: {
+          'Content-Type': 'application/json',
+          ...(isAuth ? { 'Authorization': `Bearer ${this.preAuthToken}` } : {})
+        },
+        body: JSON.stringify(req)
+      });
+
+      if (!response.ok) throw new Error(`Failed to fetch API settings: ${response.statusText}`);
+
+      const data = await response.json();
+      if (!data.success) throw new Error(`API response error: ${data.message}`);
+
+      this.#displayResponse(data.data || {});
+
+      isAuth && this.#autoSetToken(data.data.token || '');
+
+      console.log(`API settings fetched successfully for ${name}`);
+    }
+    catch (error) {
+      console.error(`Error fetching API settings for ${name}:`, error);
+    } finally {
+      this.isFetching = false;
+    }
+  }
+
+  #autoSetToken(token = '', isAuth = true) {
+    this.preAuthToken = token;
+    const swaggerUi = window.ui;
+    if (swaggerUi && swaggerUi.preauthorizeApiKey) {
+      if (isAuth) {
+        swaggerUi.preauthorizeApiKey('bearerAuth', `Bearer ${token}`);
+        console.log('Token set using preauthorizeApiKey');
+      }
+      else {
+        swaggerUi.preauthorizeApiKey('bearerAuth', '');
+        console.log('No token set.');
+      }
+    } else {
+      console.error('Swagger UI instance or preauthorizeApiKey not found');
+    }
+  }
+
+  #displayResponse(res) {
+    console.log(res);
+  }
+
+  // ================================================
+  // Common Functions
   // ================================================
 
   /**
@@ -1125,6 +1219,22 @@ class SwaggerFaster {
   // ================================================
   // Event Functions
   // ================================================
+
+  /**
+   * Execute the event every time you click on the sidebar API action item.
+   * @param {MouseEvent} event Click event
+   */
+  async #onLobbyApiItemClick(event) {
+    event.preventDefault();
+    const apiId = event.target.dataset['apiId'];
+    if (!apiId) return;
+
+    const targetApi = this.apiSettings.find(api => api.id === apiId);
+    if (!targetApi) return;
+
+    this.isFetching = true;
+    await this.#fetchApiSettings(targetApi);
+  }
 
   /**
    * Execute the event every time you open modal
@@ -1388,6 +1498,10 @@ class SwaggerFaster {
     // Handle after setting the current action
     this.#onPageChange();
 
+    // Set the form data based on the current action
+    const apiActionItems = uiBuilder.createApiActionGroupItems(this.apiSettings);
+    this.wApiActionGroup.innerHTML = apiActionItems;
+
     // Set the title and modal container based on the current action
     this.hTitleModal.innerText = uiBuilder.getHeaderModal(this.currentAction);
     const tabHTML = uiBuilder.createTabSettingElement(this.currentAction);
@@ -1402,6 +1516,7 @@ class SwaggerFaster {
     this.#loadEnvDropdownList();
     this.#clearErrorMessage();
     this.#setModalEvent();
+    this.#setLobbyEvent();
   }
 
   // ================================================
@@ -1489,6 +1604,15 @@ class SwaggerFaster {
         };
         break;
     };
+  }
+
+  /**
+   * Set event for lobby API action items.
+   */
+  #setLobbyEvent() {
+    this.wApiActionGroup.querySelectorAll('.api-action-item .api-action-control').forEach((element) => {
+      element.addEventListener('click', (event) => this.#onLobbyApiItemClick(event));
+    });
   }
 
   /**
