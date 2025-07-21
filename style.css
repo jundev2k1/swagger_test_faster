@@ -3,20 +3,47 @@
   color: var(--jun-tool-text-color, #1a1a1a);
   --jun-tool-primary-color: #007bff;
   --jun-tool-primary-hover: #0056b3;
+  --jun-tool-primary-bg: rgba(0, 123, 255, 0.1);
+  --jun-tool-primary-bg-hover: rgba(0, 123, 255, 0.2);
+  --jun-tool-primary-disabled: rgba(0, 123, 255, 0.4);
   --jun-tool-secondary-color: #6c757d;
   --jun-tool-secondary-hover: #5a6268;
+  --jun-tool-secondary-bg: rgba(108, 117, 125, 0.1);
+  --jun-tool-secondary-bg-hover: rgba(108, 117, 125, 0.2);
+  --jun-tool-secondary-disabled: rgba(108, 117, 125, 0.4);
   --jun-tool-success-color: #28a745;
   --jun-tool-success-hover: #218838;
+  --jun-tool-success-bg: rgba(40, 167, 69, 0.1);
+  --jun-tool-success-bg-hover: rgba(40, 167, 69, 0.2);
+  --jun-tool-success-disabled: rgba(40, 167, 69, 0.4);
   --jun-tool-danger-color: #dc3545;
   --jun-tool-danger-hover: #c82333;
+  --jun-tool-danger-bg: rgba(220, 53, 69, 0.1);
+  --jun-tool-danger-bg-hover: rgba(220, 53, 69, 0.2);
+  --jun-tool-danger-disabled: rgba(220, 53, 69, 0.4);
   --jun-tool-warning-color: #ffc107;
   --jun-tool-warning-hover: #e0a800;
+  --jun-tool-warning-bg: rgba(255, 193, 7, 0.15);
+  --jun-tool-warning-bg-hover: rgba(255, 193, 7, 0.25);
+  --jun-tool-warning-disabled: rgba(255, 193, 7, 0.5);
   --jun-tool-info-color: #17a2b8;
   --jun-tool-info-hover: #117a8b;
+  --jun-tool-info-bg: rgba(23, 162, 184, 0.1);
+  --jun-tool-info-bg-hover: rgba(23, 162, 184, 0.2);
+  --jun-tool-info-disabled: rgba(23, 162, 184, 0.4);
   --jun-tool-light-color: #f8f9fa;
   --jun-tool-light-hover: #e2e6ea;
+  --jun-tool-light-bg: rgba(248, 249, 250, 0.5);
+  --jun-tool-light-bg-hover: rgba(248, 249, 250, 0.7);
+  --jun-tool-light-disabled: rgba(248, 249, 250, 0.5);
   --jun-tool-dark-color: #343a40;
   --jun-tool-dark-hover: #23272b;
+  --jun-tool-dark-bg: rgba(52, 58, 64, 0.08);
+  --jun-tool-dark-bg-hover: rgba(52, 58, 64, 0.15);
+  --jun-tool-dark-disabled: rgba(52, 58, 64, 0.3);
+  --jun-tool-black-color: #1a1a1a;
+  --jun-tool-black-hover: #000000;
+  --jun-tool-black-disabled: rgba(26, 26, 26, 0.3);
   --jun-tool-background: rgba(255, 255, 255, 0.95);
   --jun-tool-backdrop-blur: blur(8px);
   --jun-tool-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
@@ -24,15 +51,113 @@
   --jun-tool-subtle-bg: rgba(0, 0, 0, 0.05);
   --jun-tool-subtle-bg-light: rgba(0, 0, 0, 0.02);
   --jun-tool-key-color: #555;
+  --jun-tool-spacing-xs: 4px;
   --jun-tool-spacing-sm: 8px;
   --jun-tool-spacing-md: 12px;
   --jun-tool-spacing-lg: 16px;
   --jun-tool-border-radius: 4px;
-  --jun-tool-font-size-sm: 0.85rem;
+  --jun-tool-font-size-xs: 0.7rem;
+  --jun-tool-font-size-sm: 0.875rem;
   --jun-tool-font-size-md: 0.9rem;
   --jun-tool-font-size-lg: 1rem;
   --jun-tool-font-size-xl: 1.25rem;
   --jun-tool-font-size-xxl: 1.3rem;
+}
+
+#jun-tool .bg-primary {
+  background-color: var(--jun-tool-primary-bg);
+}
+
+#jun-tool .bg-primary-hover:hover {
+  background-color: var(--jun-tool-primary-bg-hover);
+}
+
+#jun-tool .bg-primary:disabled {
+  background-color: var(--jun-tool-primary-bg);
+}
+
+#jun-tool .bg-secondary {
+  background-color: var(--jun-tool-secondary-bg);
+}
+
+#jun-tool .bg-secondary-hover:hover {
+  background-color: var(--jun-tool-secondary-bg-hover);
+}
+
+#jun-tool .bg-secondary:disabled {
+  background-color: var(--jun-tool-secondary-bg);
+}
+
+#jun-tool .bg-success {
+  background-color: var(--jun-tool-success-bg);
+}
+
+#jun-tool .bg-success-hover:hover {
+  background-color: var(--jun-tool-success-bg-hover);
+}
+
+#jun-tool .bg-success:disabled {
+  background-color: var(--jun-tool-success-bg);
+}
+
+#jun-tool .bg-danger {
+  background-color: var(--jun-tool-danger-bg);
+}
+
+#jun-tool .bg-danger-hover:hover {
+  background-color: var(--jun-tool-danger-bg-hover);
+}
+
+#jun-tool .bg-danger:disabled {
+  background-color: var(--jun-tool-danger-bg);
+}
+
+#jun-tool .bg-warning {
+  background-color: var(--jun-tool-warning-bg);
+}
+
+#jun-tool .bg-warning-hover:hover {
+  background-color: var(--jun-tool-warning-bg-hover);
+}
+
+#jun-tool .bg-warning:disabled {
+  background-color: var(--jun-tool-warning-bg);
+}
+
+#jun-tool .bg-info {
+  background-color: var(--jun-tool-info-bg);
+}
+
+#jun-tool .bg-info-hover:hover {
+  background-color: var(--jun-tool-info-bg-hover);
+}
+
+#jun-tool .bg-info:disabled {
+  background-color: var(--jun-tool-info-bg);
+}
+
+#jun-tool .bg-light {
+  background-color: var(--jun-tool-light-bg);
+}
+
+#jun-tool .bg-light-hover:hover {
+  background-color: var(--jun-tool-light-bg-hover);
+}
+
+#jun-tool .bg-light:disabled {
+  background-color: var(--jun-tool-light-bg);
+}
+
+#jun-tool .bg-dark {
+  background-color: var(--jun-tool-dark-bg);
+}
+
+#jun-tool .bg-dark-hover:hover {
+  background-color: var(--jun-tool-dark-bg-hover);
+}
+
+#jun-tool .bg-dark:disabled {
+  background-color: var(--jun-tool-dark-bg);
 }
 
 #jun-tool .grid-1 {
@@ -285,6 +410,30 @@
   padding: var(--jun-tool-spacing-lg);
 }
 
+.font-xs {
+  font-size: var(--jun-tool-font-size-xs);
+}
+
+.font-sm {
+  font-size: var(--jun-tool-font-size-sm);
+}
+
+.font-md {
+  font-size: var(--jun-tool-font-size-md);
+}
+
+.font-lg {
+  font-size: var(--jun-tool-font-size-lg);
+}
+
+.font-xl {
+  font-size: var(--jun-tool-font-size-xl);
+}
+
+.font-xxl {
+  font-size: var(--jun-tool-font-size-xxl);
+}
+
 #jun-tool .text-center {
   text-align: center;
 }
@@ -443,28 +592,23 @@
 }
 
 #jun-tool .btn-control {
-  background: none;
   border: none;
   padding: var(--jun-tool-spacing-sm) var(--jun-tool-spacing-md);
   cursor: pointer;
-  font-size: var(--jun-tool-font-size-md);
-  color: var(--jun-tool-primary-color);
+  border-radius: var(--jun-tool-border-radius);
+  font-weight: 500;
+  color: var(--jun-tool-black-color);
   transition: background 0.2s, color 0.2s;
 }
 
 #jun-tool .btn-control:hover {
-  background: rgba(0, 123, 255, 0.1);
   border-radius: var(--jun-tool-border-radius);
 }
 
 #jun-tool .btn-control.primary {
   background: var(--jun-tool-primary-color);
   color: #fff;
-  font-weight: 500;
-  text-align: center;
-  padding: var(--jun-tool-spacing-sm) var(--jun-tool-spacing-md);
-  border-radius: var(--jun-tool-border-radius);
-  transition: background 0.2s, transform 0.1s;
+  transition: .5s;
 }
 
 #jun-tool .btn-control.primary:hover {
@@ -479,11 +623,7 @@
 #jun-tool .btn-control.secondary {
   background: var(--jun-tool-secondary-color);
   color: #fff;
-  font-weight: 500;
-  text-align: center;
-  padding: var(--jun-tool-spacing-sm) var(--jun-tool-spacing-md);
-  border-radius: var(--jun-tool-border-radius);
-  transition: background 0.2s, transform 0.1s;
+  transition: .5s;
 }
 
 #jun-tool .btn-control.secondary:hover {
@@ -498,11 +638,7 @@
 #jun-tool .btn-control.success {
   background: var(--jun-tool-success-color);
   color: #fff;
-  font-weight: 500;
-  text-align: center;
-  padding: var(--jun-tool-spacing-sm) var(--jun-tool-spacing-md);
-  border-radius: var(--jun-tool-border-radius);
-  transition: background 0.2s, transform 0.1s;
+  transition: .5s;
 }
 
 #jun-tool .btn-control.success:hover {
@@ -517,11 +653,7 @@
 #jun-tool .btn-control.danger {
   background: var(--jun-tool-danger-color);
   color: #fff;
-  font-weight: 500;
-  text-align: center;
-  padding: var(--jun-tool-spacing-sm) var(--jun-tool-spacing-md);
-  border-radius: var(--jun-tool-border-radius);
-  transition: background 0.2s, transform 0.1s;
+  transition: .5s;
 }
 
 #jun-tool .btn-control.danger:hover {
@@ -536,11 +668,7 @@
 #jun-tool .btn-control.warning {
   background: var(--jun-tool-warning-color);
   color: #212529;
-  font-weight: 500;
-  text-align: center;
-  padding: var(--jun-tool-spacing-sm) var(--jun-tool-spacing-md);
-  border-radius: var(--jun-tool-border-radius);
-  transition: background 0.2s, transform 0.1s;
+  transition: .5s;
 }
 
 #jun-tool .btn-control.warning:hover {
@@ -555,11 +683,7 @@
 #jun-tool .btn-control.info {
   background: var(--jun-tool-info-color);
   color: #fff;
-  font-weight: 500;
-  text-align: center;
-  padding: var(--jun-tool-spacing-sm) var(--jun-tool-spacing-md);
-  border-radius: var(--jun-tool-border-radius);
-  transition: background 0.2s, transform 0.1s;
+  transition: .5s;
 }
 
 #jun-tool .btn-control.info:hover {
@@ -574,11 +698,7 @@
 #jun-tool .btn-control.light {
   background: var(--jun-tool-light-color);
   color: #212529;
-  font-weight: 500;
-  text-align: center;
-  padding: var(--jun-tool-spacing-sm) var(--jun-tool-spacing-md);
-  border-radius: var(--jun-tool-border-radius);
-  transition: background 0.2s, transform 0.1s;
+  transition: .5s;
 }
 
 #jun-tool .btn-control.light:hover {
@@ -593,11 +713,7 @@
 #jun-tool .btn-control.dark {
   background: var(--jun-tool-dark-color);
   color: #fff;
-  font-weight: 500;
-  text-align: center;
-  padding: var(--jun-tool-spacing-sm) var(--jun-tool-spacing-md);
-  border-radius: var(--jun-tool-border-radius);
-  transition: background 0.2s, transform 0.1s;
+  transition: .5s;
 }
 
 #jun-tool .btn-control.dark:hover {
@@ -633,7 +749,7 @@
   right: 0;
   background-color: #fff;
   border: 1px solid #ddd;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   list-style: none;
   padding: 8px 0;
   margin: 0;
@@ -737,7 +853,7 @@
 #jun-tool .api-action-group {
   max-height: 50vh;
   overflow-y: auto;
-  padding: 0 var(--jun-tool-spacing-lg);
+  padding: var(--jun-tool-spacing-lg);
   margin: 0;
   list-style: none;
 }
@@ -745,24 +861,23 @@
 #jun-tool .api-action-group-item {
   margin-top: var(--jun-tool-spacing-sm);
   margin-bottom: var(--jun-tool-spacing-sm);
+  border-radius: var(--jun-tool-border-radius);
 }
 
 #jun-tool .api-action-group-item a {
   display: block;
   text-decoration: none;
-  color: #fff;
-  background: var(--jun-tool-secondary-color);
-  border-radius: var(--jun-tool-border-radius);
+  color: var(--jun-tool-black-color);
   font-weight: 500;
   text-align: center;
   padding: var(--jun-tool-spacing-sm) var(--jun-tool-spacing-md);
-  transition: background 0.2s, transform 0.1s;
   text-align: left;
+  transition: .25s;
 }
 
 #jun-tool .api-action-group-item a:hover {
-  background: var(--jun-tool-secondary-hover);
   transform: translateY(-1px);
+  color: var(--jun-tool-black-hover);
 }
 
 #jun-tool .api-action-group-item a:active {
@@ -800,6 +915,7 @@
   overflow-y: auto;
 }
 
+/* 
 #jun-tool .key {
   font-size: var(--jun-tool-font-size-sm);
   color: var(--jun-tool-key-color);
@@ -812,7 +928,7 @@
   margin: var(--jun-tool-spacing-sm) 0;
   word-break: break-all;
   display: block;
-}
+} */
 
 #jun-tool .value.copyable {
   cursor: pointer;
@@ -960,42 +1076,60 @@
 
 #jun-tool .api-list-item {
   display: flex;
-  flex-direction: column;
   gap: 4px;
-  background: var(--jun-tool-subtle-bg-light);
+  filter: brightness(1.5);
   border-radius: var(--jun-tool-border-radius);
-  padding: var(--jun-tool-spacing-sm) var(--jun-tool-spacing-md);
   transition: background 0.2s, box-shadow 0.2s;
 }
 
 #jun-tool .api-list-item:hover {
-  background: rgba(0, 123, 255, 0.06);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-#jun-tool .api-list-item a {
+#jun-tool .api-list-item button[data-action="copy-insert-api"]:hover,
+#jun-tool .api-list-item button[data-action="delete-api"]:hover {
+  transform: none;
+}
+
+#jun-tool .api-list-item .api-setting-content {
+  padding: var(--jun-tool-spacing-sm) var(--jun-tool-spacing-md);
+  flex-grow: 1;
+}
+
+#jun-tool .api-list-item .api-setting-content a {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: var(--jun-tool-text-color);
+  color: var(--jun-tool-black-color);
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 600;
   font-size: var(--jun-tool-font-size-md);
+  transition: .25s;
 }
 
-#jun-tool .api-list-item a:hover {
-  color: var(--jun-tool-primary-color);
+#jun-tool .api-list-item .api-setting-content a:hover {
+  color: var(--jun-tool-black-hover);
 }
 
-#jun-tool .api-list-item .api-method {
+#jun-tool .api-list-item .api-setting-content a .api-item-title {
+  flex-grow: 1;
+}
+
+#jun-tool .api-list-item .api-setting-content .api-method {
   width: 40px;
   text-align: center;
 }
 
-#jun-tool .api-action {
+#jun-tool .api-list-item .api-setting-content .api-item-endpoint {
+  margin: 4px 0 0 0;
   font-size: var(--jun-tool-font-size-sm);
   color: var(--jun-tool-key-color);
-  padding-left: 62px;
+}
+
+#jun-tool .api-list-item .api-setting-content .api-item-desc {
+  font-style: italic;
+  font-size: var(--jun-tool-font-size-xs);
+  color: var(--jun-tool-key-color);
 }
 
 #jun-tool .modal .error-message {
@@ -1035,4 +1169,124 @@
 
 #jun-tool .modal-footer .close-modal:hover {
   background: var(--jun-tool-secondary-hover);
+}
+
+#jun-tool #toast-container {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 90%;
+  pointer-events: none;
+}
+
+#jun-tool .jun-toast {
+  display: inline-block;
+  padding: 10px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transform: translateY(10px);
+  animation: jun-toast-in 0.3s ease forwards, jun-toast-out 0.3s ease forwards;
+  animation-delay: 0s, var(--hide-delay, 3s);
+  background: #17a2b8;
+  pointer-events: auto;
+}
+
+#jun-tool .jun-toast.success {
+  background: var(--jun-tool-success-color);
+}
+
+#jun-tool .jun-toast.warning {
+  background: var(--jun-tool-warning-color);
+  color: #000;
+}
+
+#jun-tool .jun-toast.error {
+  background: var(--jun-tool-danger-color);
+}
+
+#jun-tool .jun-toast.info {
+  background: var(--jun-tool-info-color);
+}
+
+@keyframes jun-toast-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes jun-toast-out {
+  to {
+    opacity: .3;
+    transform: translateY(10px);
+  }
+}
+
+#jun-tool .json-viewer {
+  font-family: monospace;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #222;
+  white-space: pre;
+}
+
+#jun-tool .json-viewer .node {
+  margin-left: 14px;
+  position: relative;
+}
+
+#jun-tool .json-viewer .key {
+  color: #c92c2c;
+  font-weight: bold;
+}
+
+#jun-tool .json-viewer .value {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 220px;
+  display: inline-block;
+  vertical-align: bottom;
+}
+
+.json-viewer .value.string {
+  color: #032f62;
+}
+
+.json-viewer .value.number {
+  color: #005cc5;
+}
+
+.json-viewer .value.boolean {
+  color: #d73a49;
+}
+
+.json-viewer .value.null {
+  color: #6a737d;
+  font-style: italic;
+}
+
+#jun-tool .json-viewer .toggle {
+  cursor: pointer;
+  font-weight: bold;
+  color: #555;
+  margin-right: 4px;
+  user-select: none;
+}
+
+#jun-tool .json-viewer .children.collapsed {
+  display: none;
+}
+
+#jun-tool .json-viewer .copyable:hover {
+  text-decoration: underline;
+  cursor: pointer;
 }
