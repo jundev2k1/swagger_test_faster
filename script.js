@@ -1194,7 +1194,7 @@ class SwaggerFaster {
           ...(isAuth ? { 'Authorization': `Bearer ${this.preAuthToken}` } : {})
         },
         body: request && method !== httpMethods.GET
-          ? JSON.stringify(this.resolveObjectVars(request))
+          ? this.resolveObjectVars(request)
           : undefined,
       };
       const response = await fetch(this.resolveVars(endpoint), option);
