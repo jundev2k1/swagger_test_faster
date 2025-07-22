@@ -1035,7 +1035,7 @@ const uiBuilder = (() => {
                 <option value="${val}" ${color === val ? 'selected' : ''}>
                   ${key}
                 </option>
-              `)}
+              `).join('')}
             </select>
           </div>
           <div class="form-group">
@@ -1045,7 +1045,7 @@ const uiBuilder = (() => {
                 <option value="${val}" ${color === val ? 'selected' : ''}>
                   ${t(`color.${val}`, key)}
                 </option>
-              `)}
+              `).join('')}
             </select>
           </div>
         </div>
