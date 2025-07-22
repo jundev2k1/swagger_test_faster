@@ -725,7 +725,7 @@ const uiBuilder = (() => {
           <button class="btn-control icon-badge light dropdown-toggle" id="btn-change-language">🌍</button>
           <ul class="dropdown-menu" data-target-id="btn-change-language">
             ${supportedLanguages.map(lang => `
-              <li><a href="#" data-lang="${lang}">${translate.lang[lang]}</a></li>
+              <li><a href="javascript:void" data-lang="${lang}">${translate.lang[lang]}</a></li>
             `).join('')}
           </ul>
         </div>
@@ -746,7 +746,7 @@ const uiBuilder = (() => {
           <div class="card json-viewer"></div>
         </div>
         <div class="tool-setting">
-          <a href="#" id="btn-open-setting" class="btn-control secondary action-control">${t('btn.setting')}</a>
+          <a href="javascript:void" id="btn-open-setting" class="btn-control secondary action-control">${t('btn.setting')}</a>
         </div>
       </div>
     </aside>
@@ -773,7 +773,7 @@ const uiBuilder = (() => {
   const createApiActionGroupItems = (datasource = []) => {
     return datasource.map(({ id, name, method, color }) => `
       <li class="api-action-group-item bg-${color} bg-${color}-hover">
-        <a href="#" class="btn-control api-action-control" data-api-id="${id}">
+        <a href="javascript:void" class="btn-control api-action-control" data-api-id="${id}">
           <span class="api-method badge ${methodColors[method] || methodColors[httpMethods.GET]}">${method}</span>
           ${name}
         </a>
@@ -836,7 +836,7 @@ const uiBuilder = (() => {
               <button type="button" class="btn-control icon-badge light" data-action="delete-environment" title="${t('tooltip.delete')}">🗑️</button>
             </div>
           `).join('')}
-          <a href="#" id="btn-add-new-env" class="btn-control light">${t('btn.add-new')}</a>
+          <a href="javascript:void" id="btn-add-new-env" class="btn-control light">${t('btn.add-new')}</a>
         </div>
       </form>
     `;
@@ -897,7 +897,7 @@ const uiBuilder = (() => {
                 <button class="btn-control icon-badge light" data-action="delete-variable" title="${t('tooltip.delete')}">🗑️</button>
               </div>
             `).join('')}
-          ${selectedEnv ? `<a href="#" id="btn-add-new-var" class="btn-control light">${t('btn.add-new')}</a>` : ''}
+          ${selectedEnv ? `<a href="javascript:void" id="btn-add-new-var" class="btn-control light">${t('btn.add-new')}</a>` : ''}
         </div>
       </form>
     `;
@@ -966,7 +966,7 @@ const uiBuilder = (() => {
       <li class="api-list-item bg-${color || 'primary'} bg-${color || 'primary'}-hover">
         <div class="api-setting-content">
           <p class="api-item-endpoint">${t('modal.api-list-item.endpoint-to')}: ${endpoint}</p>
-          <a href="#" data-api-id="${id}">
+          <a href="javascript:void" data-api-id="${id}">
             <span class="api-method badge ${methodColors[method] || methodColors[httpMethods.GET]}">${method}</span>
             <span class="api-item-title">${name}</span>
           </a>
@@ -1202,7 +1202,7 @@ class SwaggerFaster {
       this.apiResponse = data;
       this.#displayResponseChange();
 
-      isAuth && this.#autoSetToken(data.data.token || '');
+      response.ok && isAuth && this.#autoSetToken(data?.data?.token || '');
 
       console.log(`API settings fetched successfully for ${name}`);
       Toast.success(t('message.fetch-api.success'));
