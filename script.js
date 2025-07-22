@@ -1013,7 +1013,7 @@ const uiBuilder = (() => {
     `;
   }
 
-  const createApiSettingForm = ({ name, desc, endpoint, request, color, isAuth }) => {
+  const createApiSettingForm = ({ name, desc, method, endpoint, request, color, isAuth }) => {
     return `
       <form id="api-setting-form">
         <div class="form-group">
@@ -1032,7 +1032,7 @@ const uiBuilder = (() => {
             <label for="api-setting-method" class="form-label">${t('modal.api-setting.http-method')}</label>
             <select class="form-select" id="api-setting-method" name="method" data-action="form-input">
               ${Object.entries(httpMethods).map(([key, val]) => `
-                <option value="${val}" ${color === val ? 'selected' : ''}>
+                <option value="${val}" ${method === val ? 'selected' : ''}>
                   ${key}
                 </option>
               `).join('')}
