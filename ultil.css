@@ -1,0 +1,738 @@
+#jun-tool {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: var(--jun-tool-text-color, #1a1a1a);
+  --jun-tool-primary-color: #007bff;
+  --jun-tool-primary-hover: #0056b3;
+  --jun-tool-primary-bg: rgba(0, 123, 255, 0.1);
+  --jun-tool-primary-bg-hover: rgba(0, 123, 255, 0.2);
+  --jun-tool-primary-disabled: rgba(0, 123, 255, 0.4);
+  --jun-tool-secondary-color: #6c757d;
+  --jun-tool-secondary-hover: #5a6268;
+  --jun-tool-secondary-bg: rgba(108, 117, 125, 0.1);
+  --jun-tool-secondary-bg-hover: rgba(108, 117, 125, 0.2);
+  --jun-tool-secondary-disabled: rgba(108, 117, 125, 0.4);
+  --jun-tool-success-color: #28a745;
+  --jun-tool-success-hover: #218838;
+  --jun-tool-success-bg: rgba(40, 167, 69, 0.1);
+  --jun-tool-success-bg-hover: rgba(40, 167, 69, 0.2);
+  --jun-tool-success-disabled: rgba(40, 167, 69, 0.4);
+  --jun-tool-danger-color: #dc3545;
+  --jun-tool-danger-hover: #c82333;
+  --jun-tool-danger-bg: rgba(220, 53, 69, 0.1);
+  --jun-tool-danger-bg-hover: rgba(220, 53, 69, 0.2);
+  --jun-tool-danger-disabled: rgba(220, 53, 69, 0.4);
+  --jun-tool-warning-color: #ffc107;
+  --jun-tool-warning-hover: #e0a800;
+  --jun-tool-warning-bg: rgba(255, 193, 7, 0.15);
+  --jun-tool-warning-bg-hover: rgba(255, 193, 7, 0.25);
+  --jun-tool-warning-disabled: rgba(255, 193, 7, 0.5);
+  --jun-tool-info-color: #17a2b8;
+  --jun-tool-info-hover: #117a8b;
+  --jun-tool-info-bg: rgba(23, 162, 184, 0.1);
+  --jun-tool-info-bg-hover: rgba(23, 162, 184, 0.2);
+  --jun-tool-info-disabled: rgba(23, 162, 184, 0.4);
+  --jun-tool-light-color: #f8f9fa;
+  --jun-tool-light-hover: #e2e6ea;
+  --jun-tool-light-bg: rgba(248, 249, 250, 0.5);
+  --jun-tool-light-bg-hover: rgba(248, 249, 250, 0.7);
+  --jun-tool-light-disabled: rgba(248, 249, 250, 0.5);
+  --jun-tool-dark-color: #343a40;
+  --jun-tool-dark-hover: #23272b;
+  --jun-tool-dark-bg: rgba(52, 58, 64, 0.08);
+  --jun-tool-dark-bg-hover: rgba(52, 58, 64, 0.15);
+  --jun-tool-dark-disabled: rgba(52, 58, 64, 0.3);
+  --jun-tool-black-color: #1a1a1a;
+  --jun-tool-black-hover: #000000;
+  --jun-tool-black-disabled: rgba(26, 26, 26, 0.3);
+  --jun-tool-background: rgba(255, 255, 255, 0.95);
+  --jun-tool-backdrop-blur: blur(8px);
+  --jun-tool-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+  --jun-tool-border-color: rgba(0, 0, 0, 0.1);
+  --jun-tool-subtle-bg: rgba(0, 0, 0, 0.05);
+  --jun-tool-subtle-bg-light: rgba(0, 0, 0, 0.02);
+  --jun-tool-key-color: #555;
+  --jun-tool-spacing-xs: 4px;
+  --jun-tool-spacing-sm: 8px;
+  --jun-tool-spacing-md: 12px;
+  --jun-tool-spacing-lg: 16px;
+  --jun-tool-border-radius: 4px;
+  --jun-tool-font-size-xs: 0.7rem;
+  --jun-tool-font-size-sm: 0.875rem;
+  --jun-tool-font-size-md: 0.9rem;
+  --jun-tool-font-size-lg: 1rem;
+  --jun-tool-font-size-xl: 1.25rem;
+  --jun-tool-font-size-xxl: 1.3rem;
+}
+
+#jun-tool .bg-primary {
+  background-color: var(--jun-tool-primary-bg);
+}
+
+#jun-tool .bg-primary-hover:hover {
+  background-color: var(--jun-tool-primary-bg-hover);
+}
+
+#jun-tool .bg-primary:disabled {
+  background-color: var(--jun-tool-primary-bg);
+}
+
+#jun-tool .bg-secondary {
+  background-color: var(--jun-tool-secondary-bg);
+}
+
+#jun-tool .bg-secondary-hover:hover {
+  background-color: var(--jun-tool-secondary-bg-hover);
+}
+
+#jun-tool .bg-secondary:disabled {
+  background-color: var(--jun-tool-secondary-bg);
+}
+
+#jun-tool .bg-success {
+  background-color: var(--jun-tool-success-bg);
+}
+
+#jun-tool .bg-success-hover:hover {
+  background-color: var(--jun-tool-success-bg-hover);
+}
+
+#jun-tool .bg-success:disabled {
+  background-color: var(--jun-tool-success-bg);
+}
+
+#jun-tool .bg-danger {
+  background-color: var(--jun-tool-danger-bg);
+}
+
+#jun-tool .bg-danger-hover:hover {
+  background-color: var(--jun-tool-danger-bg-hover);
+}
+
+#jun-tool .bg-danger:disabled {
+  background-color: var(--jun-tool-danger-bg);
+}
+
+#jun-tool .bg-warning {
+  background-color: var(--jun-tool-warning-bg);
+}
+
+#jun-tool .bg-warning-hover:hover {
+  background-color: var(--jun-tool-warning-bg-hover);
+}
+
+#jun-tool .bg-warning:disabled {
+  background-color: var(--jun-tool-warning-bg);
+}
+
+#jun-tool .bg-info {
+  background-color: var(--jun-tool-info-bg);
+}
+
+#jun-tool .bg-info-hover:hover {
+  background-color: var(--jun-tool-info-bg-hover);
+}
+
+#jun-tool .bg-info:disabled {
+  background-color: var(--jun-tool-info-bg);
+}
+
+#jun-tool .bg-light {
+  background-color: var(--jun-tool-light-bg);
+}
+
+#jun-tool .bg-light-hover:hover {
+  background-color: var(--jun-tool-light-bg-hover);
+}
+
+#jun-tool .bg-light:disabled {
+  background-color: var(--jun-tool-light-bg);
+}
+
+#jun-tool .bg-dark {
+  background-color: var(--jun-tool-dark-bg);
+}
+
+#jun-tool .bg-dark-hover:hover {
+  background-color: var(--jun-tool-dark-bg-hover);
+}
+
+#jun-tool .bg-dark:disabled {
+  background-color: var(--jun-tool-dark-bg);
+}
+
+#jun-tool .grid-1 {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+#jun-tool .grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+#jun-tool .grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+#jun-tool .grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+#jun-tool .grid-5 {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+}
+
+#jun-tool .grid-6 {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+}
+
+#jun-tool .grid-cols-1-2 {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+}
+
+#jun-tool .grid-cols-1-3 {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+}
+
+#jun-tool .grid-cols-2-1 {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+}
+
+#jun-tool .grid-cols-1-2-1-1 {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr 1fr;
+}
+
+#jun-tool .span-1 {
+  grid-column: span 1;
+}
+
+#jun-tool .span-2 {
+  grid-column: span 2;
+}
+
+#jun-tool .span-3 {
+  grid-column: span 3;
+}
+
+#jun-tool .span-4 {
+  grid-column: span 4;
+}
+
+#jun-tool .gap-0 {
+  gap: 0;
+}
+
+#jun-tool .gap-1 {
+  gap: 4px;
+}
+
+#jun-tool .gap-2 {
+  gap: var(--jun-tool-spacing-sm);
+}
+
+#jun-tool .gap-3 {
+  gap: var(--jun-tool-spacing-md);
+}
+
+#jun-tool .gap-4 {
+  gap: var(--jun-tool-spacing-lg);
+}
+
+#jun-tool .flex {
+  display: flex;
+}
+
+#jun-tool .flex-row {
+  flex-direction: row;
+}
+
+#jun-tool .flex-col {
+  flex-direction: column;
+}
+
+#jun-tool .flex-wrap {
+  flex-wrap: wrap;
+}
+
+#jun-tool .flex-nowrap {
+  flex-wrap: nowrap;
+}
+
+#jun-tool .items-start {
+  align-items: flex-start;
+}
+
+#jun-tool .items-center {
+  align-items: center;
+}
+
+#jun-tool .items-end {
+  align-items: flex-end;
+}
+
+#jun-tool .justify-start {
+  justify-content: flex-start;
+}
+
+#jun-tool .justify-center {
+  justify-content: center;
+}
+
+#jun-tool .justify-end {
+  justify-content: flex-end;
+}
+
+#jun-tool .justify-between {
+  justify-content: space-between;
+}
+
+#jun-tool .justify-around {
+  justify-content: space-around;
+}
+
+#jun-tool .flex-1 {
+  flex: 1;
+}
+
+#jun-tool .flex-auto {
+  flex: auto;
+}
+
+#jun-tool .flex-none {
+  flex: none;
+}
+
+#jun-tool .m-0 {
+  margin: 0;
+}
+
+#jun-tool .m-1 {
+  margin: 4px;
+}
+
+#jun-tool .m-2 {
+  margin: var(--jun-tool-spacing-sm);
+}
+
+#jun-tool .m-3 {
+  margin: var(--jun-tool-spacing-md);
+}
+
+#jun-tool .m-4 {
+  margin: var(--jun-tool-spacing-lg);
+}
+
+#jun-tool .mx-0 {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+#jun-tool .mx-1 {
+  margin-left: 4px;
+  margin-right: 4px;
+}
+
+#jun-tool .mx-2 {
+  margin-left: var(--jun-tool-spacing-sm);
+  margin-right: var(--jun-tool-spacing-sm);
+}
+
+#jun-tool .mx-3 {
+  margin-left: var(--jun-tool-spacing-md);
+  margin-right: var(--jun-tool-spacing-md);
+}
+
+#jun-tool .mx-4 {
+  margin-left: var(--jun-tool-spacing-lg);
+  margin-right: var(--jun-tool-spacing-lg);
+}
+
+#jun-tool .my-0 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+#jun-tool .my-1 {
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+#jun-tool .my-2 {
+  margin-top: var(--jun-tool-spacing-sm);
+  margin-bottom: var(--jun-tool-spacing-sm);
+}
+
+#jun-tool .my-3 {
+  margin-top: var(--jun-tool-spacing-md);
+  margin-bottom: var(--jun-tool-spacing-md);
+}
+
+#jun-tool .my-4 {
+  margin-top: var(--jun-tool-spacing-lg);
+  margin-bottom: var(--jun-tool-spacing-lg);
+}
+
+#jun-tool .mb-0 {
+  margin-bottom: 0;
+}
+
+#jun-tool .mb-1 {
+  margin-bottom: 4px;
+}
+
+#jun-tool .mb-2 {
+  margin-bottom: var(--jun-tool-spacing-sm);
+}
+
+#jun-tool .mb-3 {
+  margin-bottom: var(--jun-tool-spacing-md);
+}
+
+#jun-tool .mb-4 {
+  margin-bottom: var(--jun-tool-spacing-lg);
+}
+
+#jun-tool .mt-0 {
+  margin-top: 0;
+}
+
+#jun-tool .mt-1 {
+  margin-top: 4px;
+}
+
+#jun-tool .mt-2 {
+  margin-top: var(--jun-tool-spacing-sm);
+}
+
+#jun-tool .mt-3 {
+  margin-top: var(--jun-tool-spacing-md);
+}
+
+#jun-tool .mt-4 {
+  margin-top: var(--jun-tool-spacing-lg);
+}
+
+#jun-tool .ml-0 {
+  margin-left: 0;
+}
+
+#jun-tool .ml-1 {
+  margin-left: 4px;
+}
+
+#jun-tool .ml-2 {
+  margin-left: var(--jun-tool-spacing-sm);
+}
+
+#jun-tool .ml-3 {
+  margin-left: var(--jun-tool-spacing-md);
+}
+
+#jun-tool .ml-4 {
+  margin-left: var(--jun-tool-spacing-lg);
+}
+
+#jun-tool .mr-0 {
+  margin-right: 0;
+}
+
+#jun-tool .mr-1 {
+  margin-right: 4px;
+}
+
+#jun-tool .mr-2 {
+  margin-right: var(--jun-tool-spacing-sm);
+}
+
+#jun-tool .mr-3 {
+  margin-right: var(--jun-tool-spacing-md);
+}
+
+#jun-tool .mr-4 {
+  margin-right: var(--jun-tool-spacing-lg);
+}
+
+#jun-tool .p-0 {
+  padding: 0;
+}
+
+#jun-tool .p-1 {
+  padding: 4px;
+}
+
+#jun-tool .p-2 {
+  padding: var(--jun-tool-spacing-sm);
+}
+
+#jun-tool .p-3 {
+  padding: var(--jun-tool-spacing-md);
+}
+
+#jun-tool .p-4 {
+  padding: var(--jun-tool-spacing-lg);
+}
+
+#jun-tool .px-0 {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+#jun-tool .px-1 {
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#jun-tool .px-2 {
+  padding-left: var(--jun-tool-spacing-sm);
+  padding-right: var(--jun-tool-spacing-sm);
+}
+
+#jun-tool .px-3 {
+  padding-left: var(--jun-tool-spacing-md);
+  padding-right: var(--jun-tool-spacing-md);
+}
+
+#jun-tool .px-4 {
+  padding-left: var(--jun-tool-spacing-lg);
+  padding-right: var(--jun-tool-spacing-lg);
+}
+
+#jun-tool .py-0 {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+#jun-tool .py-1 {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#jun-tool .py-2 {
+  padding-top: var(--jun-tool-spacing-sm);
+  padding-bottom: var(--jun-tool-spacing-sm);
+}
+
+#jun-tool .py-3 {
+  padding-top: var(--jun-tool-spacing-md);
+  padding-bottom: var(--jun-tool-spacing-md);
+}
+
+#jun-tool .py-4 {
+  padding-top: var(--jun-tool-spacing-lg);
+  padding-bottom: var(--jun-tool-spacing-lg);
+}
+
+#jun-tool .pt-0 {
+  padding-top: 0;
+}
+
+#jun-tool .pt-1 {
+  padding-top: 4px;
+}
+
+#jun-tool .pt-2 {
+  padding-top: var(--jun-tool-spacing-sm);
+}
+
+#jun-tool .pt-3 {
+  padding-top: var(--jun-tool-spacing-md);
+}
+
+#jun-tool .pt-4 {
+  padding-top: var(--jun-tool-spacing-lg);
+}
+
+#jun-tool .pb-0 {
+  padding-bottom: 0;
+}
+
+#jun-tool .pb-1 {
+  padding-bottom: 4px;
+}
+
+#jun-tool .pb-2 {
+  padding-bottom: var(--jun-tool-spacing-sm);
+}
+
+#jun-tool .pb-3 {
+  padding-bottom: var(--jun-tool-spacing-md);
+}
+
+#jun-tool .pb-4 {
+  padding-bottom: var(--jun-tool-spacing-lg);
+}
+
+#jun-tool .pl-0 {
+  padding-left: 0;
+}
+
+#jun-tool .pl-1 {
+  padding-left: 4px;
+}
+
+#jun-tool .pl-2 {
+  padding-left: var(--jun-tool-spacing-sm);
+}
+
+#jun-tool .pl-3 {
+  padding-left: var(--jun-tool-spacing-md);
+}
+
+#jun-tool .pl-4 {
+  padding-left: var(--jun-tool-spacing-lg);
+}
+
+#jun-tool .pr-0 {
+  padding-right: 0;
+}
+
+#jun-tool .pr-1 {
+  padding-right: 4px;
+}
+
+#jun-tool .pr-2 {
+  padding-right: var(--jun-tool-spacing-sm);
+}
+
+#jun-tool .pr-3 {
+  padding-right: var(--jun-tool-spacing-md);
+}
+
+#jun-tool .pr-4 {
+  padding-right: var(--jun-tool-spacing-lg);
+}
+
+#jun-tool .font-xs {
+  font-size: var(--jun-tool-font-size-xs);
+}
+
+#jun-tool .font-sm {
+  font-size: var(--jun-tool-font-size-sm);
+}
+
+#jun-tool .font-md {
+  font-size: var(--jun-tool-font-size-md);
+}
+
+#jun-tool .font-lg {
+  font-size: var(--jun-tool-font-size-lg);
+}
+
+#jun-tool .font-xl {
+  font-size: var(--jun-tool-font-size-xl);
+}
+
+#jun-tool .font-xxl {
+  font-size: var(--jun-tool-font-size-xxl);
+}
+
+#jun-tool .text-center {
+  text-align: center;
+}
+
+#jun-tool .text-left {
+  text-align: left;
+}
+
+#jun-tool .text-right {
+  text-align: right;
+}
+
+#jun-tool .d-none {
+  display: none !important;
+}
+
+#jun-tool .d-block {
+  display: block !important;
+}
+
+#jun-tool .badge {
+  display: inline-block;
+  padding: 2px 6px;
+  font-size: 0.75rem;
+  border-radius: var(--jun-tool-border-radius);
+  font-weight: 600;
+  text-transform: uppercase;
+  line-height: 1;
+  transition: background 0.2s ease;
+}
+
+#jun-tool .badge.primary {
+  background: var(--jun-tool-primary-color);
+  color: #fff;
+}
+
+#jun-tool .badge.primary:hover {
+  background: var(--jun-tool-primary-hover);
+}
+
+#jun-tool .badge.secondary {
+  background: var(--jun-tool-secondary-color);
+  color: #fff;
+}
+
+#jun-tool .badge.secondary:hover {
+  background: var(--jun-tool-secondary-hover);
+}
+
+#jun-tool .badge.success {
+  background: var(--jun-tool-success-color);
+  color: #fff;
+}
+
+#jun-tool .badge.success:hover {
+  background: var(--jun-tool-success-hover);
+}
+
+#jun-tool .badge.danger {
+  background: var(--jun-tool-danger-color);
+  color: #fff;
+}
+
+#jun-tool .badge.danger:hover {
+  background: var(--jun-tool-danger-hover);
+}
+
+#jun-tool .badge.warning {
+  background: var(--jun-tool-warning-color);
+  color: #212529;
+}
+
+#jun-tool .badge.warning:hover {
+  background: var(--jun-tool-warning-hover);
+}
+
+#jun-tool .badge.info {
+  background: var(--jun-tool-info-color);
+  color: #fff;
+}
+
+#jun-tool .badge.info:hover {
+  background: var(--jun-tool-info-hover);
+}
+
+#jun-tool .badge.light {
+  background: var(--jun-tool-light-color);
+  color: #212529;
+}
+
+#jun-tool .badge.light:hover {
+  background: var(--jun-tool-light-hover);
+}
+
+#jun-tool .badge.dark {
+  background: var(--jun-tool-dark-color);
+  color: #fff;
+}
+
+#jun-tool .badge.dark:hover {
+  background: var(--jun-tool-dark-hover);
+}

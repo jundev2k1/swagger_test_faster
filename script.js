@@ -72,6 +72,16 @@ const translate = Object.freeze({
     'vi': 'Xóa mục này',
     'zh-TW': '刪除此項目',
   },
+  'tooltip.copy.success': {
+    'en': 'Copied to clipboard successfully!',
+    'vi': 'Sao chép vào clipboard thành công!',
+    'zh-TW': '成功複製到剪貼簿！',
+  },
+  'tooltip.copy.fail': {
+    'en': 'Failed to copy to clipboard.',
+    'vi': 'Sao chép vào clipboard thất bại.',
+    'zh-TW': '無法複製到剪貼簿。',
+  },
   'dialog.confirm-save': {
     'en': 'Do you want to save changes before closing?',
     'vi': 'Bạn có muốn lưu thay đổi trước khi đóng không?',
@@ -93,7 +103,7 @@ const translate = Object.freeze({
     'zh-TW': '環境',
   },
   'sidebar.api.title': {
-    'en': 'API Action',
+    'en': 'API Actions',
     'vi': 'Hành động API',
     'zh-TW': 'API 操作',
   },
@@ -148,9 +158,9 @@ const translate = Object.freeze({
     'zh-TW': '環境變數',
   },
   'modal.title.your-env-var': {
-    'en': 'Your Variables ( ${name} )',
-    'vi': 'Biến của bạn ( ${name} )',
-    'zh-TW': '您的變數 ( ${name} )',
+    'en': 'Your Environment Variables ( ${name} )',
+    'vi': 'Biến môi trường của bạn ( ${name} )',
+    'zh-TW': '您的環境變數 ( ${name} )',
   },
   'modal.env-var.hard-setting.host': {
     'en': 'Host ( ${host} )',
@@ -193,8 +203,8 @@ const translate = Object.freeze({
     'zh-TW': 'HTTP 方法',
   },
   'modal.api-setting.is-auth-api': {
-    'en': 'Is auto set token after request Success?',
-    'vi': 'Tự động đặt token sau khi yêu cầu thành công?',
+    'en': 'Auto-set token after successful request?',
+    'vi': 'Tự động cài đặt token sau khi yêu cầu thành công?',
     'zh-TW': '請求成功後自動設置令牌？',
   },
   'modal.api-list.empty': {
@@ -267,6 +277,46 @@ const translate = Object.freeze({
     'vi': 'Tên môi trường không hợp lệ. Phải bắt đầu bằng chữ cái và chỉ chứa chữ cái, số và dấu gạch dưới.',
     'zh-TW': '無效的環境名稱。必須以字母開頭，並且只能包含字母、數字和下劃線。',
   },
+  'validation.missing-replacer': {
+    'en': 'Missing environment variables: ${0}',
+    'vi': 'Thiếu biến môi trường: ${0}',
+    'zh-TW': '缺少環境變數：${0}',
+  },
+  'validation.duplicate-field': {
+    'en': 'This field is duplicated.',
+    'vi': 'Trường này bị trùng lặp.',
+    'zh-TW': '此欄位重複。',
+  },
+  'message.fetch-api.endpoint-empty': {
+    'en': 'No API endpoint provided.',
+    'vi': 'Không có điểm cuối API được cung cấp.',
+    'zh-TW': '未提供 API 端點。',
+  },
+  'message.fetch-api.success': {
+    'en': 'API fetched successfully.',
+    'vi': 'Gọi API thành công.',
+    'zh-TW': 'API 獲取成功。',
+  },
+  'message.fetch-api.fetch-error': {
+    'en': 'Failed to fetch API.',
+    'vi': 'Gọi API thất bại.',
+    'zh-TW': '無法獲取 API。',
+  },
+  'message.fetch-api.swagger-not-found': {
+    'en': 'Swagger UI instance not found.',
+    'vi': 'Không tìm thấy instance Swagger UI.',
+    'zh-TW': '未找到 Swagger UI 實例。',
+  },
+  'message.api-response.empty': {
+    'en': 'No API response available.',
+    'vi': 'Không có phản hồi API nào.',
+    'zh-TW': '無 API 回應。',
+  },
+  'message.save-changes.env.success': {
+    'en': 'Environment settings saved successfully.',
+    'vi': 'Cài đặt môi trường đã được lưu thành công.',
+    'zh-TW': '環境設定已成功保存。',
+  },
 });
 
 /**
@@ -316,6 +366,39 @@ function tryParseJSON(jsonString, defaultValue = null) {
   } catch (e) {
     console.error("Error parsing JSON:", e);
     return defaultValue;
+  }
+}
+
+function getDefaultValue(input) {
+  switch (typeof (input)) {
+    case 'object':
+      return Array.isArray(input) ? [] : {};
+    case 'string':
+      return '';
+    case 'boolean':
+      return false;
+    case 'number':
+      return 0;
+    default:
+      return undefined;
+  }
+}
+
+function escapeHTML(str) {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+function tryGetUrlPath(url = '') {
+  try {
+    const result = new URL(url).pathname;
+    return result;
+  } catch {
+    return url;
   }
 }
 
@@ -498,6 +581,7 @@ const validator = (() => {
    * @returns {[boolean, string]} Validation result.
    */
   const isValidJson = (value) => {
+    if (value.trim() === '') return [true, ''];
     try {
       JSON.parse(value);
       return [true, ''];
@@ -516,12 +600,27 @@ const validator = (() => {
     return [isValid, isValid ? '' : t('validation.invalid-env-name')];
   }
 
+  const isDuplicateValue = (dataSource = [], selector) => {
+    if (typeof (selector) !== 'function') throw Error('The `selector` parameter must be a function at `isDuplicateValue`.');
+
+    const duplicateRow = [];
+    const distincField = {};
+    dataSource.map(selector).forEach((item, index) => {
+      const isExist = !!distincField[item];
+      if (isExist) duplicateRow.push(index);
+
+      distincField[item] = '1';
+    });
+
+    return [duplicateRow.length === 0, duplicateRow];
+  }
+
   const apiSettingValidations = Object.freeze({
     name: [isRequired],
     endpoint: [isRequired, isValidUrl],
     method: [isValidHttpMethod],
     color: [isValidColor],
-    request: [isRequired, isValidJson],
+    request: [isValidJson],
   });
   const envSettingValidations = Object.freeze({
     id: [isRequired],
@@ -589,6 +688,11 @@ const validator = (() => {
       return result;
     },
     validateVariableSetting(formData) {
+      const [isValid, duplicateRows] = isDuplicateValue(formData, item => item.name);
+      if (!isValid) return [
+        true,
+        duplicateRows.map(row => ({ itemIndex: row, isError: true, errors: [{ field: 'name', message: t('validation.duplicate-field') }] }))];
+
       return this.validateList(formData, variableSettingValidations);
     },
     validateVariableSettingItem(name, value) {
@@ -599,6 +703,12 @@ const validator = (() => {
       return result;
     },
     validateEnvSetting(formData) {
+      const [isValid, duplicateRows] = isDuplicateValue(formData, item => item.value);
+      if (!isValid)
+        return [
+          true,
+          duplicateRows.map(row => ({ itemIndex: row, isError: true, errors: [{ field: 'value', message: t('validation.duplicate-field') }] }))];
+
       return this.validateList(formData, envSettingValidations);
     },
     validateEnvSettingItem(name, value) {
@@ -771,12 +881,13 @@ const uiBuilder = (() => {
   `;
 
   const createApiActionGroupItems = (datasource = []) => {
-    return datasource.map(({ id, name, method, color }) => `
+    return datasource.map(({ id, name, method, endpoint, color }) => `
       <li class="api-action-group-item bg-${color} bg-${color}-hover">
         <a href="javascript:void" class="btn-control api-action-control" data-api-id="${id}">
           <span class="api-method badge ${methodColors[method] || methodColors[httpMethods.GET]}">${method}</span>
           ${name}
         </a>
+        <p class="font-sm m-0 p-3 pt-0 truncate" title="${endpoint}">${t('modal.api-list-item.endpoint-to')}: ${tryGetUrlPath(endpoint)}</p>
       </li>
     `).join('') || '';
   }
@@ -860,7 +971,7 @@ const uiBuilder = (() => {
     return [defaultOption, ...options, btnAddNew].join('');
   }
 
-  const createEnvVariableForm = ({ envSettings = [], selectedEnv = '', variables = [] }) => {
+  const createEnvVariableForm = ({ selectedEnv = '', variables = [] }) => {
     const hardSettings = variables.filter(item => item.isHardSetting);
     const hostSetting = hardSettings.find(item => item.name === 'host')?.value || '';
     const softSettings = variables.filter(item => !item.isHardSetting);
@@ -869,7 +980,6 @@ const uiBuilder = (() => {
         <div class="form-group grid-3 mb-2">
           <label for="ddl-select-environment" class="form-label">${t('sidebar.env.title')}:</label>
           <select id="ddl-select-environment" class="form-select span-2" control="ddl-select-environment" required>
-            ${createEnvDropdownItems(envSettings, selectedEnv)}
           </select>
         </div>
         <h3>${t('modal.title.env-var')}</h3>
@@ -877,7 +987,7 @@ const uiBuilder = (() => {
           <div class="form-group grid-3 gap-1">
             <label for="tb-env-host" class="form-label">${t('modal.env-var.hard-setting.host')}:</label>
             <div class="form-control span-2">
-              <input id="tb-env-host" name="host" class="form-input" value="${hostSetting}" data-env-input-type="value" required ${!selectedEnv ? 'disabled' : ''}>
+              <input id="tb-env-host" name="host" class="form-input" value="${escapeHTML(hostSetting)}" data-env-input-type="value" required ${!selectedEnv ? 'disabled' : ''}>
               <span class="error-message"></span>
             </div>
           </div>
@@ -891,7 +1001,7 @@ const uiBuilder = (() => {
                   <span class="error-message"></span>
                 </div>
                 <div class="form-control span-3">
-                  <input class="form-input" data-env-input-type="value" value="${value}" required>
+                  <input class="form-input" data-env-input-type="value" value="${escapeHTML(value)}" required>
                   <span class="error-message"></span>
                 </div>
                 <button class="btn-control icon-badge light" data-action="delete-variable" title="${t('tooltip.delete')}">🗑️</button>
@@ -903,7 +1013,7 @@ const uiBuilder = (() => {
     `;
   }
 
-  const createApiSettingForm = ({ name, desc, endpoint, request, color, isAuthApi }) => {
+  const createApiSettingForm = ({ name, desc, endpoint, request, color, isAuth }) => {
     return `
       <form id="api-setting-form">
         <div class="form-group">
@@ -954,7 +1064,7 @@ const uiBuilder = (() => {
           </div>
         </div>
         <div class="form-group">
-          <input type="checkbox" id="api-setting-is-auth" class="form-checkbox" name="isAuth" ${isAuthApi ? 'checked' : ''} data-action="form-input" />
+          <input type="checkbox" id="api-setting-is-auth" class="form-checkbox" name="isAuth" ${isAuth ? 'checked' : ''} data-action="form-input" />
           <label for="api-setting-is-auth">${t('modal.api-setting.is-auth-api')}</label>
         </div>
       </form>
@@ -965,11 +1075,11 @@ const uiBuilder = (() => {
     return datasource.map(({ id, name, method, endpoint, color, desc }) => `
       <li class="api-list-item bg-${color || 'primary'} bg-${color || 'primary'}-hover">
         <div class="api-setting-content">
-          <p class="api-item-endpoint">${t('modal.api-list-item.endpoint-to')}: ${endpoint}</p>
           <a href="javascript:void" data-api-id="${id}">
             <span class="api-method badge ${methodColors[method] || methodColors[httpMethods.GET]}">${method}</span>
             <span class="api-item-title">${name}</span>
           </a>
+          <p class="api-item-endpoint truncate" title=${endpoint}>${t('modal.api-list-item.endpoint-to')}: ${tryGetUrlPath(endpoint)}</p>
           <span class="api-item-desc">
             ${desc || ''}
           </span>
@@ -980,7 +1090,7 @@ const uiBuilder = (() => {
     `).join('') || '';
   };
 
-  const createContainnerContent = (action = actionMode.LOBBY, dataSource, envSettings = [], selectedEnv) => {
+  const createContainnerContent = (action = actionMode.LOBBY, dataSource, selectedEnv) => {
     switch (action) {
       case actionMode.API_LIST:
         return createApiListItem(dataSource) || `<div class="empty-state">${t('modal.api-list.empty')}</div>`;
@@ -992,8 +1102,7 @@ const uiBuilder = (() => {
         return createEnvSettingForm(dataSource);
 
       case actionMode.ENVIRONMENT_VARIABLES:
-        const targetItem = dataSource.find(item => item.envId === selectedEnv);
-        return createEnvVariableForm({ envSettings, selectedEnv, variables: targetItem?.items || [] });
+        return createEnvVariableForm({ selectedEnv, variables: dataSource });
 
       default:
         return '';
@@ -1049,7 +1158,7 @@ class SwaggerFaster {
       endpoint: '',
       method: httpMethods.GET,
       color: colorEnums.Primary,
-      request: {},
+      request: '',
       isAuth: false,
     }
   };
@@ -1237,6 +1346,11 @@ class SwaggerFaster {
   #displayResponseChange() {
     this.btnCopyResponse.disabled = !this.apiResponse;
 
+    if (!this.apiResponse) {
+      this.wApiResponse.textContent = t('message.api-response.empty');
+      return;
+    }
+
     const jsonContent = renderJSONFormattedStrict(this.apiResponse);
     this.wApiResponse.innerHTML = jsonContent.innerHTML;
     this.wApiResponse.querySelectorAll('.copyable').forEach(element => {
@@ -1325,23 +1439,23 @@ class SwaggerFaster {
    * @returns {Object} Input object with default values set based on the action type
    */
   mapToFormData(input, type) {
-    const autoSet = (input, defaultInput) => {
+    const autoMapping = (input, defaultInput) => {
       const mappingInput = Object.entries(defaultInput)
-        .reduce((preValue, [key]) => {
-          preValue[key] = input[key];
+        .reduce((preValue, [key, value]) => {
+          preValue[key] = input[key] || value;
           return preValue;
         }, {});
       return mappingInput;
     }
     switch (type) {
       case actionMode.API_SETTING:
-        return autoSet(input, this.#defaultApiSettingData);
+        return autoMapping(input, this.#defaultApiSettingData);
 
       case actionMode.ENVIRONMENT_SETTINGS:
-        return autoSet(input, this.#defaultEnvSettingData);
+        return autoMapping(input, this.#defaultEnvSettingData);
 
       case actionMode.ENVIRONMENT_VARIABLES:
-        return autoSet(input, this.#defaultEnvVariableItem);
+        return autoMapping(input, this.#defaultEnvVariableItem);
 
       default:
         return {};
@@ -1536,11 +1650,11 @@ class SwaggerFaster {
     if (isAddNewEnvCommand) {
       event.target.value = this.currentEnv || '';
       this.currentAction = actionMode.ENVIRONMENT_SETTINGS;
-      this.isPageDataChange = true;
     } else {
       this.currentEnv = event.target.value;
     }
 
+    this.isPageDataChange = true;
     this.#onPageBinding();
   }
 
@@ -1555,7 +1669,11 @@ class SwaggerFaster {
     clearTimeout(this.timeoutId);
     this.timeoutId = setTimeout(() => {
       const targetItem = this.formData.dataSource.find(item => item.id === envId);
-      targetItem.value = event.target.value;
+      const inputValue = event.target?.value.trim() || '';
+      targetItem.value = inputValue;
+
+      const isDuplicate = this.formData.dataSource.some(env => env.id != envId && env.value == inputValue);
+      this.#setInputErrorMessage(event, isDuplicate ? t('validation.duplicate-field') : '');
     }, 300);
   }
 
@@ -1569,12 +1687,6 @@ class SwaggerFaster {
 
     clearTimeout(this.timeoutId);
     this.timeoutId = setTimeout(() => {
-      let targetItem = this.formData.dataSource.find(item => item.envId === this.currentEnv);
-      if (!targetItem) {
-        this.formData.dataSource = [...this.formData.dataSource, this.#defaultEnvVariableData];
-        targetItem = this.formData.dataSource.find(item => item.envId === this.currentEnv);
-      };
-
       const inputName = event.target.dataset['envInputType'] || '';
       if (!inputName) return;
 
@@ -1587,27 +1699,25 @@ class SwaggerFaster {
         // Validate the input value
         const errorMessage = validator.validateVariableSettingItem(inputName, inputValue);
         this.#setInputErrorMessage(event, errorMessage);
-        if (errorMessage) return;
 
-        const variableItem = targetItem.items.find(item => item.id === variableId);
+        const variableItem = this.formData.dataSource.find(item => item.id === variableId);
         // If the variable item already exists, update its value
         if (variableItem) {
-          variableItem[event.target.dataset['envInputType']] = event.target.value;
+          variableItem[event.target.dataset['envInputType']] = inputValue;
           return;
         }
 
         // If the variable item does not exist, create a new one
         const newVariable = { id: variableId, isHardSetting: false };
         newVariable[inputName] = inputValue;
-        targetItem.items = [newVariable];
+        this.formData.dataSource = [...this.formData.dataSource, newVariable];
       } else if (type === 'hard-setting') {
         const name = event.target.name.trim();
         const value = event.target.value.trim();
         const errorMessage = validator.validateVariableSettingItem(inputName, value);
         this.#setInputErrorMessage(event, errorMessage);
-        if (errorMessage && errorMessage !== '') return;
 
-        const variableItem = targetItem.items
+        const variableItem = this.formData.dataSource
           .find(item => item.isHardSetting && item.name === event.target.name);
         // If the variable item already exists, update its value
         if (variableItem) {
@@ -1623,7 +1733,7 @@ class SwaggerFaster {
           value,
         };
 
-        targetItem.items = [...targetItem.items, newItem];
+        this.formData.dataSource = [...this.formData.dataSource, newItem];
       }
     }, 300);
   }
@@ -1650,8 +1760,6 @@ class SwaggerFaster {
 
         const errorMessage = validator.validateApiSettingItem(event.target.name, value);
         this.#setInputErrorMessage(event, errorMessage);
-        if (errorMessage) return;
-
         this.formData.dataSource[event.target.name] = event.target.value.trim();
         break;
     }
@@ -1674,23 +1782,35 @@ class SwaggerFaster {
         if (isEnvFormError) return;
 
         this.envSettings = [...envFormDatas];
-        if (!this.currentEnv) this.currentEnv = this.envSettings[0]?.id || '';
+        if (!this.currentEnv || !this.envSettings.some(i => i.id == this.currentEnv))
+          this.currentEnv = this.envSettings[0]?.id || '';
+
         if (this.envSettings.length === 0) this.currentEnv = '';
 
+        const validEnvVars = this.envVariables.filter(item => this.envSettings.some(env => env.id === item.envId));
+        this.envVariables = [...validEnvVars];
         Toast.success('message.save-changes.env.suceess');
         break;
 
       case actionMode.ENVIRONMENT_VARIABLES:
-        const targetEnvVariables = this.formData.dataSource.find(item => item.envId === this.currentEnv);
-        if (!targetEnvVariables) return;
-
-        const varFormDatas = targetEnvVariables.items
+        const varFormDatas = this.formData.dataSource
           .map(item => this.mapToFormData(item, actionMode.ENVIRONMENT_VARIABLES));
         const [isVariableFormError, varErrorMessages] = validator.validateVariableSetting(varFormDatas);
         this.#setVariableErrorMessage(varErrorMessages);
         if (isVariableFormError) return;
 
-        this.envVariables = [...varFormDatas];
+        const currentVars = [...this.envVariables];
+        const targetVarIndex = currentVars.findIndex(item => item.envId === this.currentEnv);
+        if (targetVarIndex < 0) {
+          const newEnvVar = this.#defaultEnvVariableData;
+          newEnvVar.envId = this.currentEnv;
+          newEnvVar.items = [...this.formData.dataSource];
+          this.envVariables = [...this.envVariables, newEnvVar];
+        } else {
+          const updateEnvVars = [...this.envVariables];
+          updateEnvVars[targetVarIndex].items = [...this.formData.dataSource];
+          this.envVariables = [...updateEnvVars];
+        }
         Toast.success('message.save-changes.env-var.suceess');
         break;
 
@@ -1725,8 +1845,10 @@ class SwaggerFaster {
    * Execute function when binding page, reset data from local storage data
    */
   #onPageChange() {
-    if (this.isPageDataChange)
+    if (this.isPageDataChange) {
       this.#setFormData();
+      this.#clearErrorMessage();
+    }
 
     this.btnBack.classList.toggle(
       'd-none',
@@ -1754,7 +1876,7 @@ class SwaggerFaster {
     this.#onPageChange();
 
     // Set the form data based on the current action
-    const apiActionItems = uiBuilder.createApiActionGroupItems(this.apiSettings);
+    const apiActionItems = uiBuilder.createApiActionGroupItems(this.resolveObjectVars(this.apiSettings));
     this.wApiActionGroup.innerHTML = apiActionItems;
 
     // Set the title and modal container based on the current action
@@ -1766,14 +1888,13 @@ class SwaggerFaster {
     const modalContent = uiBuilder.createContainnerContent(
       this.currentAction,
       this.resolveObjectVars(this.formData.dataSource),
-      this.envSettings,
       this.currentEnv);
     const modalContainerUi = uiBuilder.createModalContentContainer(this.currentAction, modalContent);
     this.wContentModal.innerHTML = modalContainerUi;
 
     // Binding data for controls and set events
     this.#loadEnvDropdownList();
-    this.#clearErrorMessage();
+    this.#displayResponseChange();
     this.#setModalEvent();
     this.#setLobbyEvent();
   }
@@ -1844,14 +1965,14 @@ class SwaggerFaster {
               && env.items.some(i => i.isHardSetting && i.name === item.name)));
         const envVarIndex = this.envVariables.findIndex(item => item.envId === this.currentEnv);
         if (envVarIndex >= 0) {
-          const newVars = this.envVariables;
+          const newVars = [...this.envVariables];
           newVars[envVarIndex].items = [...missingHardEnvs, ...this.envVariables[envVarIndex].items];
           this.envVariables = newVars;
         }
 
         this.formData = {
           type: actionMode.ENVIRONMENT_VARIABLES,
-          dataSource: [...this.envVariables],
+          dataSource: [...this.envVariables.find(item => item.envId === this.currentEnv)?.items || []],
         };
         break;
 
@@ -1939,7 +2060,7 @@ class SwaggerFaster {
       e.preventDefault();
 
       this.formData.dataSource = [...this.formData.dataSource, this.#defaultEnvSettingData];
-      this.#onPageBinding(false);
+      this.#onPageBinding();
     });
 
     this.btnRemoveEnvs.forEach(element => {
@@ -1958,18 +2079,13 @@ class SwaggerFaster {
 
     this.btnAddNewVariable?.addEventListener('click', (e) => {
       e.preventDefault();
-      let targetGroup = this.formData.dataSource.find(item => item.envId === this.currentEnv);
-      if (!targetGroup) {
-        this.formData.dataSource = [...this.formData.dataSource, this.#defaultEnvVariableData];
-        targetGroup = this.formData.dataSource.find(item => item.envId === this.currentEnv);
-      }
       const newItem = {
         id: crypto.randomUUID(),
         isHardSetting: false,
         name: '',
         value: '',
       };
-      targetGroup.items = [...targetGroup.items, newItem];
+      this.formData.dataSource = [...this.formData.dataSource, newItem];
 
       this.#onPageBinding(false);
     });
@@ -1981,11 +2097,9 @@ class SwaggerFaster {
 
         const targetId = event.target.closest('.form-group')
           ?.dataset['targetId'] || '';
-        const targetGroup = this.formData.dataSource.find(data => data.envId === this.currentEnv);
-        if (!targetGroup) return;
 
-        const newForms = targetGroup.items.filter(data => data.id !== targetId);
-        targetGroup.items = [...newForms];
+        const newForms = this.formData.dataSource.filter(data => data.id !== targetId);
+        this.formData.dataSource = [...newForms];
 
         this.#onPageBinding();
       });
@@ -2054,7 +2168,12 @@ class SwaggerFaster {
       this.isPageDataChange = true;
       this.#onOpenModal(redirectAction);
     });
-    this.btnSaveChanges.addEventListener('click', (e) => this.#onSaveChanges(e));
+    this.btnSaveChanges.addEventListener('click', (e) => {
+      clearTimeout(this.timeoutId);
+      this.timeoutId = setTimeout(() => {
+        this.#onSaveChanges(e)
+      }, 250);
+    });
 
     this.#setLocaleEvent();
 
