@@ -954,7 +954,7 @@ const uiBuilder = (() => {
           </div>
         </div>
         <div class="form-group">
-          <input type="checkbox" id="api-setting-is-auth" class="form-checkbox" name="is-auth" ${isAuthApi ? 'checked' : ''} data-action="form-input" />
+          <input type="checkbox" id="api-setting-is-auth" class="form-checkbox" name="isAuth" ${isAuthApi ? 'checked' : ''} data-action="form-input" />
           <label for="api-setting-is-auth">${t('modal.api-setting.is-auth-api')}</label>
         </div>
       </form>
@@ -1049,8 +1049,7 @@ class SwaggerFaster {
       endpoint: '',
       method: httpMethods.GET,
       color: colorEnums.Primary,
-      req: {},
-      res: {},
+      request: {},
       isAuth: false,
     }
   };
@@ -1118,7 +1117,7 @@ class SwaggerFaster {
   get envVariables() { return tryParseJSON(localStorage.getItem(this.#envVariableKey), []); }
   set envVariables(value) { localStorage.setItem(this.#envVariableKey, JSON.stringify(value)); }
   /** Your api setting
-   *  @type {{ id: string, name: string, desc: string, endpoint: string, method: httpMethods, color: colorEnums, req: Object, isAuth: boolean }[]} */
+   *  @type {{ id: string, name: string, desc: string, endpoint: string, method: httpMethods, color: colorEnums, request: Object, isAuth: boolean }[]} */
   get apiSettings() { return tryParseJSON(localStorage.getItem(this.#apiSettingsKey), []); }
   set apiSettings(value) { localStorage.setItem(this.#apiSettingsKey, JSON.stringify(value)); }
   /** @type {string} Selected environment */
@@ -1176,11 +1175,11 @@ class SwaggerFaster {
    *  endpoint: string,
    *  method: httpMethods,
    *  color: colorEnums,
-   *  req: Object,
+   *  request: Object,
    *  isAuth: boolean }} apiSetting API setting object to fetch 
    */
   async #fetchApiSettings(apiSetting) {
-    const { name, endpoint, method, req, isAuth } = apiSetting || {};
+    const { name, endpoint, method, request, isAuth } = apiSetting || {};
     if (!endpoint) {
       console.warn('No API endpoint provided for fetching settings.');
       Toast.warning(t('message.fetch-api.endpoint-empty'));
@@ -1194,16 +1193,11 @@ class SwaggerFaster {
           'Content-Type': 'application/json',
           ...(isAuth ? { 'Authorization': `Bearer ${this.preAuthToken}` } : {})
         },
-        body: req && method !== httpMethods.GET
-          ? JSON.stringify(this.resolveObjectVars(req))
+        body: request && method !== httpMethods.GET
+          ? JSON.stringify(this.resolveObjectVars(request))
           : undefined,
       };
       const response = await fetch(this.resolveVars(endpoint), option);
-      if (!response.ok) {
-        Toast.error(t('message.fetch-api.fetch-error'));
-        throw new Error(`Failed to fetch API settings: ${response.statusText}`);
-      }
-
       const data = await response.json();
       this.apiResponse = data;
       this.#displayResponseChange();
@@ -1325,17 +1319,19 @@ class SwaggerFaster {
   }
 
   /**
-   * Set default input item form data based on the action type.
+   * Map to input form data based on the action type.
    * @param {Object} input Input object to set default values for
    * @param {actionMode} type Type of action to determine which default data to use
    * @returns {Object} Input object with default values set based on the action type
    */
-  setDefaultInputItemFormData(input, type) {
+  mapToFormData(input, type) {
     const autoSet = (input, defaultInput) => {
-      Object.entries(defaultInput).forEach(([key, value]) => {
-        if (!input[key]) input[key] = value;
-      });
-      return input;
+      const mappingInput = Object.entries(defaultInput)
+        .reduce((preValue, [key]) => {
+          preValue[key] = input[key];
+          return preValue;
+        }, {});
+      return mappingInput;
     }
     switch (type) {
       case actionMode.API_SETTING:
@@ -1671,41 +1667,45 @@ class SwaggerFaster {
 
     switch (this.formData.type) {
       case actionMode.ENVIRONMENT_SETTINGS:
-        const [isEnvFormError, envErrorMessages] = validator.validateEnvSetting(
-          this.formData.dataSource.map(item => this.setDefaultInputItemFormData(item, actionMode.ENVIRONMENT_SETTINGS)));
+        const envFormDatas = this.formData.dataSource
+          .map(item => this.mapToFormData(item, actionMode.ENVIRONMENT_SETTINGS));
+        const [isEnvFormError, envErrorMessages] = validator.validateEnvSetting(envFormDatas);
         this.#setEnvErrorMessage(envErrorMessages);
         if (isEnvFormError) return;
 
-        this.envSettings = this.formData.dataSource;
+        this.envSettings = [...envFormDatas];
         if (!this.currentEnv) this.currentEnv = this.envSettings[0]?.id || '';
         if (this.envSettings.length === 0) this.currentEnv = '';
+
+        Toast.success('message.save-changes.env.suceess');
         break;
 
       case actionMode.ENVIRONMENT_VARIABLES:
         const targetEnvVariables = this.formData.dataSource.find(item => item.envId === this.currentEnv);
         if (!targetEnvVariables) return;
 
-        const [isVariableFormError, varErrorMessages] = validator.validateVariableSetting(
-          targetEnvVariables.items.map(item => this.setDefaultInputItemFormData(item, actionMode.ENVIRONMENT_VARIABLES)));
+        const varFormDatas = targetEnvVariables.items
+          .map(item => this.mapToFormData(item, actionMode.ENVIRONMENT_VARIABLES));
+        const [isVariableFormError, varErrorMessages] = validator.validateVariableSetting(varFormDatas);
         this.#setVariableErrorMessage(varErrorMessages);
         if (isVariableFormError) return;
 
-        this.envVariables = this.formData.dataSource;
+        this.envVariables = [...varFormDatas];
+        Toast.success('message.save-changes.env-var.suceess');
         break;
 
       case actionMode.API_SETTING:
-        const [isApiFormError, apiSettingErrorMessages] = validator.validateApiSetting(
-          this.resolveObjectVars(
-            this.setDefaultInputItemFormData(this.formData.dataSource, actionMode.API_SETTING)));
+        const apiFormData = this.mapToFormData(this.formData.dataSource, actionMode.API_SETTING);
+        const [isApiFormError, apiSettingErrorMessages] = validator.validateApiSetting(this.resolveObjectVars(apiFormData));
         this.#setApiSettingErrorMessage(apiSettingErrorMessages);
         if (isApiFormError) return;
 
         const settingIndex = this.apiSettings.findIndex(setting => setting.id === this.targetId);
         if (settingIndex < 0) {
-          this.apiSettings = [this.formData.dataSource, ...this.apiSettings];
+          this.apiSettings = [apiFormData, ...this.apiSettings];
         } else {
           const settings = [...this.apiSettings];
-          settings[settingIndex] = this.formData.dataSource
+          settings[settingIndex] = apiFormData;
           this.apiSettings = [...settings];
         }
 
@@ -1713,6 +1713,7 @@ class SwaggerFaster {
         this.isPageDataChange = true;
         this.currentAction = actionMode.API_LIST;
         this.#onPageBinding();
+        Toast.success('message.save-changes.api-setting.suceess');
         return;
 
       default:
@@ -1885,7 +1886,6 @@ class SwaggerFaster {
     this.btnApiSettingItems.forEach((item) => {
       item.addEventListener('click', (e) => {
         e.preventDefault();
-        debugger
         const apiId = e.target.closest('a').dataset['apiId'];
         if (apiId) {
           this.targetId = apiId;
@@ -1952,7 +1952,6 @@ class SwaggerFaster {
         const newForms = this.formData.dataSource.filter(data => data.id !== targetId);
         this.formData.dataSource = [...newForms];
 
-        this.isPageDataChange = true;
         this.#onPageBinding();
       });
     });
