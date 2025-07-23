@@ -1375,7 +1375,7 @@ export class SwaggerFaster {
 
     const validEnvVars = this.envVariables.filter(item => this.envSettings.some(env => env.id === item.envId));
     this.envVariables = [...validEnvVars];
-    Toast.success('message.save-changes.env.success');
+    Toast.success(t('message.save-changes.env.success'));
   }
 
   /**
@@ -1400,7 +1400,7 @@ export class SwaggerFaster {
       updateEnvVars[targetVarIndex].items = [...this.formData.dataSource];
       this.envVariables = [...updateEnvVars];
     }
-    Toast.success('message.save-changes.variable.success');
+    Toast.success(t('message.save-changes.variable.success'));
   }
 
   /**
@@ -1425,7 +1425,7 @@ export class SwaggerFaster {
     this.isPageDataChange = true;
     this.currentAction = actionMode.API_LIST;
     this.#onPageBinding();
-    Toast.success('message.save-changes.api-setting.success');
+    Toast.success(t('message.save-changes.api-setting.success'));
   }
 
   /**
