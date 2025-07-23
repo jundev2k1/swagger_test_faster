@@ -6,7 +6,7 @@
 
 import { t } from './core/i18n/translate.js';
 import { $, $$ } from './core/utils/helpers.js';
-import { Toast, uiBuilder } from './core/ui/index.js';
+import { Toast, UIBuilder } from './core/ui/index.js';
 import { validator } from './core/form/validate.js';
 import { HttpMethods, actionMode, modalTabs, DefaultFormData, Store } from './core/data/index.js';
 
@@ -692,20 +692,20 @@ export class SwaggerFaster {
     this.#onPageChange();
 
     // Set the form data based on the current action
-    const apiActionItems = uiBuilder.createApiActionGroupItems(this.resolveObjectVars(Store.apiSettings));
+    const apiActionItems = UIBuilder.createApiActionGroupItems(this.resolveObjectVars(Store.apiSettings));
     this.wApiActionGroup.innerHTML = apiActionItems;
 
     // Set the title and modal container based on the current action
-    this.hTitleModal.innerText = uiBuilder.getHeaderModal(this.currentAction);
-    const tabHTML = uiBuilder.createTabSettingElement(this.currentAction);
+    this.hTitleModal.innerText = UIBuilder.getHeaderModal(this.currentAction);
+    const tabHTML = UIBuilder.createTabSettingElement(this.currentAction);
     this.wTabModal.innerHTML = tabHTML;
 
     // Set the content of the modal container based on the current action
-    const modalContent = uiBuilder.createContainnerContent(
+    const modalContent = UIBuilder.createContainnerContent(
       this.currentAction,
       this.resolveObjectVars(this.formData.dataSource),
       Store.currentEnv);
-    const modalContainerUi = uiBuilder.createModalContentContainer(this.currentAction, modalContent);
+    const modalContainerUi = UIBuilder.createModalContentContainer(this.currentAction, modalContent);
     this.wContentModal.innerHTML = modalContainerUi;
 
     // Binding data for controls and set events
@@ -738,7 +738,7 @@ export class SwaggerFaster {
    */
   #loadEnvDropdownList() {
     const envControls = $$('select[control="ddl-select-environment"]');
-    const envSelections = uiBuilder.createEnvDropdownItems(Store.envSettings, Store.currentEnv);
+    const envSelections = UIBuilder.createEnvDropdownItems(Store.envSettings, Store.currentEnv);
     envControls.forEach((dropdown) => {
       dropdown.innerHTML = envSelections;
       dropdown.addEventListener('change', (e) => this.#onEnvironmentChange(e));
@@ -1016,7 +1016,7 @@ export class SwaggerFaster {
     const rootElement = $('#jun-tool');
     const rootNode = rootElement || document.createElement('div');
     rootNode.id = 'jun-tool';
-    rootNode.innerHTML = uiBuilder.createDefaultUI();
+    rootNode.innerHTML = UIBuilder.createDefaultUI();
 
     if (!rootElement) document.body.appendChild(rootNode);
   }

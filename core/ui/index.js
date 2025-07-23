@@ -8,4 +8,4 @@
 
 export { renderJsonFormattedStrict } from './renderJson.js';
 export { Toast } from './Toast.js';
-export { uiBuilder } from './uiBuilder.js';
+export { UIBuilder } from './uiBuilder.js';
