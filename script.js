@@ -1,323 +1,5 @@
-const defaultLang = 'vi';
-const supportedLanguages = Object.freeze(['en', 'vi', 'zh-TW']);
-
-const translate = Object.freeze({
-  'lang': {
-    'en': 'English',
-    'vi': 'Tiếng Việt',
-    'zh-TW': '繁體中文',
-  },
-  'color.primary': {
-    'en': 'Primary',
-    'vi': 'Chính',
-    'zh-TW': '主要',
-  },
-  'color.secondary': {
-    'en': 'Secondary',
-    'vi': 'Phụ',
-    'zh-TW': '次要',
-  },
-  'color.success': {
-    'en': 'Success',
-    'vi': 'Thành công',
-    'zh-TW': '成功',
-  },
-  'color.danger': {
-    'en': 'Danger',
-    'vi': 'Nguy hiểm',
-    'zh-TW': '危險',
-  },
-  'color.warning': {
-    'en': 'Warning',
-    'vi': 'Cảnh báo',
-    'zh-TW': '警告',
-  },
-  'color.info': {
-    'en': 'Info',
-    'vi': 'Thông tin',
-    'zh-TW': '資訊',
-  },
-  'btn.back': {
-    'en': 'Back',
-    'vi': 'Trở lại',
-    'zh-TW': '返回',
-  },
-  'btn.setting': {
-    'en': 'Settings',
-    'vi': 'Cài đặt',
-    'zh-TW': '設定',
-  },
-  'btn.add-new': {
-    'en': 'Add new',
-    'vi': 'Thêm mới',
-    'zh-TW': '新增',
-  },
-  'btn.save-changes': {
-    'en': 'Save Changes',
-    'vi': 'Lưu thay đổi',
-    'zh-TW': '儲存變更',
-  },
-  'btn.close': {
-    'en': 'Close',
-    'vi': 'Đóng',
-    'zh-TW': '關閉',
-  },
-  'tooltip.copy': {
-    'en': 'Copy to clipboard',
-    'vi': 'Sao chép vào clipboard',
-    'zh-TW': '複製到剪貼簿',
-  },
-  'tooltip.delete': {
-    'en': 'Delete this item',
-    'vi': 'Xóa mục này',
-    'zh-TW': '刪除此項目',
-  },
-  'tooltip.copy.success': {
-    'en': 'Copied to clipboard successfully!',
-    'vi': 'Sao chép vào clipboard thành công!',
-    'zh-TW': '成功複製到剪貼簿！',
-  },
-  'tooltip.copy.fail': {
-    'en': 'Failed to copy to clipboard.',
-    'vi': 'Sao chép vào clipboard thất bại.',
-    'zh-TW': '無法複製到剪貼簿。',
-  },
-  'dialog.confirm-save': {
-    'en': 'Do you want to save changes before closing?',
-    'vi': 'Bạn có muốn lưu thay đổi trước khi đóng không?',
-    'zh-TW': '您要在關閉之前保存更改嗎？',
-  },
-  'dialog.confirm-delete': {
-    'en': 'Are you sure you want to delete this item?',
-    'vi': 'Bạn có chắc chắn muốn xóa mục này không?',
-    'zh-TW': '您確定要刪除此項目嗎？',
-  },
-  'ddl.select-environment': {
-    'en': 'Select Environment',
-    'vi': 'Chọn môi trường',
-    'zh-TW': '選擇環境',
-  },
-  'sidebar.env.title': {
-    'en': 'Environment',
-    'vi': 'Môi trường',
-    'zh-TW': '環境',
-  },
-  'sidebar.api.title': {
-    'en': 'API Actions',
-    'vi': 'Hành động API',
-    'zh-TW': 'API 操作',
-  },
-  'sidebar.response.title': {
-    'en': 'Response Result',
-    'vi': 'Kết quả phản hồi',
-    'zh-TW': '回應結果',
-  },
-  'sidebar.response.copy': {
-    'en': 'Copy full response',
-    'vi': 'Sao chép toàn bộ phản hồi',
-    'zh-TW': '複製完整回應',
-  },
-  'modal.tab.env': {
-    'en': 'Environment Settings',
-    'vi': 'Cài đặt môi trường',
-    'zh-TW': '環境設定',
-  },
-  'modal.tab.api': {
-    'en': 'API Settings',
-    'vi': 'Cài đặt API',
-    'zh-TW': 'API 設定',
-  },
-  'modal.header.default': {
-    'en': 'Jun Tool Settings',
-    'vi': 'Cài đặt công cụ Jun',
-    'zh-TW': 'Jun 工具設定',
-  },
-  'modal.header.api-list': {
-    'en': 'API List',
-    'vi': 'Danh sách API',
-    'zh-TW': 'API 列表',
-  },
-  'modal.header.api-setting': {
-    'en': 'API Settings',
-    'vi': 'Cài đặt API',
-    'zh-TW': 'API 設定',
-  },
-  'modal.header.env-setting': {
-    'en': 'Environment Settings',
-    'vi': 'Cài đặt môi trường',
-    'zh-TW': '環境設定',
-  },
-  'modal.header.env-variable': {
-    'en': 'Environment Variables',
-    'vi': 'Biến môi trường',
-    'zh-TW': '環境變數',
-  },
-  'modal.title.env-var': {
-    'en': 'Environment Variables',
-    'vi': 'Biến môi trường',
-    'zh-TW': '環境變數',
-  },
-  'modal.title.your-env-var': {
-    'en': 'Your Environment Variables ( ${name} )',
-    'vi': 'Biến môi trường của bạn ( ${name} )',
-    'zh-TW': '您的環境變數 ( ${name} )',
-  },
-  'modal.env-var.hard-setting.host': {
-    'en': 'Host ( ${host} )',
-    'vi': 'Máy chủ ( ${host} )',
-    'zh-TW': '主機 ( ${host} )',
-  },
-  'modal.api-setting.name': {
-    'en': 'API Name',
-    'vi': 'Tên API',
-    'zh-TW': 'API 名稱',
-  },
-  'modal.api-setting.desc': {
-    'en': 'Description',
-    'vi': 'Mô tả',
-    'zh-TW': '描述',
-  },
-  'modal.api-setting.request': {
-    'en': 'Request',
-    'vi': 'Yêu cầu',
-    'zh-TW': '請求',
-  },
-  'modal.api-setting.endpoint': {
-    'en': 'Endpoint',
-    'vi': 'Điểm cuối',
-    'zh-TW': '端點',
-  },
-  'modal.api-setting.response': {
-    'en': 'Response',
-    'vi': 'Phản hồi',
-    'zh-TW': '回應',
-  },
-  'modal.api-setting.color': {
-    'en': 'Color',
-    'vi': 'Màu sắc',
-    'zh-TW': '顏色',
-  },
-  'modal.api-setting.http-method': {
-    'en': 'HTTP Method',
-    'vi': 'Phương thức HTTP',
-    'zh-TW': 'HTTP 方法',
-  },
-  'modal.api-setting.is-auth-api': {
-    'en': 'Auto-set token after successful request?',
-    'vi': 'Tự động cài đặt token sau khi yêu cầu thành công?',
-    'zh-TW': '請求成功後自動設置令牌？',
-  },
-  'modal.api-list.empty': {
-    'en': 'No APIs found. Please add a new API.',
-    'vi': 'Không tìm thấy API nào. Vui lòng thêm API mới.',
-    'zh-TW': '未找到任何 API。請添加新的 API。',
-  },
-  'modal.api-list.add-new': {
-    'en': 'Add New API',
-    'vi': 'Thêm API mới',
-    'zh-TW': '新增 API',
-  },
-  'modal.api-list.api-name': {
-    'en': 'API Name',
-    'vi': 'Tên API',
-    'zh-TW': 'API 名稱',
-  },
-  'modal.api-list.api-description': {
-    'en': 'API Description',
-    'vi': 'Mô tả API',
-    'zh-TW': 'API 描述',
-  },
-  'modal.api-list.api-color': {
-    'en': 'API Color',
-    'vi': 'Màu sắc API',
-    'zh-TW': 'API 顏色',
-  },
-  'modal.api-list.api-action': {
-    'en': 'Actions',
-    'vi': 'Hành động',
-    'zh-TW': '操作',
-  },
-  'modal.api-list-item.endpoint-to': {
-    'en': 'To',
-    'vi': 'Đến',
-    'zh-TW': '至',
-  },
-  'modal.env-setting.name': {
-    'en': 'Environment Name',
-    'vi': 'Tên môi trường',
-    'zh-TW': '環境名稱',
-  },
-  'validation.required': {
-    'en': 'This field is required.',
-    'vi': 'Trường này là bắt buộc.',
-    'zh-TW': '此欄位為必填。',
-  },
-  'validation.invalid-url': {
-    'en': 'Invalid URL format.',
-    'vi': 'Định dạng URL không hợp lệ.',
-    'zh-TW': '無效的 URL 格式。',
-  },
-  'validation.invalid-http-method': {
-    'en': 'Invalid HTTP method.',
-    'vi': 'Phương thức HTTP không hợp lệ.',
-    'zh-TW': '無效的 HTTP 方法。',
-  },
-  'validation.invalid-color': {
-    'en': 'Invalid color selection.',
-    'vi': 'Lựa chọn màu không hợp lệ.',
-    'zh-TW': '無效的顏色選擇。',
-  },
-  'validation.invalid-json': {
-    'en': 'Invalid JSON format.',
-    'vi': 'Định dạng JSON không hợp lệ.',
-    'zh-TW': '無效的 JSON 格式。',
-  },
-  'validation.invalid-env-name': {
-    'en': 'Invalid environment name. Must start with a letter and contain only letters, numbers, and underscores.',
-    'vi': 'Tên môi trường không hợp lệ. Phải bắt đầu bằng chữ cái và chỉ chứa chữ cái, số và dấu gạch dưới.',
-    'zh-TW': '無效的環境名稱。必須以字母開頭，並且只能包含字母、數字和下劃線。',
-  },
-  'validation.missing-replacer': {
-    'en': 'Missing environment variables: ${0}',
-    'vi': 'Thiếu biến môi trường: ${0}',
-    'zh-TW': '缺少環境變數：${0}',
-  },
-  'validation.duplicate-field': {
-    'en': 'This field is duplicated.',
-    'vi': 'Trường này bị trùng lặp.',
-    'zh-TW': '此欄位重複。',
-  },
-  'message.fetch-api.endpoint-empty': {
-    'en': 'No API endpoint provided.',
-    'vi': 'Không có điểm cuối API được cung cấp.',
-    'zh-TW': '未提供 API 端點。',
-  },
-  'message.fetch-api.success': {
-    'en': 'API fetched successfully.',
-    'vi': 'Gọi API thành công.',
-    'zh-TW': 'API 獲取成功。',
-  },
-  'message.fetch-api.fetch-error': {
-    'en': 'Failed to fetch API.',
-    'vi': 'Gọi API thất bại.',
-    'zh-TW': '無法獲取 API。',
-  },
-  'message.fetch-api.swagger-not-found': {
-    'en': 'Swagger UI instance not found.',
-    'vi': 'Không tìm thấy instance Swagger UI.',
-    'zh-TW': '未找到 Swagger UI 實例。',
-  },
-  'message.api-response.empty': {
-    'en': 'No API response available.',
-    'vi': 'Không có phản hồi API nào.',
-    'zh-TW': '無 API 回應。',
-  },
-  'message.save-changes.env.success': {
-    'en': 'Environment settings saved successfully.',
-    'vi': 'Cài đặt môi trường đã được lưu thành công.',
-    'zh-TW': '環境設定已成功保存。',
-  },
-});
+import { translate, t, defaultLang, supportedLanguages } from './translate.js';
+import { httpMethods, colorEnums, actionMode, modalTabs, toastType, methodColors } from './data.js';
 
 /**
  * Get the first element that matches the selector.
@@ -338,24 +20,6 @@ function $$(selector = '') {
 }
 
 /**
- * Translate a key to the current language.
- * @param {string} key Translation key
- * @param {*} defaultText Default text to return if the key is not found in the translations.
- * @returns {string} The translated text or the default text if the key is not found.
- */
-function t(key, defaultText = key) {
-  let lang = localStorage.getItem('juntool-lang') || defaultLang;
-  if (!supportedLanguages.includes(lang)) {
-    console.warn(`Language ${lang} is not supported, falling back to ${defaultLang}`);
-    lang = defaultLang;
-  }
-
-  return translate[key] && translate[key][lang]
-    ? translate[key][lang]
-    : defaultText;
-}
-
-/**
  * Try to parse a JSON string and return the parsed object.
  * @param {string} jsonString JSON string to parse 
  * @returns {Object|null} The parsed object if successful, or null if parsing fails.
@@ -366,21 +30,6 @@ function tryParseJSON(jsonString, defaultValue = null) {
   } catch (e) {
     console.error("Error parsing JSON:", e);
     return defaultValue;
-  }
-}
-
-function getDefaultValue(input) {
-  switch (typeof (input)) {
-    case 'object':
-      return Array.isArray(input) ? [] : {};
-    case 'string':
-      return '';
-    case 'boolean':
-      return false;
-    case 'number':
-      return 0;
-    default:
-      return undefined;
   }
 }
 
@@ -401,72 +50,6 @@ function tryGetUrlPath(url = '') {
     return url;
   }
 }
-
-/** Modal tabs for the application. */
-const modalTabs = Object.freeze({
-  API: 'api',
-  ENVIRONMENT: 'environment',
-});
-
-/** Action modes for the application. */
-const actionMode = Object.freeze({
-  LOBBY: "lobby",
-  API_LIST: "api_list",
-  API_SETTING: "api_setting",
-  ENVIRONMENT_SETTINGS: "environment_settings",
-  ENVIRONMENT_VARIABLES: "environment_variables",
-});
-
-/** HTTP methods used in API requests. */
-const httpMethods = Object.freeze({
-  GET: "GET",
-  POST: "POST",
-  PUT: "PUT",
-  PATCH: "PATCH",
-  DELETE: "DELETE",
-  HEAD: "HEAD",
-  OPTIONS: "OPTIONS",
-});
-
-/** Color enums and options for Api actions. */
-const colorEnums = Object.freeze({
-  Primary: 'primary',
-  Secondary: 'secondary',
-  Success: 'success',
-  Danger: 'danger',
-  Warning: 'warning',
-  Info: 'info',
-  Light: 'light',
-  Dark: 'dark',
-});
-
-/** Color mapping for HTTP methods, used in UI elements. */
-const methodColors = Object.freeze({
-  [httpMethods.GET]: 'primary',
-  [httpMethods.POST]: 'success',
-  [httpMethods.PUT]: 'warning',
-  [httpMethods.PATCH]: 'info',
-  [httpMethods.DELETE]: 'danger',
-  [httpMethods.OPTIONS]: 'secondary',
-  [httpMethods.HEAD]: 'secondary',
-});
-
-/** Color options for Api actions, used in dropdowns or UI elements. */
-const colorOptions = Object.freeze([
-  { value: colorEnums.Primary, translateKey: 'color.primary', },
-  { value: colorEnums.Secondary, translateKey: 'color.secondary', },
-  { value: colorEnums.Success, translateKey: 'color.success', },
-  { value: colorEnums.Danger, translateKey: 'color.danger', },
-  { value: colorEnums.Warning, translateKey: 'color.warning', },
-  { value: colorEnums.Info, translateKey: 'color.info', },
-]);
-
-const toastType = Object.freeze({
-  Success: 'success',
-  Warn: 'warning',
-  Error: 'error',
-  Info: 'info',
-});
 
 class Toast {
   get container() {
@@ -1025,7 +608,7 @@ const uiBuilder = (() => {
         </div>
         <div class="form-group">
           <label for="api-description" class="form-label">${t('modal.api-setting.desc')}</label>
-          <textarea class="resize-none" id="api-description" name="desc" data-action="form-input">${desc || ''}</textarea>
+          <textarea class="resize-none" id="api-description" name="desc" data-action="form-input">${escapeHTML(desc || '')}</textarea>
         </div>
         <div class="grid grid-2">
           <div class="form-group">
@@ -1052,14 +635,14 @@ const uiBuilder = (() => {
         <div class="form-group">
           <label for="api-setting-endpoint" class="form-label">${t('modal.api-setting.endpoint')}</label>
           <div class="form-control">
-            <input id="api-setting-endpoint" name="endpoint" class="form-input" value="${endpoint || ''}" data-action="form-input" required />
+            <input id="api-setting-endpoint" name="endpoint" class="form-input" value="${escapeHTML(endpoint || '')}" data-action="form-input" required />
             <span class="error-message"></span>
           </div>
         </div>
         <div class="form-group">
           <label for="api-setting-request" class="form-label">${t('modal.api-setting.request')}</label>
           <div class="form-control">
-            <textarea id="api-setting-request" name="request" class="resize-none" data-action="form-input" required>${request || ''}</textarea>
+            <textarea id="api-setting-request" name="request" class="resize-none" data-action="form-input" required>${escapeHTML(request || '')}</textarea>
             <span class="error-message"></span>
           </div>
         </div>
@@ -1775,70 +1358,91 @@ class SwaggerFaster {
 
     switch (this.formData.type) {
       case actionMode.ENVIRONMENT_SETTINGS:
-        const envFormDatas = this.formData.dataSource
-          .map(item => this.mapToFormData(item, actionMode.ENVIRONMENT_SETTINGS));
-        const [isEnvFormError, envErrorMessages] = validator.validateEnvSetting(envFormDatas);
-        this.#setEnvErrorMessage(envErrorMessages);
-        if (isEnvFormError) return;
-
-        this.envSettings = [...envFormDatas];
-        if (!this.currentEnv || !this.envSettings.some(i => i.id == this.currentEnv))
-          this.currentEnv = this.envSettings[0]?.id || '';
-
-        if (this.envSettings.length === 0) this.currentEnv = '';
-
-        const validEnvVars = this.envVariables.filter(item => this.envSettings.some(env => env.id === item.envId));
-        this.envVariables = [...validEnvVars];
-        Toast.success('message.save-changes.env.suceess');
+        this.#saveEnvChanges();
         break;
 
       case actionMode.ENVIRONMENT_VARIABLES:
-        const varFormDatas = this.formData.dataSource
-          .map(item => this.mapToFormData(item, actionMode.ENVIRONMENT_VARIABLES));
-        const [isVariableFormError, varErrorMessages] = validator.validateVariableSetting(varFormDatas);
-        this.#setVariableErrorMessage(varErrorMessages);
-        if (isVariableFormError) return;
-
-        const currentVars = [...this.envVariables];
-        const targetVarIndex = currentVars.findIndex(item => item.envId === this.currentEnv);
-        if (targetVarIndex < 0) {
-          const newEnvVar = this.#defaultEnvVariableData;
-          newEnvVar.envId = this.currentEnv;
-          newEnvVar.items = [...this.formData.dataSource];
-          this.envVariables = [...this.envVariables, newEnvVar];
-        } else {
-          const updateEnvVars = [...this.envVariables];
-          updateEnvVars[targetVarIndex].items = [...this.formData.dataSource];
-          this.envVariables = [...updateEnvVars];
-        }
-        Toast.success('message.save-changes.env-var.suceess');
+        this.#saveVariableChanges();
         break;
 
       case actionMode.API_SETTING:
-        const apiFormData = this.mapToFormData(this.formData.dataSource, actionMode.API_SETTING);
-        const [isApiFormError, apiSettingErrorMessages] = validator.validateApiSetting(this.resolveObjectVars(apiFormData));
-        this.#setApiSettingErrorMessage(apiSettingErrorMessages);
-        if (isApiFormError) return;
-
-        const settingIndex = this.apiSettings.findIndex(setting => setting.id === this.targetId);
-        if (settingIndex < 0) {
-          this.apiSettings = [apiFormData, ...this.apiSettings];
-        } else {
-          const settings = [...this.apiSettings];
-          settings[settingIndex] = apiFormData;
-          this.apiSettings = [...settings];
-        }
-
-        this.targetId = null;
-        this.isPageDataChange = true;
-        this.currentAction = actionMode.API_LIST;
-        this.#onPageBinding();
-        Toast.success('message.save-changes.api-setting.suceess');
+        this.#saveApiSettingChanges();
         return;
 
       default:
-        throw new Error(`Fail to save changes (action: ${this.formData.type})`);
+        throw new Error(`${t('message.save-changes.fail')} (${this.formData.type})`);
     }
+  }
+
+  /**
+   * Save environment changes
+   */
+  #saveEnvChanges() {
+    const envFormDatas = this.formData.dataSource
+      .map(item => this.mapToFormData(item, actionMode.ENVIRONMENT_SETTINGS));
+    const [isEnvFormError, envErrorMessages] = validator.validateEnvSetting(envFormDatas);
+    this.#setEnvErrorMessage(envErrorMessages);
+    if (isEnvFormError) return;
+
+    this.envSettings = [...envFormDatas];
+    if (!this.currentEnv || !this.envSettings.some(i => i.id == this.currentEnv))
+      this.currentEnv = this.envSettings[0]?.id || '';
+
+    if (this.envSettings.length === 0) this.currentEnv = '';
+
+    const validEnvVars = this.envVariables.filter(item => this.envSettings.some(env => env.id === item.envId));
+    this.envVariables = [...validEnvVars];
+    Toast.success('message.save-changes.env.success');
+  }
+
+  /**
+   * Save variable changes
+   */
+  #saveVariableChanges() {
+    const varFormDatas = this.formData.dataSource
+      .map(item => this.mapToFormData(item, actionMode.ENVIRONMENT_VARIABLES));
+    const [isVariableFormError, varErrorMessages] = validator.validateVariableSetting(varFormDatas);
+    this.#setVariableErrorMessage(varErrorMessages);
+    if (isVariableFormError) return;
+
+    const currentVars = [...this.envVariables];
+    const targetVarIndex = currentVars.findIndex(item => item.envId === this.currentEnv);
+    if (targetVarIndex < 0) {
+      const newEnvVar = this.#defaultEnvVariableData;
+      newEnvVar.envId = this.currentEnv;
+      newEnvVar.items = [...this.formData.dataSource];
+      this.envVariables = [...this.envVariables, newEnvVar];
+    } else {
+      const updateEnvVars = [...this.envVariables];
+      updateEnvVars[targetVarIndex].items = [...this.formData.dataSource];
+      this.envVariables = [...updateEnvVars];
+    }
+    Toast.success('message.save-changes.variable.success');
+  }
+
+  /**
+   * Save API setting changes
+   */
+  #saveApiSettingChanges() {
+    const apiFormData = this.mapToFormData(this.formData.dataSource, actionMode.API_SETTING);
+    const [isApiFormError, apiSettingErrorMessages] = validator.validateApiSetting(this.resolveObjectVars(apiFormData));
+    this.#setApiSettingErrorMessage(apiSettingErrorMessages);
+    if (isApiFormError) return;
+
+    const settingIndex = this.apiSettings.findIndex(setting => setting.id === this.targetId);
+    if (settingIndex < 0) {
+      this.apiSettings = [apiFormData, ...this.apiSettings];
+    } else {
+      const settings = [...this.apiSettings];
+      settings[settingIndex] = apiFormData;
+      this.apiSettings = [...settings];
+    }
+
+    this.targetId = null;
+    this.isPageDataChange = true;
+    this.currentAction = actionMode.API_LIST;
+    this.#onPageBinding();
+    Toast.success('message.save-changes.api-setting.success');
   }
 
   /**
@@ -2208,6 +1812,9 @@ class SwaggerFaster {
 
   /**
    * Refresh the page by re-rendering the UI and setting up event listeners.
+   *
+   * This method is used to initialize the page when it is first loaded, and to
+   * re-render the page when the user navigates to a different page.
    */
   refreshPage() {
     this.#renderUI();
@@ -2217,6 +1824,9 @@ class SwaggerFaster {
 
   /**
    * Initialize the SwaggerFaster class and set up the initial state.
+   *
+   * This method is a static initializer that creates a new instance of the class,
+   * renders the UI, sets up event listeners, and binds the UI to the page.
    */
   static init() {
     const instance = new SwaggerFaster();
