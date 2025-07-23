@@ -1,22 +1,20 @@
-/**
- * ============================================
- * File: EnvVariableForm.js
- * Type UI: Form
- * Description: Environment Variable Form
- * Copyright (c) 2025. Jun Dev
- * ============================================
- */
+// ============================================
+// File: EnvVariableForm.js
+// Type UI: Form
+// Description: Environment Variable Form
+// Copyright (c) 2025. Jun Dev
+// ============================================
 
+import { Store } from '../../data/store.js';
 import { t } from '../../i18n/translate.js';
 import { escapeHTML } from '../../utils/helpers.js';
 
-
 /**
  * Render the Environment Variable Form.
- * @param {{ selectedEnv: string, variables: { id: string, name: string, value: string, isHardSetting: boolean }[] }} [option] The options for the Environment Variable Form.
+ * @param {EnvVariableItem[]} variables The options for the Environment Variable Form.
  * @returns {string} The HTML of the Environment Variable Form.
  */
-const EnvVariableForm = ({ selectedEnv = '', variables = [] }) => {
+const EnvVariableForm = (variables = []) => {
   const hardSettings = variables.filter(item => item.isHardSetting);
   const hostSetting = hardSettings.find(item => item.name === 'host')?.value || '';
   const softSettings = variables.filter(item => !item.isHardSetting);
@@ -32,14 +30,14 @@ const EnvVariableForm = ({ selectedEnv = '', variables = [] }) => {
         <div class="form-group grid-3 gap-1">
           <label for="tb-env-host" class="form-label">${t('modal.env-var.hard-setting.host')}:</label>
           <div class="form-control span-2">
-            <input id="tb-env-host" name="host" class="form-input" value="${escapeHTML(hostSetting)}" data-env-input-type="value" required ${!selectedEnv ? 'disabled' : ''}>
+            <input id="tb-env-host" name="host" class="form-input" value="${escapeHTML(hostSetting)}" data-env-input-type="value" required ${!Store.currentEnv ? 'disabled' : ''}>
             <span class="error-message"></span>
           </div>
         </div>
       </div>
       <h3>${t('modal.title.your-env-var')}</h3>
       <div class="list-wrapper mb-2" data-env-type="soft-setting">
-        ${!selectedEnv ? '' : softSettings.map(({ id, name, value }) => `
+        ${!Store.currentEnv ? '' : softSettings.map(({ id, name, value }) => `
             <div class="form-group grid-6 gap-1" data-target-id="${id}">
               <div class="form-control span-2">
                 <input class="form-input" data-env-input-type="name" value="${name}" required>
@@ -52,7 +50,7 @@ const EnvVariableForm = ({ selectedEnv = '', variables = [] }) => {
               <button class="btn-control icon-badge light" data-action="delete-variable" title="${t('tooltip.delete')}">🗑️</button>
             </div>
           `).join('')}
-        ${selectedEnv ? `<a href="javascript:void" id="btn-add-new-var" class="btn-control light">${t('btn.add-new')}</a>` : ''}
+        ${Store.currentEnv ? `<a href="javascript:void" id="btn-add-new-var" class="btn-control light">${t('btn.add-new')}</a>` : ''}
       </div>
     </form>
   `;

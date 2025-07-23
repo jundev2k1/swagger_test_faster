@@ -1,13 +1,13 @@
 import { t } from '../../i18n/translate.js';
 import { tryGetUrlPath } from '../../utils/helpers.js';
-import { httpMethods, methodColors } from '../../data/constants.js';
+import { HttpMethods, MethodColors } from '../../data/constants.js';
 
 const ModalApiListItem = (datasource = []) => {
   return datasource.map(({ id, name, method, endpoint, color, desc }) => `
     <li class="api-list-item bg-${color || 'primary'} bg-${color || 'primary'}-hover">
       <div class="api-setting-content">
         <a href="javascript:void" data-api-id="${id}">
-          <span class="api-method badge ${methodColors[method] || methodColors[httpMethods.GET]}">${method}</span>
+          <span class="api-method badge ${MethodColors[method] || MethodColors[HttpMethods.GET]}">${method}</span>
           <span class="api-item-title">${name}</span>
         </a>
         <p class="api-item-endpoint truncate" title=${endpoint}>${t('modal.api-list-item.endpoint-to')}: ${tryGetUrlPath(endpoint)}</p>

@@ -1,10 +1,8 @@
-/**
- * ============================================
- * File: App Config (config.js)
- * Description: App configuration
- * Copyright (c) 2025. Jun Dev
- * ============================================
- */
+// ============================================
+// File: App Config (config.js)
+// Description: App configuration
+// Copyright (c) 2025. Jun Dev
+// ============================================
 
 export const config = Object.freeze({
   defaultLang: 'vi',

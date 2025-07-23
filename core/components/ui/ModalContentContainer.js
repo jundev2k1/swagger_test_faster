@@ -6,7 +6,7 @@
  * ============================================
  */
 
-import { t } from '../utils/translate.js';
+import { t } from '../../i18n/translate.js';
 import { actionMode } from '../../data/constants.js';
 
 const ModalContentContainer = (action = actionMode.LOBBY, innerHTML = '') => {

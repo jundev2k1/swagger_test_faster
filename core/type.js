@@ -1,23 +1,21 @@
-/**
- * ===============================================
- * File: type.js
- * Description: Contains functions for type checking
- * Copyright (c) 2025. Jun Dev
- * ================================================
- */
+// ================================================
+// File: type.js
+// Description: Contains functions for type checking
+// Copyright (c) 2025. Jun Dev
+// ================================================
 
-// ================================================
-// Form data type
-// ================================================
+
+// ============ Form data type ====================
 
 /**
  * @typedef {Object} ApiSetting
+ * @property {string} id - The ID of the API.
  * @property {string} name - The name of the API.
  * @property {string} desc - The description of the API.
  * @property {string} method - The HTTP method of the API.
+ * @property {string} color - The color of the API.
  * @property {string} endpoint - The endpoint of the API.
  * @property {string} request - The request of the API.
- * @property {string} color - The color of the API.
  * @property {boolean} isAuth - Whether the API is authenticated or not.
  */
 
@@ -47,36 +45,15 @@
  * @property {EnvSetting[] | EnvVariableItem[] | ApiSetting} dataSource - The list of APIs.
  */
 
-// ================================================
-// Page data type
-// ================================================
+// ============ Page data type ====================
 
 /**
  * - Action modes for the application.
  * @typedef { 'lobby' | 'api_list' | 'api_setting' | 'environment_settings' | 'environment_variables' } ActionMode
- */
-
-/**
+ * 
  * - Modal tabs for the application.
  * @typedef { 'api' | 'environment' } ModalTab
- */
-
-/**
- * - Color enums and options for Api actions.
- * @typedef { 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' } ColorEnum
- */
-
-/**
- * - HTTP methods used in API requests.
- * @typedef { 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'HEAD' | 'OPTIONS' } HttpMethod
- */
-
-/**
- * - Method colors for HTTP methods, used in UI elements.
- * @typedef { 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' } MethodColor
- */
-
-/**
+ * 
  * - Color options for Api actions, used in dropdowns or UI elements.
  * @typedef { { value: ColorEnum, translateKey: string }[] } ColorOption
  */

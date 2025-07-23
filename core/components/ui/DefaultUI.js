@@ -1,14 +1,13 @@
-/**
- * =============================
- * File: DefaultUI.js (defaultUI.js)
- * Description: Render default UI for the application
- * Copyright (c) 2025. Jun Dev
- * ============================= 
- */
+ // =============================
+ // File: DefaultUI.js (defaultUI.js)
+ // Description: Render default UI for the application
+ // Copyright (c) 2025. Jun Dev
+ // ============================= 
 
-import { config } from "../../../config";
-import { t, translate } from "../../i18n/translate";
+import { config } from "../../../config.js";
+import { t, translate } from "../../i18n/translate.js";
 
+/** Render default UI for the application. */
 const DefaultUI = () => {
   return `
     <aside id="tool-sidebar">

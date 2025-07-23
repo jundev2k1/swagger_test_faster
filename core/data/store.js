@@ -6,7 +6,8 @@
  * ===============================================
  */
 
-import { storeKeys } from "./constants";
+import { tryParseJSON } from "../utils/helpers.js";
+import { storeKeys } from "./constants.js";
 
 /** Store for the application. */
 export class Store {

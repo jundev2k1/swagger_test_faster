@@ -17,8 +17,8 @@ import { default as ModalEnvVariableForm } from '../form/EnvVariableForm.js';
 
 /**
  * Render Modal containner content
- * @param {actionMode} [action] Current action for the modal
- * @param {object} [dataSource] Data source for the modal
+ * @param {ActionMode} [action] Current action for the modal
+ * @param {ApiSetting[] | ApiSetting | EnvSetting[] | EnvVariableItem[]} [dataSource] Data source for the modal
  * @param {string} [selectedEnv] Selected environment
  * @returns {string} HTML content of the modal containner
  */
@@ -26,7 +26,7 @@ const ModalContainnerContent = (action = actionMode.LOBBY, dataSource, selectedE
   switch (action) {
     /**
      * Render API list for the modal containner
-     * @param {object[]} [dataSource] Data source for the API list
+     * @param {ApiSetting[]} [dataSource] Data source for the API list
      * @returns {string} HTML content of the API list
      */
     case actionMode.API_LIST:
@@ -34,7 +34,7 @@ const ModalContainnerContent = (action = actionMode.LOBBY, dataSource, selectedE
 
     /**
      * Render API setting form for the modal containner
-     * @param {object} [dataSource] Data source for the API setting form
+     * @param {ApiSetting} [dataSource] Data source for the API setting form
      * @returns {string} HTML content of the API setting form
      */
     case actionMode.API_SETTING:
@@ -42,7 +42,7 @@ const ModalContainnerContent = (action = actionMode.LOBBY, dataSource, selectedE
 
     /**
      * Render Environment setting form for the modal containner
-     * @param {object} [dataSource] Data source for the Environment setting form
+     * @param {EnvSetting[]} [dataSource] Data source for the Environment setting form
      * @returns {string} HTML content of the Environment setting form
      */
     case actionMode.ENVIRONMENT_SETTINGS:
@@ -50,12 +50,11 @@ const ModalContainnerContent = (action = actionMode.LOBBY, dataSource, selectedE
 
     /**
      * Render Environment variable form for the modal containner
-     * @param {object} [dataSource] Data source for the Environment variable form
-     * @param {string} [selectedEnv] Selected environment
+     * @param {EnvVariableItem[]} [dataSource] Data source for the Environment variable form
      * @returns {string} HTML content of the Environment variable form
      */
     case actionMode.ENVIRONMENT_VARIABLES:
-      return ModalEnvVariableForm({ selectedEnv, variables: dataSource });
+      return ModalEnvVariableForm(dataSource);
 
     default:
       return '';

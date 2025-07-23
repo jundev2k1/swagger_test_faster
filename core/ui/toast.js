@@ -1,10 +1,10 @@
-/**
- * =============================================
- * File: Toast.js
- * Description: Contains functions for Toast UI
- * Copyright (c) 2025. Jun Dev
- * ============================================
- */
+// =============================================
+// File: Toast.js
+// Description: Contains functions for Toast UI
+// Copyright (c) 2025. Jun Dev
+// ============================================
+
+import { $ } from "../utils/helpers.js";
 
 /**
  * Toast types

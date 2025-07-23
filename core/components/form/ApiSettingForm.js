@@ -9,7 +9,7 @@
 
 import { t } from '../../i18n/translate.js';
 import { escapeHTML } from '../../utils/helpers.js';
-import { httpMethods, colorEnums } from '../../data/constants.js';
+import { HttpMethods, ColorEnums } from '../../data/constants.js';
 
 /**
  * Render the API Setting Form.
@@ -34,7 +34,7 @@ const ApiSettingForm = ({ name, desc, method, endpoint, request, color, isAuth }
         <div class="form-group">
           <label for="api-setting-method" class="form-label">${t('modal.api-setting.http-method')}</label>
           <select class="form-select" id="api-setting-method" name="method" data-action="form-input">
-            ${Object.entries(httpMethods).map(([key, val]) => `
+            ${Object.entries(HttpMethods).map(([key, val]) => `
               <option value="${val}" ${method === val ? 'selected' : ''}>
                 ${key}
               </option>
@@ -44,7 +44,7 @@ const ApiSettingForm = ({ name, desc, method, endpoint, request, color, isAuth }
         <div class="form-group">
           <label for="api-setting-color" class="form-label">${t('modal.api-setting.color')}</label>
           <select class="form-select" id="api-setting-color" name="color" data-action="form-input">
-            ${Object.entries(colorEnums).map(([key, val]) => `
+            ${Object.entries(ColorEnums).map(([key, val]) => `
               <option value="${val}" ${color === val ? 'selected' : ''}>
                 ${t(`color.${val}`, key)}
               </option>

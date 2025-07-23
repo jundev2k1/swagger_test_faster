@@ -1,17 +1,14 @@
-/**
- * ================================================
- * File:  Main script (main.user.js)
- * Description: The main script will be imported from tampermonkey, this file will import other scripts
- * Copyright (c) 2025. Jun Dev
- * ================================================
- */
+// ================================================
+// File:  Main script (main.user.js)
+// Description: The main script will be imported from tampermonkey, this file will import other scripts
+// Copyright (c) 2025. Jun Dev
+// ================================================
 
 import { t } from './core/i18n/translate.js';
-import { $, $$, tryParseJSON } from './core/utils/helpers.js';
-import { Toast } from './core/ui/index.js';
+import { $, $$ } from './core/utils/helpers.js';
+import { Toast, uiBuilder } from './core/ui/index.js';
 import { validator } from './core/form/validate.js';
-import { httpMethods, colorEnums, actionMode, modalTabs, DefaultFormData, Store } from './core/data/index.js';
-
+import { HttpMethods, actionMode, modalTabs, DefaultFormData, Store } from './core/data/index.js';
 
 export class SwaggerFaster {
   #modalFormIds = Object.freeze({
@@ -101,7 +98,7 @@ export class SwaggerFaster {
           'Content-Type': 'application/json',
           ...(isAuth ? { 'Authorization': `Bearer ${this.preAuthToken}` } : {})
         },
-        body: request && method !== httpMethods.GET
+        body: request && method !== HttpMethods.GET
           ? this.resolveObjectVars(request)
           : undefined,
       };
@@ -380,7 +377,7 @@ export class SwaggerFaster {
     const apiId = event.target.dataset['apiId'];
     if (!apiId) return;
 
-    const targetApi = this.apiSettings.find(api => api.id === apiId);
+    const targetApi = Store.apiSettings.find(api => api.id === apiId);
     if (!targetApi) return;
 
     this.isFetching = true;
@@ -644,13 +641,13 @@ export class SwaggerFaster {
     this.#setApiSettingErrorMessage(apiSettingErrorMessages);
     if (isApiFormError) return;
 
-    const settingIndex = this.apiSettings.findIndex(setting => setting.id === this.targetId);
+    const settingIndex = Store.apiSettings.findIndex(setting => setting.id === this.targetId);
     if (settingIndex < 0) {
-      this.apiSettings = [apiFormData, ...this.apiSettings];
+      Store.apiSettings = [apiFormData, ...Store.apiSettings];
     } else {
-      const settings = [...this.apiSettings];
+      const settings = [...Store.apiSettings];
       settings[settingIndex] = apiFormData;
-      this.apiSettings = [...settings];
+      Store.apiSettings = [...settings];
     }
 
     this.targetId = null;
@@ -695,7 +692,7 @@ export class SwaggerFaster {
     this.#onPageChange();
 
     // Set the form data based on the current action
-    const apiActionItems = uiBuilder.createApiActionGroupItems(this.resolveObjectVars(this.apiSettings));
+    const apiActionItems = uiBuilder.createApiActionGroupItems(this.resolveObjectVars(Store.apiSettings));
     this.wApiActionGroup.innerHTML = apiActionItems;
 
     // Set the title and modal container based on the current action
@@ -757,14 +754,16 @@ export class SwaggerFaster {
         this.targetId = null;
         this.formData = {
           type: actionMode.API_LIST,
-          dataSource: [...this.apiSettings],
+          dataSource: [...Store.apiSettings],
         };
         break;
 
       case actionMode.API_SETTING:
+        const targetSetting = Store.apiSettings.find(api => api.id === this.targetId) || DefaultFormData.defaultApiSettingData;
+        targetSetting.id = this.targetId;
         this.formData = {
           type: actionMode.API_SETTING,
-          dataSource: this.apiSettings.find(api => api.id === this.targetId) || DefaultFormData.defaultApiSettingData,
+          dataSource: targetSetting,
         };
         break;
 
@@ -845,9 +844,10 @@ export class SwaggerFaster {
 
         if (!confirm(t('dialog.confirm-delete'))) return;
 
-        const newSettings = this.apiSettings.filter(setting => setting.id !== apiId);
-        this.apiSettings = [...newSettings];
+        const newSettings = Store.apiSettings.filter(setting => setting.id !== apiId);
+        Store.apiSettings = [...newSettings];
 
+        this.isPageDataChange = true;
         this.#onPageBinding();
       });
     });
@@ -858,7 +858,7 @@ export class SwaggerFaster {
         const apiId = e.target.closest('.api-list-item').querySelector('[data-api-id]')?.dataset['apiId'] || '';
         if (!apiId) return;
 
-        const targetItem = this.apiSettings.find(setting => setting.id === apiId);
+        const targetItem = Store.apiSettings.find(setting => setting.id === apiId);
         this.formData = { type: actionMode.API_SETTING, dataSource: { ...targetItem, id: crypto.randomUUID() } };
         this.currentAction = actionMode.API_SETTING;
 
@@ -1050,3 +1050,5 @@ export class SwaggerFaster {
     console.log("SwaggerFaster executed");
   }
 }
+
+SwaggerFaster.init();

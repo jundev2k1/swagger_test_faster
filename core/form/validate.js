@@ -1,10 +1,11 @@
-/**
- * ===============================================
- * File: Form Validator (validate.js)
- * Description: Contains validators for form inputs
- * Copyright (c) 2025. Jun Dev
- * ===============================================
- */
+// ===============================================
+// File: Form Validator (validate.js)
+// Description: Contains validators for form inputs
+// Copyright (c) 2025. Jun Dev
+// ===============================================
+
+import { t } from '../i18n/translate.js';
+import { ColorEnums, HttpMethods } from '../data/constants.js';
 
 /**
  * Validator for form inputs and settings.
@@ -40,7 +41,7 @@ export const validator = (() => {
    * @returns {[boolean, string]} Validation result.
    */
   const isValidHttpMethod = (value) => {
-    const isValid = Object.values(httpMethods).includes(value);
+    const isValid = Object.values(HttpMethods).includes(value);
     return [isValid, isValid ? '' : t('validation.invalid-http-method')];
   }
 
@@ -50,7 +51,7 @@ export const validator = (() => {
    * @returns {[boolean, string]} Validation result.
    */
   const isValidColor = (value) => {
-    const isValid = Object.values(colorEnums).includes(value);
+    const isValid = Object.values(ColorEnums).includes(value);
     return [isValid, isValid ? '' : t('validation.invalid-color')];
   }
 

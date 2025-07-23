@@ -6,17 +6,20 @@
  * =================================================
  */
 
+import { ColorEnums, HttpMethods } from "./constants.js";
+import { Store } from "./store.js";
+
 /** The default form data */
 export class DefaultFormData {
   /** @type {ApiSetting} The default api setting data */
   static get defaultApiSettingData() {
     return {
-      id: this.targetId,
+      id: '',
       name: '',
       desc: '',
       endpoint: '',
-      method: httpMethods.GET,
-      color: colorEnums.Primary,
+      method: HttpMethods.GET,
+      color: ColorEnums.Primary,
       request: '',
       isAuth: false,
     }

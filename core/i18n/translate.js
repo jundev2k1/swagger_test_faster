@@ -6,7 +6,7 @@
  * ============================================
  */
 
-import { defaultLang, supportedLanguages } from "../../config";
+import { config } from "../../config.js";
 
 export const translate = Object.freeze({
   'lang': {
@@ -360,7 +360,7 @@ export function t(key, defaultValue = key) {
  */
 function getLanguage() {
   const storedLanguage = localStorage.getItem('juntool-lang');
-  const language = supportedLanguages.includes(storedLanguage) ? storedLanguage : defaultLang;
+  const language = config.supportedLanguages.includes(storedLanguage) ? storedLanguage : config.defaultLang;
 
   return language;
 }
