@@ -93,23 +93,6 @@ class Toast {
   }
 }
 
-function showToast(message, type = 'info', duration = 3000) {
-  const container = document.getElementById('jun-toast-container');
-  if (!container) return;
-
-  const toast = document.createElement('div');
-  toast.className = `jun-toast ${type}`;
-  toast.textContent = message;
-
-  toast.style.setProperty('--hide-delay', `${duration}ms`);
-  container.appendChild(toast);
-
-  const totalDuration = duration + 300;
-  setTimeout(() => {
-    toast.remove();
-  }, totalDuration + 100);
-}
-
 /**
  * Validator for form inputs and settings.
  */
@@ -1836,6 +1819,7 @@ class SwaggerFaster {
   }
 }
 
+console.log("SwaggerFaster loaded");
 // Execute class
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => SwaggerFaster.init());
