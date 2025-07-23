@@ -700,7 +700,7 @@ const uiBuilder = (() => {
   };
 })();
 
-class SwaggerFaster {
+export class SwaggerFaster {
   // ================================================
   // Local variable
   // ================================================
