@@ -1,765 +1,24 @@
-import { translate, t, defaultLang, supportedLanguages } from './translate.js';
-import { httpMethods, colorEnums, actionMode, modalTabs, toastType, methodColors } from './data.js';
-
 /**
- * Get the first element that matches the selector.
- * @param {string} selector DOM Selector 
- * @returns {Element|null} The first element that matches the selector or null if no elements match.
+ * ================================================
+ * File:  Main script (main.user.js)
+ * Description: The main script will be imported from tampermonkey, this file will import other scripts
+ * Copyright (c) 2025. Jun Dev
+ * ================================================
  */
-function $(selector = '') {
-  return document.querySelector(selector);
-}
 
-/**
- * Get all elements that match the selector.
- * @param {string} selector DOM Selector
- * @returns {NodeList} A NodeList of elements that match the selector.
- */
-function $$(selector = '') {
-  return document.querySelectorAll(selector) || [];
-}
+import { t } from './core/i18n/translate.js';
+import { $, $$, tryParseJSON } from './core/utils/helpers.js';
+import { Toast } from './core/ui/index.js';
+import { validator } from './core/form/validate.js';
+import { httpMethods, colorEnums, actionMode, modalTabs, DefaultFormData, Store } from './core/data/index.js';
 
-/**
- * Try to parse a JSON string and return the parsed object.
- * @param {string} jsonString JSON string to parse 
- * @returns {Object|null} The parsed object if successful, or null if parsing fails.
- */
-function tryParseJSON(jsonString, defaultValue = null) {
-  try {
-    return JSON.parse(jsonString) || defaultValue;
-  } catch (e) {
-    console.error("Error parsing JSON:", e);
-    return defaultValue;
-  }
-}
-
-function escapeHTML(str) {
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
-}
-
-function tryGetUrlPath(url = '') {
-  try {
-    const result = new URL(url).pathname;
-    return result;
-  } catch {
-    return url;
-  }
-}
-
-class Toast {
-  get container() {
-    return $('#jun-tool #toast-container');
-  }
-
-  /**
-   * Show toast
-   * @param {toastType} type Toast type
-   * @param {string} message Message
-   * @param {number} duration Duration
-   */
-  show(type, message, duration) {
-    const toast = document.createElement('div');
-    toast.className = `jun-toast ${type}`;
-    toast.textContent = message;
-
-    toast.style.setProperty('--hide-delay', `${duration}ms`);
-
-    this.container?.appendChild(toast);
-    const totalDuration = duration + 300;
-    setTimeout(() => {
-      toast.remove();
-    }, totalDuration + 100);
-  }
-
-  static success(message, duration = 3000) {
-    new Toast().show(toastType.Success, message, duration);
-  }
-
-  static warning(message, duration = 3000) {
-    new Toast().show(toastType.Warn, message, duration);
-  }
-
-  static error(message, duration = 3000) {
-    new Toast().show(toastType.Error, message, duration);
-  }
-
-  static info(message, duration = 3000) {
-    new Toast().show(toastType.Info, message, duration);
-  }
-}
-
-/**
- * Validator for form inputs and settings.
- */
-const validator = (() => {
-  /**
-   * Validate if a value is required (not empty or null).
-   * @param {string | null} value Value to validate
-   * @returns {[boolean, string]} Validation result.
-   */
-  const isRequired = (value) => {
-    const isValid = value && value.trim() !== '';
-    return [isValid, isValid ? '' : t('validation.required')];
-  }
-
-  /**
-   * Validate if a value is a valid URL.
-   * @param {string} value URL value to validate
-   * @returns {[boolean, string]} Validation result.
-   */
-  const isValidUrl = (value) => {
-    try {
-      new URL(value);
-      return [true, ''];
-    } catch (e) {
-      return [false, t('validation.invalid-url')];
-    }
-  }
-
-  /**
-   * Validate if a value is a valid HTTP method.
-   * @param {string} value HTTP method value to validate
-   * @returns {[boolean, string]} Validation result.
-   */
-  const isValidHttpMethod = (value) => {
-    const isValid = Object.values(httpMethods).includes(value);
-    return [isValid, isValid ? '' : t('validation.invalid-http-method')];
-  }
-
-  /**
-   * Validate if a value is a valid color enum.
-   * @param {string} value Color value to validate
-   * @returns {[boolean, string]} Validation result.
-   */
-  const isValidColor = (value) => {
-    const isValid = Object.values(colorEnums).includes(value);
-    return [isValid, isValid ? '' : t('validation.invalid-color')];
-  }
-
-  /**
-   * Validate if a value is a valid JSON string.
-   * @param {string} value JSON string to validate
-   * @returns {[boolean, string]} Validation result.
-   */
-  const isValidJson = (value) => {
-    if (value.trim() === '') return [true, ''];
-    try {
-      JSON.parse(value);
-      return [true, ''];
-    } catch (e) {
-      return [false, t('validation.invalid-json')];
-    }
-  }
-
-  /**
-   * Validate if a value is a valid environment name.
-   * @param {string} value Environment name to validate
-   * @returns {[boolean, string]} Validation result.
-   */
-  const isValidEnvName = (value) => {
-    const isValid = value && value.trim() !== '' && /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(value);
-    return [isValid, isValid ? '' : t('validation.invalid-env-name')];
-  }
-
-  const isDuplicateValue = (dataSource = [], selector) => {
-    if (typeof (selector) !== 'function') throw Error('The `selector` parameter must be a function at `isDuplicateValue`.');
-
-    const duplicateRow = [];
-    const distincField = {};
-    dataSource.map(selector).forEach((item, index) => {
-      const isExist = !!distincField[item];
-      if (isExist) duplicateRow.push(index);
-
-      distincField[item] = '1';
-    });
-
-    return [duplicateRow.length === 0, duplicateRow];
-  }
-
-  const apiSettingValidations = Object.freeze({
-    name: [isRequired],
-    endpoint: [isRequired, isValidUrl],
-    method: [isValidHttpMethod],
-    color: [isValidColor],
-    request: [isValidJson],
-  });
-  const envSettingValidations = Object.freeze({
-    id: [isRequired],
-    value: [isRequired],
-  });
-  const variableSettingValidations = Object.freeze({
-    name: [isValidEnvName],
-    value: [isRequired],
-  });
-  return {
-    isRequired,
-    isValidUrl,
-    isValidHttpMethod,
-    isValidColor,
-    isValidJson,
-    isValidEnvName,
-    /**
-     * Validate a form data object against a set of validations.
-     * @param {Object} formData Form input data to validate
-     * @param {*} options Validation rules for each field in the form data
-     * @returns {[boolean, { field: string, message: string }[]]} Validation result.
-     */
-    validate(formData, options = {}) {
-      const errors = Object.entries(formData)
-        .map(([key, value]) => {
-          const errorMessage = options[key]
-            ?.map(callback => callback(value)[1])
-            .filter(message => message && message !== '')
-            .join(', ') || '';
-          return { field: key, message: errorMessage };
-        })
-        .filter(error => error.message !== '');
-      const isError = errors.length > 0;
-      return [isError, errors];
-    },
-    /**
-     * Validate a list of items against a set of validations.
-     * @param {Object} formData Form input data, an array of items to validate
-     * @param {Object} validations Validation rules for each item in the list
-     * @returns {[boolean, { itemIndex: number, isError: boolean, errors: { field: string, message: string }[] }[]]} Validation result.
-     */
-    validateList(formData = [], validations) {
-      const errors = formData
-        .map((item, index) => {
-          const [isError, errorMessage] = this.validate(item, validations);
-          return {
-            itemIndex: index,
-            isError,
-            errors: errorMessage.map(err => ({ field: err.field, message: err.message }))
-          };
-        })
-        .flat()
-        .filter(error => error.isError);
-      const hasError = errors.length > 0;
-      return [hasError, errors];
-    },
-    validateApiSetting(formData) {
-      return this.validate(formData, apiSettingValidations);
-    },
-    validateApiSettingItem(name, value) {
-      const result = apiSettingValidations[name]
-        ?.map((callback) => callback(value)[1])
-        .filter(error => error && error !== '')
-        .join(', ');
-      return result;
-    },
-    validateVariableSetting(formData) {
-      const [isValid, duplicateRows] = isDuplicateValue(formData, item => item.name);
-      if (!isValid) return [
-        true,
-        duplicateRows.map(row => ({ itemIndex: row, isError: true, errors: [{ field: 'name', message: t('validation.duplicate-field') }] }))];
-
-      return this.validateList(formData, variableSettingValidations);
-    },
-    validateVariableSettingItem(name, value) {
-      const result = variableSettingValidations[name]
-        ?.map((callback) => callback(value)[1])
-        .filter(error => error && error !== '')
-        .join(', ');
-      return result;
-    },
-    validateEnvSetting(formData) {
-      const [isValid, duplicateRows] = isDuplicateValue(formData, item => item.value);
-      if (!isValid)
-        return [
-          true,
-          duplicateRows.map(row => ({ itemIndex: row, isError: true, errors: [{ field: 'value', message: t('validation.duplicate-field') }] }))];
-
-      return this.validateList(formData, envSettingValidations);
-    },
-    validateEnvSettingItem(name, value) {
-      const result = envSettingValidations[name]
-        ?.map((callback) => callback(value)[1])
-        .filter(error => error && error !== '')
-        .join(', ');
-      return result;
-    },
-  }
-})();
-
-function renderJSONFormattedStrict(data) {
-  const container = document.createElement('div');
-  container.className = 'json-viewer';
-
-  function render(value, depth) {
-    const lines = [];
-
-    if (Array.isArray(value)) {
-      lines.push(makeLine('[', depth));
-
-      value.forEach((item, i) => {
-        const childLines = render(item, depth + 1);
-        const lastLine = childLines[childLines.length - 1];
-        if (lastLine) {
-          lastLine.appendChild(document.createTextNode(i < value.length - 1 ? ',' : ''));
-        }
-        lines.push(...childLines);
-      });
-
-      lines.push(makeLine(']', depth));
-      return lines;
-    }
-
-    if (typeof value === 'object' && value !== null) {
-      lines.push(makeLine('{', depth));
-
-      const keys = Object.keys(value);
-      keys.forEach((key, i) => {
-        const line = makeLine('', depth + 1);
-
-        const keySpan = document.createElement('span');
-        keySpan.className = 'key';
-        keySpan.textContent = `"${key}"`;
-        line.appendChild(keySpan);
-        line.appendChild(document.createTextNode(': '));
-
-        const val = value[key];
-
-        if (typeof val === 'object' && val !== null) {
-          lines.push(line); // key line
-          const childLines = render(val, depth + 1);
-          const last = childLines[childLines.length - 1];
-          if (last) last.appendChild(document.createTextNode(i < keys.length - 1 ? ',' : ''));
-          lines.push(...childLines);
-        } else {
-          const valSpan = document.createElement('span');
-          valSpan.className = 'value ' + getTypeClass(val);
-          valSpan.textContent = formatValue(val);
-          valSpan.title = valSpan.textContent;
-          valSpan.classList.add('copyable');
-          line.appendChild(valSpan);
-          line.appendChild(document.createTextNode(i < keys.length - 1 ? ',' : ''));
-          lines.push(line);
-        }
-      });
-
-      lines.push(makeLine('}', depth));
-      return lines;
-    }
-
-    // Primitive value (string, number, etc.)
-    const valLine = makeLine('', depth);
-    const valSpan = document.createElement('span');
-    valSpan.className = 'value ' + getTypeClass(value);
-    valSpan.textContent = formatValue(value);
-    valSpan.title = valSpan.textContent;
-    valSpan.classList.add('copyable');
-    valLine.appendChild(valSpan);
-    return [valLine];
-  }
-
-  function makeLine(text, depth) {
-    const div = document.createElement('div');
-    div.style.paddingLeft = depth * 16 + 'px';
-    if (text) div.textContent = text;
-    return div;
-  }
-
-  function formatValue(val) {
-    if (val === null) return 'null';
-    if (typeof val === 'string') return `"${val}"`;
-    if (typeof val === 'boolean') return val ? 'true' : 'false';
-    return String(val);
-  }
-
-  function getTypeClass(val) {
-    if (val === null) return 'null';
-    switch (typeof val) {
-      case 'string': return 'string';
-      case 'number': return 'number';
-      case 'boolean': return 'boolean';
-      default: return '';
-    }
-  }
-
-  // Render and attach all lines
-  const allLines = render(data, 0);
-  allLines.forEach(line => container.appendChild(line));
-  return container;
-}
-
-/**
- * Builds the UI for the application.
- */
-const uiBuilder = (() => {
-  const createDefaultUI = () => `
-    <aside id="tool-sidebar">
-      <div class="sidebar-header">
-        <button class="btn-control badge light" id="btn-toggle-sidebar">≡</button>
-        <h1>Jun's Tool</h1>
-        <div class="dropdown">
-          <button class="btn-control icon-badge light dropdown-toggle" id="btn-change-language">🌍</button>
-          <ul class="dropdown-menu" data-target-id="btn-change-language">
-            ${supportedLanguages.map(lang => `
-              <li><a href="javascript:void" data-lang="${lang}">${translate.lang[lang]}</a></li>
-            `).join('')}
-          </ul>
-        </div>
-      </div>
-      <div class="sidebar-content">
-        <h3>${t('sidebar.env.title')}</h3>
-        <div class="form-group">
-          <select name="environment" class="form-select" control="ddl-select-environment"></select>
-        </div>
-  
-        <h3>${t('sidebar.api.title')}</h3>
-        <ul class="api-action-group overflow-scroll-y mh-50vh"></ul>
-        <div class="response-result">
-          <h3>
-            ${t('sidebar.response.title')}
-            <button class="btn-control icon-badge light" id="btn-copy-response" title="${t('sidebar.response.copy')}">📃</button>
-          </h3>
-          <div class="card json-viewer"></div>
-        </div>
-        <div class="tool-setting">
-          <a href="javascript:void" id="btn-open-setting" class="btn-control secondary action-control">${t('btn.setting')}</a>
-        </div>
-      </div>
-    </aside>
-  
-    <div class="modal d-none">
-      <div class="modal-overlay"></div>
-      <div class="modal-container">
-        <div class="modal-header">
-          <button id="btn-modal-back" class="btn-back d-none">⮜ ${t('btn.back')}</button>
-          <h2 id="title-modal">Jun Tool Settings</h2>
-        </div>
-        <div class="modal-tabs"></div>
-        <div class="modal-content"></div>
-        <div class="modal-footer">
-          <button id="btn-savechanges" type="submit">${t('btn.save-changes')}</button>
-          <button id="btn-close-modal" class="close-modal" type="button">${t('btn.close')}</button>
-        </div>
-      </div>
-    </div>
-
-    <div id="toast-container"></div>
-  `;
-
-  const createApiActionGroupItems = (datasource = []) => {
-    return datasource.map(({ id, name, method, endpoint, color }) => `
-      <li class="api-action-group-item bg-${color} bg-${color}-hover">
-        <a href="javascript:void" class="btn-control api-action-control" data-api-id="${id}">
-          <span class="api-method badge ${methodColors[method] || methodColors[httpMethods.GET]}">${method}</span>
-          ${name}
-        </a>
-        <p class="font-sm m-0 p-3 pt-0 truncate" title="${endpoint}">${t('modal.api-list-item.endpoint-to')}: ${tryGetUrlPath(endpoint)}</p>
-      </li>
-    `).join('') || '';
-  }
-
-  const createTabSettingElement = (action = actionMode.LOBBY) => {
-    const isApiSetting = action === actionMode.API_SETTING
-      || action === actionMode.API_LIST;
-    const isEnvSetting = action === actionMode.ENVIRONMENT_SETTINGS
-      || action === actionMode.ENVIRONMENT_VARIABLES;
-
-    return `
-      <button class="tab-button ${isApiSetting ? 'active' : ''}" data-modal-tab="api">
-        ${t('modal.tab.api')}
-      </button>
-      <button class="tab-button ${isEnvSetting ? 'active' : ''}" data-modal-tab="environment">
-        ${t('modal.tab.env')}
-      </button>
-    `;
-  }
-
-  const createModalContentContainer = (action = actionMode.LOBBY, innerHTML = '') => {
-    switch (action) {
-      case actionMode.API_LIST:
-        return `
-          <div id="api-list-layout">
-            <ul class="api-list">${innerHTML}</ul>
-            <button class="btn-control light" id="btn-add-new-api">${t('modal.api-list.add-new')}</button>
-          </div>
-        `;
-
-      case actionMode.API_SETTING:
-        return `<div id="api-setting-layout">${innerHTML}</div>`;
-
-      case actionMode.ENVIRONMENT_SETTINGS:
-        return `<div id="enviroment-setting-layout">${innerHTML}</div>`;
-
-      case actionMode.ENVIRONMENT_VARIABLES:
-        return `<div id="enviroment-setting-layout">${innerHTML}</div>`;
-
-      // Clear content
-      default:
-        return '';
-    }
-  }
-
-  const createEnvSettingForm = (settings = []) => {
-    return `
-      <form id="enviroment-setting-form">
-        <div class="enviroment-manager mb-2">
-          ${settings.map(({ id, value }, index) => `
-            <div class="form-group grid-6 gap-1" data-target-id="${id}">
-              <label for="tb-env-${index}" class="form-label span-2">${t('modal.env-setting.name')}:</label>
-              <div class="form-control span-3">
-                <input id="tb-env-${index}" type="text" class="form-input" data-action="input" value="${value}" required />
-                <span class="error-message"></span>
-              </div>
-              <button type="button" class="btn-control icon-badge light" data-action="delete-environment" title="${t('tooltip.delete')}">🗑️</button>
-            </div>
-          `).join('')}
-          <a href="javascript:void" id="btn-add-new-env" class="btn-control light">${t('btn.add-new')}</a>
-        </div>
-      </form>
-    `;
-  }
-
-  const createEnvDropdownItems = (datasource = [], selectedValue = '') => {
-    const defaultOption = `
-      <option value="" disabled ${!datasource || datasource.length == 0 ? 'selected' : ''}>
-        ${t('ddl.select-environment')}
-      </option>`;
-    const options = datasource.map(({ id, value }) => `
-      <option value="${id}" ${id === selectedValue ? 'selected' : ''}>
-        ${value}
-      </option>
-    `);
-    const btnAddNew = `
-      <option value="add-new" command="add-new-env">
-        ${t('btn.add-new') + '...'}
-      </option>
-    `;
-    return [defaultOption, ...options, btnAddNew].join('');
-  }
-
-  const createEnvVariableForm = ({ selectedEnv = '', variables = [] }) => {
-    const hardSettings = variables.filter(item => item.isHardSetting);
-    const hostSetting = hardSettings.find(item => item.name === 'host')?.value || '';
-    const softSettings = variables.filter(item => !item.isHardSetting);
-    return `
-      <form id="enviroment-variable-form">
-        <div class="form-group grid-3 mb-2">
-          <label for="ddl-select-environment" class="form-label">${t('sidebar.env.title')}:</label>
-          <select id="ddl-select-environment" class="form-select span-2" control="ddl-select-environment" required>
-          </select>
-        </div>
-        <h3>${t('modal.title.env-var')}</h3>
-        <div class="list-wrapper" data-env-type="hard-setting">
-          <div class="form-group grid-3 gap-1">
-            <label for="tb-env-host" class="form-label">${t('modal.env-var.hard-setting.host')}:</label>
-            <div class="form-control span-2">
-              <input id="tb-env-host" name="host" class="form-input" value="${escapeHTML(hostSetting)}" data-env-input-type="value" required ${!selectedEnv ? 'disabled' : ''}>
-              <span class="error-message"></span>
-            </div>
-          </div>
-        </div>
-        <h3>${t('modal.title.your-env-var')}</h3>
-        <div class="list-wrapper mb-2" data-env-type="soft-setting">
-          ${!selectedEnv ? '' : softSettings.map(({ id, name, value }) => `
-              <div class="form-group grid-6 gap-1" data-target-id="${id}">
-                <div class="form-control span-2">
-                  <input class="form-input" data-env-input-type="name" value="${name}" required>
-                  <span class="error-message"></span>
-                </div>
-                <div class="form-control span-3">
-                  <input class="form-input" data-env-input-type="value" value="${escapeHTML(value)}" required>
-                  <span class="error-message"></span>
-                </div>
-                <button class="btn-control icon-badge light" data-action="delete-variable" title="${t('tooltip.delete')}">🗑️</button>
-              </div>
-            `).join('')}
-          ${selectedEnv ? `<a href="javascript:void" id="btn-add-new-var" class="btn-control light">${t('btn.add-new')}</a>` : ''}
-        </div>
-      </form>
-    `;
-  }
-
-  const createApiSettingForm = ({ name, desc, method, endpoint, request, color, isAuth }) => {
-    return `
-      <form id="api-setting-form">
-        <div class="form-group">
-          <label for="api-name" class="form-label">${t('modal.api-setting.name')}</label>
-          <div class="form-control">
-            <input id="api-name" name="name" class="form-input" value="${name || ''}" data-action="form-input" required />
-            <div class="error-message"></div>
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="api-description" class="form-label">${t('modal.api-setting.desc')}</label>
-          <textarea class="resize-none" id="api-description" name="desc" data-action="form-input">${escapeHTML(desc || '')}</textarea>
-        </div>
-        <div class="grid grid-2">
-          <div class="form-group">
-            <label for="api-setting-method" class="form-label">${t('modal.api-setting.http-method')}</label>
-            <select class="form-select" id="api-setting-method" name="method" data-action="form-input">
-              ${Object.entries(httpMethods).map(([key, val]) => `
-                <option value="${val}" ${method === val ? 'selected' : ''}>
-                  ${key}
-                </option>
-              `).join('')}
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="api-setting-color" class="form-label">${t('modal.api-setting.color')}</label>
-            <select class="form-select" id="api-setting-color" name="color" data-action="form-input">
-              ${Object.entries(colorEnums).map(([key, val]) => `
-                <option value="${val}" ${color === val ? 'selected' : ''}>
-                  ${t(`color.${val}`, key)}
-                </option>
-              `).join('')}
-            </select>
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="api-setting-endpoint" class="form-label">${t('modal.api-setting.endpoint')}</label>
-          <div class="form-control">
-            <input id="api-setting-endpoint" name="endpoint" class="form-input" value="${escapeHTML(endpoint || '')}" data-action="form-input" required />
-            <span class="error-message"></span>
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="api-setting-request" class="form-label">${t('modal.api-setting.request')}</label>
-          <div class="form-control">
-            <textarea id="api-setting-request" name="request" class="resize-none" data-action="form-input" required>${escapeHTML(request || '')}</textarea>
-            <span class="error-message"></span>
-          </div>
-        </div>
-        <div class="form-group">
-          <input type="checkbox" id="api-setting-is-auth" class="form-checkbox" name="isAuth" ${isAuth ? 'checked' : ''} data-action="form-input" />
-          <label for="api-setting-is-auth">${t('modal.api-setting.is-auth-api')}</label>
-        </div>
-      </form>
-    `;
-  }
-
-  const createApiListItem = (datasource = []) => {
-    return datasource.map(({ id, name, method, endpoint, color, desc }) => `
-      <li class="api-list-item bg-${color || 'primary'} bg-${color || 'primary'}-hover">
-        <div class="api-setting-content">
-          <a href="javascript:void" data-api-id="${id}">
-            <span class="api-method badge ${methodColors[method] || methodColors[httpMethods.GET]}">${method}</span>
-            <span class="api-item-title">${name}</span>
-          </a>
-          <p class="api-item-endpoint truncate" title=${endpoint}>${t('modal.api-list-item.endpoint-to')}: ${tryGetUrlPath(endpoint)}</p>
-          <span class="api-item-desc">
-            ${desc || ''}
-          </span>
-        </div>
-        <button class="btn-control icon-badge info font-xs" data-action="copy-insert-api" title="${t('tooltip.copy-insert')}">💾</button>
-        <button class="btn-control icon-badge dark font-xs" data-action="delete-api" title="${t('tooltip.delete')}">🗑️</button>
-      </li>
-    `).join('') || '';
-  };
-
-  const createContainnerContent = (action = actionMode.LOBBY, dataSource, selectedEnv) => {
-    switch (action) {
-      case actionMode.API_LIST:
-        return createApiListItem(dataSource) || `<div class="empty-state">${t('modal.api-list.empty')}</div>`;
-
-      case actionMode.API_SETTING:
-        return createApiSettingForm(dataSource);
-
-      case actionMode.ENVIRONMENT_SETTINGS:
-        return createEnvSettingForm(dataSource);
-
-      case actionMode.ENVIRONMENT_VARIABLES:
-        return createEnvVariableForm({ selectedEnv, variables: dataSource });
-
-      default:
-        return '';
-    }
-  }
-
-  const getHeaderModal = (action = actionMode.LOBBY) => {
-    const headers = Object.freeze({
-      [actionMode.API_LIST]: t('modal.header.api-list'),
-      [actionMode.API_SETTING]: t('modal.header.api-setting'),
-      [actionMode.ENVIRONMENT_SETTINGS]: t('modal.header.env-setting'),
-      [actionMode.ENVIRONMENT_VARIABLES]: t('modal.header.env-variable'),
-    });
-    return headers[action] || t('modal.header.default');
-  }
-
-  return {
-    createDefaultUI,
-    createApiActionGroupItems,
-    getHeaderModal,
-    createTabSettingElement,
-    createModalContentContainer,
-    createEnvDropdownItems,
-    createApiListItem,
-    createEnvSettingForm,
-    createEnvVariableForm,
-    createApiSettingForm,
-    createContainnerContent,
-  };
-})();
 
 export class SwaggerFaster {
-  // ================================================
-  // Local variable
-  // ================================================
-  #envSettingKey = 'juntool-enviroment-settings';
-  #envVariableKey = 'juntool-enviroment-variables';
-  #apiSettingsKey = 'juntool-api-settings';
-  #currentEnvKey = 'juntool-env';
-  #currentLangKey = 'juntool-lang';
-
   #modalFormIds = Object.freeze({
     [actionMode.API_SETTING]: 'api-setting-form',
     [actionMode.ENVIRONMENT_SETTINGS]: 'enviroment-setting-form',
     [actionMode.ENVIRONMENT_VARIABLES]: 'enviroment-variable-form',
   });
-
-  get #defaultApiSettingData() {
-    return {
-      id: this.targetId,
-      name: '',
-      desc: '',
-      endpoint: '',
-      method: httpMethods.GET,
-      color: colorEnums.Primary,
-      request: '',
-      isAuth: false,
-    }
-  };
-  get #defaultEnvSettingData() {
-    return {
-      id: crypto.randomUUID(),
-      value: '',
-    };
-  }
-  get #defaultEnvVariableData() {
-    return {
-      envId: this.currentEnv,
-      items: [],
-    }
-  };
-  get #defaultEnvVariableItem() {
-    return {
-      id: crypto.randomUUID(),
-      name: '',
-      value: '',
-      isHardSetting: false,
-    };
-  }
-  get #defaultHardEnvVariableItems() {
-    return [
-      { id: crypto.randomUUID(), name: 'host', value: '', isHardSetting: true },
-    ];
-  }
-  /** @type {Array<[string, string]>} Environment variables to replace in API requests */
-  get #envReplacer() {
-    return this.envVariables
-      .find(env => env.envId === this.currentEnv)
-      ?.items
-      .map(env => [env.name, env.value]) || [];
-  };
 
   // ================================================
   // Class constructor
@@ -782,32 +41,6 @@ export class SwaggerFaster {
     this.preSessionKey = '';
     this.isFetching = false;
   }
-
-  /** Your enviroment settings 
-   *  @type {{ id: string, name: string }[]} */
-  get envSettings() { return tryParseJSON(localStorage.getItem(this.#envSettingKey), []); }
-  set envSettings(value) { localStorage.setItem(this.#envSettingKey, JSON.stringify(value)); }
-  /** Your enviroment variables
-   *  @type {{ envId: string, items: { id: string,name: string, value: string }[] }[]} */
-  get envVariables() { return tryParseJSON(localStorage.getItem(this.#envVariableKey), []); }
-  set envVariables(value) { localStorage.setItem(this.#envVariableKey, JSON.stringify(value)); }
-  /** Your api setting
-   *  @type {{ id: string, name: string, desc: string, endpoint: string, method: httpMethods, color: colorEnums, request: Object, isAuth: boolean }[]} */
-  get apiSettings() { return tryParseJSON(localStorage.getItem(this.#apiSettingsKey), []); }
-  set apiSettings(value) { localStorage.setItem(this.#apiSettingsKey, JSON.stringify(value)); }
-  /** @type {string} Selected environment */
-  get currentEnv() {
-    const value = localStorage.getItem(this.#currentEnvKey);
-    if (!value && this.envSettings.length > 0) {
-      this.currentEnv = this.envSettings[0].id;
-      return this.envSettings[0].id;
-    }
-    return localStorage.getItem(this.#currentEnvKey) || '';
-  }
-  set currentEnv(value) { localStorage.setItem(this.#currentEnvKey, value); }
-  /** @type {string} Current language */
-  get currentLang() { return localStorage.getItem(this.#currentLangKey) || defaultLang; }
-  set currentLang(value) { localStorage.setItem(this.#currentLangKey, value); }
 
   // ================================================
   // Properties to get elements in the page
@@ -946,10 +179,10 @@ export class SwaggerFaster {
    * @returns {string} Resolved input string with environment variables replaced
    */
   resolveVars(input = '') {
-    if (!input || !this.#envReplacer || this.#envReplacer.length === 0) return input;
+    if (!input || !DefaultFormData.envReplacer || DefaultFormData.envReplacer.length === 0) return input;
 
     let result = input;
-    for (const [name, value] of this.#envReplacer) {
+    for (const [name, value] of DefaultFormData.envReplacer) {
       const regex = new RegExp(`\\$\\{${name}\\}`, 'g');
       result = result.replace(regex, value);
     }
@@ -957,22 +190,22 @@ export class SwaggerFaster {
   }
 
   /**
-   * 
-   * @param {*} input
-   * @returns {*}
+   * Resolve variables in an array, object or string.
+   * @param {[] | {} | string} input Input array, object or string
+   * @returns {string} Resolved input
    */
   resolveObjectVars(input) {
-    const convert = (obj) => {
-      return Object.entries(obj)
-        .reduce((result, [key, val]) => {
-          result[key] = typeof (val) === 'string' ? this.resolveVars(val) : val;
-          return result;
-        }, {});
-    }
-    switch (typeof (input)) {
+    const convert = (obj) => Object.fromEntries(
+      Object.entries(obj).map(([key, val]) => [
+        key,
+        typeof val === 'string' ? this.resolveVars(val) : val,
+      ])
+    );
+
+    switch (typeof input) {
       case 'object':
         return Array.isArray(input)
-          ? Array.from(input).map(item => convert(item))
+          ? input.map(convert)
           : convert(input);
 
       case 'string':
@@ -992,7 +225,7 @@ export class SwaggerFaster {
     if (!input) return [];
 
     const matches = [...input.matchAll(/\$\{(.*?)\}/g)].map(m => m[1]);
-    const definedNames = new Set(this.#envReplacer ? this.#envReplacer.map(([k]) => k) : []);
+    const definedNames = new Set(Store.envReplacer ? Store.envReplacer.map(([k]) => k) : []);
     const missing = matches.filter(name => !definedNames.has(name));
 
     return [...new Set(missing)];
@@ -1015,13 +248,13 @@ export class SwaggerFaster {
     }
     switch (type) {
       case actionMode.API_SETTING:
-        return autoMapping(input, this.#defaultApiSettingData);
+        return autoMapping(input, DefaultFormData.defaultApiSettingData);
 
       case actionMode.ENVIRONMENT_SETTINGS:
-        return autoMapping(input, this.#defaultEnvSettingData);
+        return autoMapping(input, DefaultFormData.defaultEnvSettingData);
 
       case actionMode.ENVIRONMENT_VARIABLES:
-        return autoMapping(input, this.#defaultEnvVariableItem);
+        return autoMapping(input, DefaultFormData.defaultEnvVariableItem);
 
       default:
         return {};
@@ -1197,8 +430,7 @@ export class SwaggerFaster {
   #onLanguageChange(event) {
     event.preventDefault();
     const selectedLang = event.target.dataset['lang'] || defaultLang;
-    this.currentLang = selectedLang;
-    localStorage.setItem(this.#currentLangKey, selectedLang);
+    Store.currentLang = selectedLang;
 
     event.target.closest('.dropdown-menu')?.classList.remove('show');
     this.refreshPage();
@@ -1214,10 +446,10 @@ export class SwaggerFaster {
     const isAddNewEnvCommand = value === 'add-new'
       || targetOption.attributes['command']?.value === 'add-new-env';
     if (isAddNewEnvCommand) {
-      event.target.value = this.currentEnv || '';
+      event.target.value = Store.currentEnv || '';
       this.currentAction = actionMode.ENVIRONMENT_SETTINGS;
     } else {
-      this.currentEnv = event.target.value;
+      Store.currentEnv = event.target.value;
     }
 
     this.isPageDataChange = true;
@@ -1367,14 +599,14 @@ export class SwaggerFaster {
     this.#setEnvErrorMessage(envErrorMessages);
     if (isEnvFormError) return;
 
-    this.envSettings = [...envFormDatas];
-    if (!this.currentEnv || !this.envSettings.some(i => i.id == this.currentEnv))
-      this.currentEnv = this.envSettings[0]?.id || '';
+    Store.envSettings = [...envFormDatas];
+    if (!Store.currentEnv || !Store.envSettings.some(i => i.id == Store.currentEnv))
+      Store.currentEnv = Store.envSettings[0]?.id || '';
 
-    if (this.envSettings.length === 0) this.currentEnv = '';
+    if (Store.envSettings.length === 0) Store.currentEnv = '';
 
-    const validEnvVars = this.envVariables.filter(item => this.envSettings.some(env => env.id === item.envId));
-    this.envVariables = [...validEnvVars];
+    const validEnvVars = Store.envVariables.filter(item => Store.envSettings.some(env => env.id === item.envId));
+    Store.envVariables = [...validEnvVars];
     Toast.success(t('message.save-changes.env.success'));
   }
 
@@ -1388,17 +620,17 @@ export class SwaggerFaster {
     this.#setVariableErrorMessage(varErrorMessages);
     if (isVariableFormError) return;
 
-    const currentVars = [...this.envVariables];
-    const targetVarIndex = currentVars.findIndex(item => item.envId === this.currentEnv);
+    const currentVars = [...Store.envVariables];
+    const targetVarIndex = currentVars.findIndex(item => item.envId === Store.currentEnv);
     if (targetVarIndex < 0) {
-      const newEnvVar = this.#defaultEnvVariableData;
-      newEnvVar.envId = this.currentEnv;
+      const newEnvVar = DefaultFormData.defaultEnvVariableData;
+      newEnvVar.envId = Store.currentEnv;
       newEnvVar.items = [...this.formData.dataSource];
-      this.envVariables = [...this.envVariables, newEnvVar];
+      Store.envVariables = [...Store.envVariables, newEnvVar];
     } else {
-      const updateEnvVars = [...this.envVariables];
+      const updateEnvVars = [...Store.envVariables];
       updateEnvVars[targetVarIndex].items = [...this.formData.dataSource];
-      this.envVariables = [...updateEnvVars];
+      Store.envVariables = [...updateEnvVars];
     }
     Toast.success(t('message.save-changes.variable.success'));
   }
@@ -1475,7 +707,7 @@ export class SwaggerFaster {
     const modalContent = uiBuilder.createContainnerContent(
       this.currentAction,
       this.resolveObjectVars(this.formData.dataSource),
-      this.currentEnv);
+      Store.currentEnv);
     const modalContainerUi = uiBuilder.createModalContentContainer(this.currentAction, modalContent);
     this.wContentModal.innerHTML = modalContainerUi;
 
@@ -1509,7 +741,7 @@ export class SwaggerFaster {
    */
   #loadEnvDropdownList() {
     const envControls = $$('select[control="ddl-select-environment"]');
-    const envSelections = uiBuilder.createEnvDropdownItems(this.envSettings, this.currentEnv);
+    const envSelections = uiBuilder.createEnvDropdownItems(Store.envSettings, Store.currentEnv);
     envControls.forEach((dropdown) => {
       dropdown.innerHTML = envSelections;
       dropdown.addEventListener('change', (e) => this.#onEnvironmentChange(e));
@@ -1532,7 +764,7 @@ export class SwaggerFaster {
       case actionMode.API_SETTING:
         this.formData = {
           type: actionMode.API_SETTING,
-          dataSource: this.apiSettings.find(api => api.id === this.targetId) || this.#defaultApiSettingData,
+          dataSource: this.apiSettings.find(api => api.id === this.targetId) || DefaultFormData.defaultApiSettingData,
         };
         break;
 
@@ -1540,26 +772,26 @@ export class SwaggerFaster {
         this.targetId = null;
         this.formData = {
           type: actionMode.ENVIRONMENT_SETTINGS,
-          dataSource: [...this.envSettings],
+          dataSource: [...Store.envSettings],
         };
         break;
 
       case actionMode.ENVIRONMENT_VARIABLES:
         this.targetId = null;
-        const missingHardEnvs = this.#defaultHardEnvVariableItems
-          .filter(item => !this.envVariables
-            .some(env => env.envId === this.currentEnv
+        const missingHardEnvs = DefaultFormData.defaultHardEnvVariableItems
+          .filter(item => !Store.envVariables
+            .some(env => env.envId === Store.currentEnv
               && env.items.some(i => i.isHardSetting && i.name === item.name)));
-        const envVarIndex = this.envVariables.findIndex(item => item.envId === this.currentEnv);
+        const envVarIndex = Store.envVariables.findIndex(item => item.envId === Store.currentEnv);
         if (envVarIndex >= 0) {
-          const newVars = [...this.envVariables];
-          newVars[envVarIndex].items = [...missingHardEnvs, ...this.envVariables[envVarIndex].items];
-          this.envVariables = newVars;
+          const newVars = [...Store.envVariables];
+          newVars[envVarIndex].items = [...missingHardEnvs, ...Store.envVariables[envVarIndex].items];
+          Store.envVariables = newVars;
         }
 
         this.formData = {
           type: actionMode.ENVIRONMENT_VARIABLES,
-          dataSource: [...this.envVariables.find(item => item.envId === this.currentEnv)?.items || []],
+          dataSource: [...Store.envVariables.find(item => item.envId === Store.currentEnv)?.items || []],
         };
         break;
 
@@ -1646,7 +878,7 @@ export class SwaggerFaster {
     this.btnAddNewEnv?.addEventListener('click', (e) => {
       e.preventDefault();
 
-      this.formData.dataSource = [...this.formData.dataSource, this.#defaultEnvSettingData];
+      this.formData.dataSource = [...this.formData.dataSource, DefaultFormData.defaultEnvSettingData];
       this.#onPageBinding();
     });
 
@@ -1817,12 +1049,4 @@ export class SwaggerFaster {
     instance.refreshPage();
     console.log("SwaggerFaster executed");
   }
-}
-
-console.log("SwaggerFaster loaded");
-// Execute class
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => SwaggerFaster.init());
-} else {
-  SwaggerFaster.init();
 }

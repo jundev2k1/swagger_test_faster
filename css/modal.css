@@ -1,0 +1,214 @@
+/* 
+=============================
+  File: Modal CSS (modal.css)
+  Description: CSS for Modal UI
+  Copyright (c) 2025. Jun Dev
+============================= 
+*/
+
+#jun-tool .modal {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10001;
+  align-items: center;
+  justify-content: center;
+}
+
+#jun-tool .modal-overlay {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#jun-tool .modal-container {
+  background: #fff;
+  border-radius: var(--jun-tool-border-radius);
+  max-width: 720px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+}
+
+#jun-tool .modal-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: var(--jun-tool-spacing-lg);
+  border-bottom: 1px solid var(--jun-tool-border-color);
+}
+
+#jun-tool .modal-header h2 {
+  font-size: var(--jun-tool-font-size-xxl);
+  font-weight: 600;
+  margin: 0;
+  flex: 1;
+  text-align: center;
+}
+
+#jun-tool .modal-header .btn-back {
+  position: absolute;
+  left: .875rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: var(--jun-tool-font-size-md);
+  color: var(--jun-tool-primary-color);
+  cursor: pointer;
+  padding: var(--jun-tool-spacing-sm);
+}
+
+#jun-tool .modal-header .btn-back:hover {
+  background: rgba(0, 123, 255, 0.1);
+  border-radius: var(--jun-tool-border-radius);
+}
+
+#jun-tool .modal-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--jun-tool-border-color);
+  padding: 0 var(--jun-tool-spacing-lg);
+}
+
+#jun-tool .modal-tabs button {
+  flex: 1;
+  padding: 10px var(--jun-tool-spacing-md);
+  border: none;
+  background: none;
+  font-size: var(--jun-tool-font-size-md);
+  font-weight: 500;
+  color: var(--jun-tool-primary-color);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+#jun-tool .modal-tabs button.active {
+  color: var(--jun-tool-primary-hover);
+  border-bottom: 2px solid var(--jun-tool-primary-color);
+}
+
+#jun-tool .modal-tabs button:hover {
+  background: rgba(0, 123, 255, 0.1);
+}
+
+#jun-tool .modal-content {
+  padding: var(--jun-tool-spacing-lg);
+  flex: 1;
+  overflow-y: auto;
+}
+
+#jun-tool .api-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--jun-tool-spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--jun-tool-spacing-sm);
+}
+
+#jun-tool .api-list-item {
+  display: flex;
+  gap: 4px;
+  filter: brightness(1.5);
+  border-radius: var(--jun-tool-border-radius);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+#jun-tool .api-list-item:hover {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+#jun-tool .api-list-item button[data-action="copy-insert-api"]:hover,
+#jun-tool .api-list-item button[data-action="delete-api"]:hover {
+  transform: none;
+}
+
+#jun-tool .api-list-item .api-setting-content {
+  padding: var(--jun-tool-spacing-sm) var(--jun-tool-spacing-md);
+  flex-grow: 1;
+}
+
+#jun-tool .api-list-item .api-setting-content a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--jun-tool-black-color);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: var(--jun-tool-font-size-md);
+  transition: .25s;
+}
+
+#jun-tool .api-list-item .api-setting-content a:hover {
+  color: var(--jun-tool-black-hover);
+}
+
+#jun-tool .api-list-item .api-setting-content a .api-item-title {
+  flex-grow: 1;
+}
+
+#jun-tool .api-list-item .api-setting-content .api-method {
+  width: 40px;
+  text-align: center;
+}
+
+#jun-tool .api-list-item .api-setting-content .api-item-endpoint {
+  margin: 4px 0 0 0;
+  font-size: var(--jun-tool-font-size-sm);
+  color: var(--jun-tool-key-color);
+}
+
+#jun-tool .api-list-item .api-setting-content .api-item-desc {
+  font-style: italic;
+  font-size: var(--jun-tool-font-size-xs);
+  color: var(--jun-tool-key-color);
+}
+
+#jun-tool .modal .error-message {
+  color: var(--jun-tool-danger-color);
+  font-size: .875rem;
+}
+
+#jun-tool .modal-footer {
+  padding: var(--jun-tool-spacing-md) var(--jun-tool-spacing-lg);
+  border-top: 1px solid var(--jun-tool-border-color);
+  display: flex;
+  gap: var(--jun-tool-spacing-sm);
+  justify-content: flex-end;
+}
+
+#jun-tool .modal-footer button {
+  padding: var(--jun-tool-spacing-sm) var(--jun-tool-spacing-lg);
+  border: none;
+  border-radius: var(--jun-tool-border-radius);
+  cursor: pointer;
+  font-size: var(--jun-tool-font-size-md);
+}
+
+#jun-tool .modal-footer button[type="submit"] {
+  background: var(--jun-tool-primary-color);
+  color: #fff;
+}
+
+#jun-tool .modal-footer button[type="submit"]:hover {
+  background: var(--jun-tool-primary-hover);
+}
+
+#jun-tool .modal-footer .close-modal {
+  background: var(--jun-tool-secondary-color);
+  color: #fff;
+}
+
+#jun-tool .modal-footer .close-modal:hover {
+  background: var(--jun-tool-secondary-hover);
+}

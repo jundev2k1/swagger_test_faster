@@ -1,0 +1,68 @@
+/* 
+=============================
+  File: JSON Viewer (json-viewer.css)
+  Description: CSS for JSON Viewer
+  Copyright (c) 2025. Jun Dev
+============================= 
+*/
+
+#jun-tool .json-viewer {
+  font-family: monospace;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #222;
+  white-space: pre;
+}
+
+#jun-tool .json-viewer .node {
+  margin-left: 14px;
+  position: relative;
+}
+
+#jun-tool .json-viewer .key {
+  color: #c92c2c;
+  font-weight: bold;
+}
+
+#jun-tool .json-viewer .value {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 220px;
+  display: inline-block;
+  vertical-align: bottom;
+}
+
+#jun-tool .json-viewer .value.string {
+  color: #032f62;
+}
+
+#jun-tool .json-viewer .value.number {
+  color: #005cc5;
+}
+
+#jun-tool .json-viewer .value.boolean {
+  color: #d73a49;
+}
+
+#jun-tool .json-viewer .value.null {
+  color: #6a737d;
+  font-style: italic;
+}
+
+#jun-tool .json-viewer .toggle {
+  cursor: pointer;
+  font-weight: bold;
+  color: #555;
+  margin-right: 4px;
+  user-select: none;
+}
+
+#jun-tool .json-viewer .children.collapsed {
+  display: none;
+}
+
+#jun-tool .json-viewer .copyable:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}

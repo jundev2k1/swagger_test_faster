@@ -1,0 +1,158 @@
+/* 
+=============================
+  File: Style CSS (style.css)
+  Description: The main style will be imported from tampermonkey, this file will import other styles
+  Copyright (c) 2025. Jun Dev
+============================= 
+*/
+
+@import url('./ultil.css');
+@import url('./toast.css');
+@import url('./json-viewer.css');
+@import url('./modal.css');
+
+#jun-tool aside#tool-sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 300px;
+  height: 100vh;
+  z-index: 10000;
+  background: var(--jun-tool-background);
+  backdrop-filter: var(--jun-tool-backdrop-blur);
+  box-shadow: var(--jun-tool-shadow);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#jun-tool #tool-sidebar.collapsed {
+  height: inherit;
+  width: inherit;
+}
+
+#jun-tool .sidebar-header {
+  display: flex;
+  align-items: center;
+  padding: var(--jun-tool-spacing-md) var(--jun-tool-spacing-lg);
+  border-bottom: 1px solid var(--jun-tool-border-color);
+  gap: 1rem;
+}
+
+#jun-tool .sidebar-header h1 {
+  font-size: var(--jun-tool-font-size-xl);
+  font-weight: 600;
+  margin: 0;
+  flex: 1;
+  text-align: center;
+}
+
+#jun-tool #tool-sidebar.collapsed .sidebar-content {
+  display: none !important;
+}
+
+#jun-tool .sidebar-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+#jun-tool h3 {
+  font-size: var(--jun-tool-font-size-lg);
+  font-weight: 500;
+  padding: var(--jun-tool-spacing-sm) var(--jun-tool-spacing-lg);
+  margin: 0;
+}
+
+#jun-tool .api-action-group {
+  max-height: 50vh;
+  overflow-y: auto;
+  padding: var(--jun-tool-spacing-lg);
+  margin: 0;
+  list-style: none;
+}
+
+#jun-tool .api-action-group-item {
+  margin-top: var(--jun-tool-spacing-sm);
+  margin-bottom: var(--jun-tool-spacing-sm);
+  border-radius: var(--jun-tool-border-radius);
+}
+
+#jun-tool .api-action-group-item a {
+  display: block;
+  text-decoration: none;
+  color: var(--jun-tool-black-color);
+  font-weight: 500;
+  text-align: center;
+  padding: var(--jun-tool-spacing-sm) var(--jun-tool-spacing-md);
+  text-align: left;
+  transition: .25s;
+}
+
+#jun-tool .api-action-group-item a:hover {
+  transform: translateY(-1px);
+  color: var(--jun-tool-black-hover);
+}
+
+#jun-tool .api-action-group-item a:active {
+  transform: translateY(0);
+}
+
+#jun-tool .api-action-group-item a span {
+  width: 40px;
+  margin-right: .25rem;
+  padding: 4px;
+  text-align: center;
+}
+
+#jun-tool .response-result {
+  padding: 0 var(--jun-tool-spacing-lg) var(--jun-tool-spacing-lg);
+}
+
+#jun-tool .response-result h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--jun-tool-spacing-sm);
+  flex-wrap: nowrap;
+  padding-left: 0;
+}
+
+#jun-tool .response-result #btn-copy {
+  line-height: 1;
+}
+
+#jun-tool .card {
+  background: var(--jun-tool-subtle-bg);
+  padding: var(--jun-tool-spacing-md);
+  border-radius: var(--jun-tool-border-radius);
+  max-height: 30vh;
+  overflow-y: auto;
+}
+
+#jun-tool .value.copyable {
+  cursor: pointer;
+  padding: 4px var(--jun-tool-spacing-sm);
+  border-radius: var(--jun-tool-border-radius);
+  transition: background 0.2s;
+}
+
+#jun-tool .value.copyable:hover {
+  background: rgba(0, 123, 255, 0.1);
+}
+
+#jun-tool .value .key,
+#jun-tool .value .value {
+  margin-left: var(--jun-tool-spacing-lg);
+}
+
+#jun-tool .tool-setting {
+  padding: var(--jun-tool-spacing-sm) var(--jun-tool-spacing-lg);
+  border-top: 1px solid var(--jun-tool-border-color);
+}
+
+#jun-tool .tool-setting a.btn-control {
+  display: block;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.1s;
+}

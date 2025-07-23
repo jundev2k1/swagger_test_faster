@@ -1,11 +1,27 @@
+/**
+ * ============================================
+ * File: App Constants (constants.js)
+ * Description: Contains constants used in the application
+ * Copyright (c) 2025. Jun Dev
+ * ============================================
+ */
 
-/** Modal tabs for the application. */
+/** Store keys for the application. */
+export const storeKeys = Object.freeze({
+  envSettingKey: 'juntool-enviroment-settings',
+  envVariableKey: 'juntool-enviroment-variables',
+  apiSettingsKey: 'juntool-api-settings',
+  currentEnvKey: 'juntool-env',
+  currentLangKey: 'juntool-lang',
+});
+
+/** @type {ModalTab} Modal tabs for the application. */
 export const modalTabs = Object.freeze({
   API: 'api',
   ENVIRONMENT: 'environment',
 });
 
-/** Action modes for the application. */
+/** @type {ActionMode} Action modes for the application. */
 export const actionMode = Object.freeze({
   LOBBY: "lobby",
   API_LIST: "api_list",
@@ -14,7 +30,7 @@ export const actionMode = Object.freeze({
   ENVIRONMENT_VARIABLES: "environment_variables",
 });
 
-/** HTTP methods used in API requests. */
+/** @type {HttpMethod} HTTP methods used in API requests. */
 export const httpMethods = Object.freeze({
   GET: "GET",
   POST: "POST",
@@ -25,7 +41,7 @@ export const httpMethods = Object.freeze({
   OPTIONS: "OPTIONS",
 });
 
-/** Color enums and options for Api actions. */
+/** @type {ColorEnum} Color enums and options for Api actions. */
 export const colorEnums = Object.freeze({
   Primary: 'primary',
   Secondary: 'secondary',
@@ -37,7 +53,7 @@ export const colorEnums = Object.freeze({
   Dark: 'dark',
 });
 
-/** Color mapping for HTTP methods, used in UI elements. */
+/** @type {Object.<HttpMethod, ColorEnum>}  Color mapping for HTTP methods, used in UI elements. */
 export const methodColors = Object.freeze({
   [httpMethods.GET]: 'primary',
   [httpMethods.POST]: 'success',
@@ -48,7 +64,7 @@ export const methodColors = Object.freeze({
   [httpMethods.HEAD]: 'secondary',
 });
 
-/** Color options for Api actions, used in dropdowns or UI elements. */
+/** @type {Object.<ColorEnum, Object>} Color options for Api actions, used in dropdowns or UI elements. */
 export const colorOptions = Object.freeze([
   { value: colorEnums.Primary, translateKey: 'color.primary', },
   { value: colorEnums.Secondary, translateKey: 'color.secondary', },
@@ -57,10 +73,3 @@ export const colorOptions = Object.freeze([
   { value: colorEnums.Warning, translateKey: 'color.warning', },
   { value: colorEnums.Info, translateKey: 'color.info', },
 ]);
-
-export const toastType = Object.freeze({
-  Success: 'success',
-  Warn: 'warning',
-  Error: 'error',
-  Info: 'info',
-});

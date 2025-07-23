@@ -1,5 +1,12 @@
-export const defaultLang = 'vi';
-export const supportedLanguages = Object.freeze(['en', 'vi', 'zh-TW']);
+/**
+ * =============================================
+ * File: Translate (translate.js)
+ * Description: Contains translations for the application
+ * Copyright (c) 2025. Jun Dev
+ * ============================================
+ */
+
+import { defaultLang, supportedLanguages } from "../../config";
 
 export const translate = Object.freeze({
   'lang': {
@@ -336,18 +343,24 @@ export const translate = Object.freeze({
 
 /**
  * Translate a key to the current language.
- * @param {string} key Translation key
- * @param {*} defaultText Default text to return if the key is not found in the translations.
- * @returns {string} The translated text or the default text if the key is not found.
+ * @param {string} key The translation key
+ * @param {string} [defaultValue] The default value to return if the key is not found in the translations
+ * @returns {string} The translated text or the default value if the key is not found
  */
-export function t(key, defaultText = key) {
-  let lang = localStorage.getItem('juntool-lang') || defaultLang;
-  if (!supportedLanguages.includes(lang)) {
-    console.warn(`Language ${lang} is not supported, falling back to ${defaultLang}`);
-    lang = defaultLang;
-  }
+export function t(key, defaultValue = key) {
+  const language = getLanguage();
+  const translation = translate[key] && translate[key][language];
 
-  return translate[key] && translate[key][lang]
-    ? translate[key][lang]
-    : defaultText;
+  return translation ?? defaultValue;
+}
+
+/**
+ * Gets the current language from local storage.
+ * @returns {string} The current language
+ */
+function getLanguage() {
+  const storedLanguage = localStorage.getItem('juntool-lang');
+  const language = supportedLanguages.includes(storedLanguage) ? storedLanguage : defaultLang;
+
+  return language;
 }

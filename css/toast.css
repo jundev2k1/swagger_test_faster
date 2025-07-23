@@ -1,0 +1,66 @@
+/* 
+=============================
+  File: Toast CSS (toast.css)
+  Description: CSS for Toast UI
+  Copyright (c) 2025. Jun Dev
+============================= 
+*/
+
+#jun-tool #toast-container {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 90%;
+  pointer-events: none;
+}
+
+#jun-tool .jun-toast {
+  display: inline-block;
+  padding: 10px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transform: translateY(10px);
+  animation: jun-toast-in 0.3s ease forwards, jun-toast-out 0.3s ease forwards;
+  animation-delay: 0s, var(--hide-delay, 3s);
+  background: #17a2b8;
+  pointer-events: auto;
+}
+
+#jun-tool .jun-toast.success {
+  background: var(--jun-tool-success-color);
+}
+
+#jun-tool .jun-toast.warning {
+  background: var(--jun-tool-warning-color);
+  color: #000;
+}
+
+#jun-tool .jun-toast.error {
+  background: var(--jun-tool-danger-color);
+}
+
+#jun-tool .jun-toast.info {
+  background: var(--jun-tool-info-color);
+}
+
+@keyframes jun-toast-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes jun-toast-out {
+  to {
+    opacity: .3;
+    transform: translateY(10px);
+  }
+}

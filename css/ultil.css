@@ -1,3 +1,11 @@
+/* 
+=============================
+  File: Ultil (ultil.css)
+  Description: Contains global styles
+  Copyright (c) 2025. Jun Dev
+============================= 
+*/
+
 #jun-tool {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   color: var(--jun-tool-text-color, #1a1a1a);
@@ -62,102 +70,6 @@
   --jun-tool-font-size-lg: 1rem;
   --jun-tool-font-size-xl: 1.25rem;
   --jun-tool-font-size-xxl: 1.3rem;
-}
-
-#jun-tool .bg-primary {
-  background-color: var(--jun-tool-primary-bg);
-}
-
-#jun-tool .bg-primary-hover:hover {
-  background-color: var(--jun-tool-primary-bg-hover);
-}
-
-#jun-tool .bg-primary:disabled {
-  background-color: var(--jun-tool-primary-bg);
-}
-
-#jun-tool .bg-secondary {
-  background-color: var(--jun-tool-secondary-bg);
-}
-
-#jun-tool .bg-secondary-hover:hover {
-  background-color: var(--jun-tool-secondary-bg-hover);
-}
-
-#jun-tool .bg-secondary:disabled {
-  background-color: var(--jun-tool-secondary-bg);
-}
-
-#jun-tool .bg-success {
-  background-color: var(--jun-tool-success-bg);
-}
-
-#jun-tool .bg-success-hover:hover {
-  background-color: var(--jun-tool-success-bg-hover);
-}
-
-#jun-tool .bg-success:disabled {
-  background-color: var(--jun-tool-success-bg);
-}
-
-#jun-tool .bg-danger {
-  background-color: var(--jun-tool-danger-bg);
-}
-
-#jun-tool .bg-danger-hover:hover {
-  background-color: var(--jun-tool-danger-bg-hover);
-}
-
-#jun-tool .bg-danger:disabled {
-  background-color: var(--jun-tool-danger-bg);
-}
-
-#jun-tool .bg-warning {
-  background-color: var(--jun-tool-warning-bg);
-}
-
-#jun-tool .bg-warning-hover:hover {
-  background-color: var(--jun-tool-warning-bg-hover);
-}
-
-#jun-tool .bg-warning:disabled {
-  background-color: var(--jun-tool-warning-bg);
-}
-
-#jun-tool .bg-info {
-  background-color: var(--jun-tool-info-bg);
-}
-
-#jun-tool .bg-info-hover:hover {
-  background-color: var(--jun-tool-info-bg-hover);
-}
-
-#jun-tool .bg-info:disabled {
-  background-color: var(--jun-tool-info-bg);
-}
-
-#jun-tool .bg-light {
-  background-color: var(--jun-tool-light-bg);
-}
-
-#jun-tool .bg-light-hover:hover {
-  background-color: var(--jun-tool-light-bg-hover);
-}
-
-#jun-tool .bg-light:disabled {
-  background-color: var(--jun-tool-light-bg);
-}
-
-#jun-tool .bg-dark {
-  background-color: var(--jun-tool-dark-bg);
-}
-
-#jun-tool .bg-dark-hover:hover {
-  background-color: var(--jun-tool-dark-bg-hover);
-}
-
-#jun-tool .bg-dark:disabled {
-  background-color: var(--jun-tool-dark-bg);
 }
 
 #jun-tool .grid-1 {
@@ -646,12 +558,115 @@
   text-align: right;
 }
 
+#jun-tool .truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
 #jun-tool .d-none {
   display: none !important;
 }
 
 #jun-tool .d-block {
   display: block !important;
+}
+
+#jun-tool .bg-primary {
+  background-color: var(--jun-tool-primary-bg);
+}
+
+#jun-tool .bg-primary-hover:hover {
+  background-color: var(--jun-tool-primary-bg-hover);
+}
+
+#jun-tool .bg-primary:disabled {
+  background-color: var(--jun-tool-primary-bg);
+}
+
+#jun-tool .bg-secondary {
+  background-color: var(--jun-tool-secondary-bg);
+}
+
+#jun-tool .bg-secondary-hover:hover {
+  background-color: var(--jun-tool-secondary-bg-hover);
+}
+
+#jun-tool .bg-secondary:disabled {
+  background-color: var(--jun-tool-secondary-bg);
+}
+
+#jun-tool .bg-success {
+  background-color: var(--jun-tool-success-bg);
+}
+
+#jun-tool .bg-success-hover:hover {
+  background-color: var(--jun-tool-success-bg-hover);
+}
+
+#jun-tool .bg-success:disabled {
+  background-color: var(--jun-tool-success-bg);
+}
+
+#jun-tool .bg-danger {
+  background-color: var(--jun-tool-danger-bg);
+}
+
+#jun-tool .bg-danger-hover:hover {
+  background-color: var(--jun-tool-danger-bg-hover);
+}
+
+#jun-tool .bg-danger:disabled {
+  background-color: var(--jun-tool-danger-bg);
+}
+
+#jun-tool .bg-warning {
+  background-color: var(--jun-tool-warning-bg);
+}
+
+#jun-tool .bg-warning-hover:hover {
+  background-color: var(--jun-tool-warning-bg-hover);
+}
+
+#jun-tool .bg-warning:disabled {
+  background-color: var(--jun-tool-warning-bg);
+}
+
+#jun-tool .bg-info {
+  background-color: var(--jun-tool-info-bg);
+}
+
+#jun-tool .bg-info-hover:hover {
+  background-color: var(--jun-tool-info-bg-hover);
+}
+
+#jun-tool .bg-info:disabled {
+  background-color: var(--jun-tool-info-bg);
+}
+
+#jun-tool .bg-light {
+  background-color: var(--jun-tool-light-bg);
+}
+
+#jun-tool .bg-light-hover:hover {
+  background-color: var(--jun-tool-light-bg-hover);
+}
+
+#jun-tool .bg-light:disabled {
+  background-color: var(--jun-tool-light-bg);
+}
+
+#jun-tool .bg-dark {
+  background-color: var(--jun-tool-dark-bg);
+}
+
+#jun-tool .bg-dark-hover:hover {
+  background-color: var(--jun-tool-dark-bg-hover);
+}
+
+#jun-tool .bg-dark:disabled {
+  background-color: var(--jun-tool-dark-bg);
 }
 
 #jun-tool .badge {
@@ -735,4 +750,267 @@
 
 #jun-tool .badge.dark:hover {
   background: var(--jun-tool-dark-hover);
+}
+
+#jun-tool .btn-control {
+  border: none;
+  padding: var(--jun-tool-spacing-sm) var(--jun-tool-spacing-md);
+  cursor: pointer;
+  border-radius: var(--jun-tool-border-radius);
+  font-weight: 500;
+  color: var(--jun-tool-black-color);
+  transition: background 0.2s, color 0.2s;
+}
+
+#jun-tool .btn-control:hover {
+  border-radius: var(--jun-tool-border-radius);
+}
+
+#jun-tool .btn-control:disabled {
+  cursor: not-allowed;
+}
+
+#jun-tool .btn-control.primary {
+  background: var(--jun-tool-primary-color);
+  color: #fff;
+  transition: .5s;
+}
+
+#jun-tool .btn-control.primary:hover {
+  background: var(--jun-tool-primary-hover);
+  transform: translateY(-1px);
+}
+
+#jun-tool .btn-control.primary:active {
+  transform: translateY(0);
+}
+
+#jun-tool .btn-control.secondary {
+  background: var(--jun-tool-secondary-color);
+  color: #fff;
+  transition: .5s;
+}
+
+#jun-tool .btn-control.secondary:hover {
+  background: var(--jun-tool-secondary-hover);
+  transform: translateY(-1px);
+}
+
+#jun-tool .btn-control.secondary:active {
+  transform: translateY(0);
+}
+
+#jun-tool .btn-control.success {
+  background: var(--jun-tool-success-color);
+  color: #fff;
+  transition: .5s;
+}
+
+#jun-tool .btn-control.success:hover {
+  background: var(--jun-tool-success-hover);
+  transform: translateY(-1px);
+}
+
+#jun-tool .btn-control.success:active {
+  transform: translateY(0);
+}
+
+#jun-tool .btn-control.danger {
+  background: var(--jun-tool-danger-color);
+  color: #fff;
+  transition: .5s;
+}
+
+#jun-tool .btn-control.danger:hover {
+  background: var(--jun-tool-danger-hover);
+  transform: translateY(-1px);
+}
+
+#jun-tool .btn-control.danger:active {
+  transform: translateY(0);
+}
+
+#jun-tool .btn-control.warning {
+  background: var(--jun-tool-warning-color);
+  color: #212529;
+  transition: .5s;
+}
+
+#jun-tool .btn-control.warning:hover {
+  background: var(--jun-tool-warning-hover);
+  transform: translateY(-1px);
+}
+
+#jun-tool .btn-control.warning:active {
+  transform: translateY(0);
+}
+
+#jun-tool .btn-control.info {
+  background: var(--jun-tool-info-color);
+  color: #fff;
+  transition: .5s;
+}
+
+#jun-tool .btn-control.info:hover {
+  background: var(--jun-tool-info-hover);
+  transform: translateY(-1px);
+}
+
+#jun-tool .btn-control.info:active {
+  transform: translateY(0);
+}
+
+#jun-tool .btn-control.light {
+  background: var(--jun-tool-light-color);
+  color: #212529;
+  transition: .5s;
+}
+
+#jun-tool .btn-control.light:hover {
+  background: var(--jun-tool-light-hover);
+  transform: translateY(-1px);
+}
+
+#jun-tool .btn-control.light:active {
+  transform: translateY(0);
+}
+
+#jun-tool .btn-control.dark {
+  background: var(--jun-tool-dark-color);
+  color: #fff;
+  transition: .5s;
+}
+
+#jun-tool .btn-control.dark:hover {
+  background: var(--jun-tool-dark-hover);
+  transform: translateY(-1px);
+}
+
+#jun-tool .btn-control.dark:active {
+  transform: translateY(0);
+}
+
+#jun-tool .icon-badge {
+  padding: var(--jun-tool-spacing-sm);
+}
+
+#jun-tool .dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+#jun-tool .dropdown-toggle {
+  padding: 8px 16px;
+  font-size: 1rem;
+  cursor: pointer;
+  color: white;
+  border: none;
+  border-radius: 4px;
+}
+
+#jun-tool .dropdown-menu {
+  position: absolute;
+  top: 110%;
+  right: 0;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  list-style: none;
+  padding: 8px 0;
+  margin: 0;
+  display: none;
+  min-width: 160px;
+  border-radius: 4px;
+  z-index: 1000;
+  transition: all 0.2s ease-in-out;
+}
+
+#jun-tool .dropdown-menu.show {
+  display: block;
+}
+
+#jun-tool .dropdown-menu li a {
+  display: block;
+  padding: .5rem 1rem;
+  color: #333;
+  text-decoration: none;
+  font-size: .875rem;
+}
+
+#jun-tool .dropdown-menu li a:hover {
+  background-color: #f0f0f0;
+}
+
+#jun-tool .form-group {
+  margin-bottom: var(--jun-tool-spacing-md);
+  padding: 0 var(--jun-tool-spacing-lg);
+}
+
+#jun-tool .form-label {
+  font-size: var(--jun-tool-font-size-md);
+  font-weight: 500;
+  align-self: center;
+}
+
+#jun-tool .form-input,
+#jun-tool .form-select,
+#jun-tool textarea {
+  padding: var(--jun-tool-spacing-sm);
+  border: 1px solid var(--jun-tool-secondary-color);
+  border-radius: var(--jun-tool-border-radius);
+  font-size: var(--jun-tool-font-size-md);
+  width: 100%;
+  box-sizing: border-box;
+  background: #fff;
+}
+
+#jun-tool .form-input.span-2,
+#jun-tool .form-select.span-2 {
+  grid-column: span 2;
+}
+
+#jun-tool .form-select {
+  cursor: pointer;
+  resize: none;
+}
+
+#jun-tool .form-select:disabled,
+#jun-tool .form-input:disabled,
+#jun-tool textarea:disabled {
+  background: var(--jun-tool-subtle-bg);
+  color: var(--jun-tool-secondary-color);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+#jun-tool .form-select:focus,
+#jun-tool .form-input:focus,
+#jun-tool textarea:focus {
+  outline: none;
+  border-color: var(--jun-tool-primary-color);
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+}
+
+#jun-tool .form-select.has-error,
+#jun-tool .form-input.has-error,
+#jun-tool textarea.has-error {
+  background: var(--jun-tool-danger-color);
+  color: var(--jun-tool-light-color);
+  opacity: 0.6;
+}
+
+#jun-tool textarea.resize-none {
+  resize: none;
+}
+
+#jun-tool textarea#api-setting-request {
+  min-height: 12em;
+}
+
+#jun-tool .form-checkbox {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--jun-tool-primary-color);
+  cursor: pointer;
+  margin: 0;
 }
