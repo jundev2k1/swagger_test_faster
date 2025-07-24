@@ -1,11 +1,9 @@
-/**
- * =============================
- * File: ModalContainnerContent.js
- * Type UI: Modal UI
- * Description: Render Modal containner content
- * Copyright (c) 2025. Jun Dev
- * ============================= 
- */
+// =============================
+// File: ModalContainnerContent.js
+// Type UI: Modal UI
+// Description: Render Modal containner content
+// Copyright (c) 2025. Jun Dev
+// ============================= 
 
 import { t } from '../../i18n/translate.js';
 import { actionMode } from '../../data/constants.js';

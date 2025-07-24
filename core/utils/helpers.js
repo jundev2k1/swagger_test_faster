@@ -1,3 +1,9 @@
+// =============================================
+// File: helpers.js
+// Description: Contains helper functions
+// Copyright (c) 2025. Jun Dev
+// ============================================
+
 /**
  * Get the first element that matches the selector.
  * @param {string} selector DOM Selector 

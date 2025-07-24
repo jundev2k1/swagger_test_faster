@@ -1,3 +1,10 @@
+// =============================
+// File: ModalApiListItem.js (modalApiListItem.js)
+// Type UI: Modal UI (list)
+// Description: Render API list UI
+// Copyright (c) 2025. Jun Dev
+// =============================
+
 import { t } from '../../i18n/translate.js';
 import { tryGetUrlPath } from '../../utils/helpers.js';
 import { HttpMethods, MethodColors } from '../../data/constants.js';

@@ -1,10 +1,8 @@
-/**
- * =============================
- * File: index.js (index.js)
- * Description: Contains components for the application
- * Copyright (c) 2025. Jun Dev
- * ============================= 
- */
+ // =============================
+ // File: index.js (index.js)
+ // Description: Contains components for the application
+ // Copyright (c) 2025. Jun Dev
+ // ============================= 
 
 // UI
 export { default as DefaultUI } from './ui/DefaultUI.js';

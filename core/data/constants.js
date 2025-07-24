@@ -1,12 +1,10 @@
-/**
- * ============================================
- * File: App Constants (constants.js)
- * Description: Contains constants used in the application
- * Copyright (c) 2025. Jun Dev
- * ============================================
- */
+ // ============================================
+ // File: App Constants (constants.js)
+ // Description: Contains constants used in the application
+ // Copyright (c) 2025. Jun Dev
+ // ============================================
 
-/** Store keys for the application. */
+/** @type {StoreKeys} Store keys for the application. */
 export const storeKeys = Object.freeze({
   envSettingKey: 'juntool-enviroment-settings',
   envVariableKey: 'juntool-enviroment-variables',
@@ -21,7 +19,7 @@ export const modalTabs = Object.freeze({
   ENVIRONMENT: 'environment',
 });
 
-/** Action modes for the application. */
+/** @type {ActionMode} Action modes for the application. */
 export const actionMode = Object.freeze({
   LOBBY: "lobby",
   API_LIST: "api_list",
@@ -30,7 +28,7 @@ export const actionMode = Object.freeze({
   ENVIRONMENT_VARIABLES: "environment_variables",
 });
 
-/** HTTP methods used in API requests. */
+/** @type {HttpMethod} HTTP methods used in API requests. */
 export const HttpMethods = Object.freeze({
   GET: "GET",
   POST: "POST",
@@ -53,7 +51,7 @@ export const ColorEnums = Object.freeze({
   Dark: 'dark',
 });
 
-/** Color mapping for HTTP methods, used in UI elements. */
+/** @type {Record<HttpMethod, ColorEnum>} Color mapping for HTTP methods, used in UI elements. */
 export const MethodColors = Object.freeze({
   [HttpMethods.GET]: 'primary',
   [HttpMethods.POST]: 'success',
@@ -64,7 +62,7 @@ export const MethodColors = Object.freeze({
   [HttpMethods.HEAD]: 'secondary',
 });
 
-/** Color options for Api actions, used in dropdowns or UI elements. */
+/** @type {ColorOption[]} Color options for Api actions, used in dropdowns or UI elements. */
 export const ColorOptions = Object.freeze([
   { value: ColorEnums.Primary, translateKey: 'color.primary', },
   { value: ColorEnums.Secondary, translateKey: 'color.secondary', },

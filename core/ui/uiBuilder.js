@@ -4,16 +4,25 @@
 // Copyright (c) 2025. Jun Dev
 // ============================================
 
-import { DefaultUI, EnvDropdownItems, EnvSettingForm, EnvVariableForm, ApiSettingForm, ModalApiListItem, TabSettings } from "../components/index.js";
-import { actionMode, ColorEnums, HttpMethods, MethodColors } from "../data/constants.js";
+import { DefaultUI, EnvDropdownItems, TabSettings } from "../components/index.js";
+import { actionMode, HttpMethods, MethodColors } from "../data/constants.js";
 import { t } from "../i18n/translate.js";
 import { tryGetUrlPath } from "../utils/helpers.js";
 
 export class UIBuilder {
+  /**
+   * Create the default UI for the application.
+   * @returns {string} The HTML of the default UI.
+   */
   static createDefaultUI() {
     return DefaultUI();
   }
 
+/**
+ * Get the header text for the modal based on the current action mode.
+ * @param {actionMode} [action] - The current action mode of the application.
+ * @returns {string} The translated header text for the modal.
+ */
   static getHeaderModal(action = actionMode.LOBBY) {
     const headers = Object.freeze({
       [actionMode.API_LIST]: t('modal.header.api-list'),
@@ -24,6 +33,11 @@ export class UIBuilder {
     return headers[action] || t('modal.header.default');
   }
 
+  /**
+   * Render API action group item list UI
+   * @param {ApiSetting[]} [datasource] An array of objects that contain the information of the API action group items
+   * @returns {string} The HTML of the API action group item list UI
+   */
   static createApiActionGroupItems = (datasource = []) => {
     return datasource.map(({ id, name, method, endpoint, color }) => `
       <li class="api-action-group-item bg-${color} bg-${color}-hover">
@@ -36,14 +50,30 @@ export class UIBuilder {
     `).join('') || '';
   }
 
+  /**
+   * Render Environment dropdown options UI
+   * @param {EnvSetting[]} [datasource] An array of objects that contain the information of the Environment dropdown options
+   * @returns {string} The HTML of the Environment dropdown options UI
+   */
   static createEnvDropdownItems(dataSource = []) {
     return EnvDropdownItems(dataSource);
   }
 
+  /**
+   * Render the tab setting buttons for the modal based on the current action mode
+   * @param {actionMode} [action] - The current action mode of the application
+   * @returns {string} The HTML of the tab setting buttons
+   */
   static createTabModalTabs(action = actionMode.LOBBY) {
     return TabSettings(action);
   }
 
+  /**
+   * Render the modal content container based on the current action mode
+   * @param {actionMode} [action] - The current action mode of the application
+   * @param {string} [innerHTML] - The HTML content of the modal content container
+   * @returns {string} The HTML of the modal content container
+   */
   static createModalContentContainer(action = actionMode.LOBBY, innerHTML = '') {
     switch (action) {
       case actionMode.API_LIST:
@@ -68,5 +98,4 @@ export class UIBuilder {
         return '';
     }
   }
-
 }

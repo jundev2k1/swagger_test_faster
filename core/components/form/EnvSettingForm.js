@@ -1,11 +1,10 @@
-/**
- * ============================================
- * File: EnvSettingForm.js
- * Type UI: Form
- * Description: Environment Setting Form
- * Copyright (c) 2025. Jun Dev
- * ============================================
- */
+// ============================================
+// File: EnvSettingForm.js
+// Type UI: Form
+// Description: Environment Setting Form
+// Copyright (c) 2025. Jun Dev
+// ============================================
+
 
 import { t } from '../../i18n/translate.js';
 

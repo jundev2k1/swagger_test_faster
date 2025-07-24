@@ -5,6 +5,16 @@
 // ================================================
 
 
+// ============ Store type ====================
+/**
+ * @typedef {Object} StoreKeys
+ * @property {string} envSettingKey - The key of the environment settings.
+ * @property {string} envVariableKey - The key of the environment variables.
+ * @property {string} apiSettingsKey - The key of the API settings.
+ * @property {string} currentEnvKey - The key of the current environment.
+ * @property {string} currentLangKey - The key of the current language.
+ */
+
 // ============ Form data type ====================
 
 /**
@@ -49,11 +59,60 @@
 
 /**
  * - Action modes for the application.
- * @typedef { 'lobby' | 'api_list' | 'api_setting' | 'environment_settings' | 'environment_variables' } ActionMode
- * 
+ * @typedef { Object } ActionMode
+ * @property {'lobby'} LOBBY Lobby page
+ * @property {'api_list'} API_LIST Modal: API list page
+ * @property {'api_setting'} API_SETTING Modal: API setting page
+ * @property {'environment_settings'} ENVIRONMENT_SETTINGS Modal: Environment settings page
+ * @property {'environment_variables'} ENVIRONMENT_VARIABLES Modal: Environment variables page
+ *
  * - Modal tabs for the application.
- * @typedef { 'api' | 'environment' } ModalTab
- * 
+ * @typedef { Object } ModalTab
+ * @property {'api'} API modalTab
+ * @property {'environment'} ENVIRONMENT modalTab
+ *
+ * - HTTP methods for the application.
+ * @typedef { Object } HttpMethod
+ * @property {'GET'} GET
+ * @property {'POST'} POST
+ * @property {'PUT'} PUT
+ * @property {'PATCH'} PATCH
+ * @property {'DELETE'} DELETE
+ * @property {'OPTIONS'} OPTIONS
+ * @property {'HEAD'} HEAD
+ *
  * - Color options for Api actions, used in dropdowns or UI elements.
- * @typedef { { value: ColorEnum, translateKey: string }[] } ColorOption
+ * @typedef { Object } ColorEnum
+ * @property {'primary'} PRIMARY Primary color
+ * @property {'secondary'} SECONDARY Secondary color
+ * @property {'success'} SUCCESS Success color
+ * @property {'danger'} DANGER Danger color
+ * @property {'warning'} WARNING Warning color
+ * @property {'info'} INFO Info color
+ *
+ * - Color options for Api actions, used in dropdowns or UI elements.
+ * @typedef { Object } ColorOption
+ * @property { ColorEnum } value ColorEnum (Primary, Secondary, Success, Danger, Warning, Info)
+ * @property { string } translateKey Key of the translation
+ */
+
+// ============ Page data type ====================
+
+/**
+ * @typedef {[isError: boolean, message: string]} ValidateFieldResult
+ * @property { boolean } isError - Whether the form is valid or not.
+ * @property { string } message - The error message.
+ *
+ */
+
+/**
+ * @typedef { Object } ErrorInfo
+ * @property { string } field - The field name.
+ * @property { string } message - The error message.
+ */
+
+/**
+ * @typedef {[isError: boolean, errors: ErrorInfo[]]} ValidateFormResult
+ * @property { boolean } isError - Whether the form is valid or not.
+ * @property { ErrorInfo[] } errors - The list of errors.
  */

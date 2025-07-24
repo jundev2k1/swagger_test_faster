@@ -1,10 +1,8 @@
-/**
- * ===============================================
- * File: store.js
- * Description: Store for the application
- * Copyright (c) 2025. Jun Dev
- * ===============================================
- */
+// ===============================================
+// File: store.js
+// Description: Store for the application
+// Copyright (c) 2025. Jun Dev
+// ===============================================
 
 import { tryParseJSON } from "../utils/helpers.js";
 import { storeKeys } from "./constants.js";
@@ -38,7 +36,7 @@ export class Store {
   static get apiSettings() { return tryParseJSON(localStorage.getItem(storeKeys.apiSettingsKey), []); }
   static set apiSettings(value) { localStorage.setItem(storeKeys.apiSettingsKey, JSON.stringify(value)); }
 
-  /** @type {Array<[string: variableKey, string: value]>} Environment variables to replace in API requests */
+  /** @type {Array<[variableKey: string, value: string]>} Environment variables to replace in API requests */
   static get envReplacer() {
     return this.envVariables.find(env => env.envId === Store.currentEnv)?.items.map(env => [env.name, env.value]) || [];
   };

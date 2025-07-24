@@ -1,11 +1,9 @@
-/**
- * ============================================
- * File: ApiSettingForm.js
- * Type UI: Form
- * Description: API Setting Form
- * Copyright (c) 2025. Jun Dev
- * ============================================
- */
+// ============================================
+// File: ApiSettingForm.js
+// Type UI: Form
+// Description: API Setting Form
+// Copyright (c) 2025. Jun Dev
+// ============================================
 
 import { t } from '../../i18n/translate.js';
 import { escapeHTML } from '../../utils/helpers.js';

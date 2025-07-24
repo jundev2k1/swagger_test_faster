@@ -1,11 +1,9 @@
-/** 
- * =============================
- * File: ApiActionGroupItems.js (apiActionGroupItems.js)
- * Type UI: Lobby UI (list)
- * Description: Render API action group item list UI
- * Copyright (c) 2025. Jun Dev
- * ============================= 
- */
+ // =============================
+ // File: ApiActionGroupItems.js (apiActionGroupItems.js)
+ // Type UI: Lobby UI (list)
+ // Description: Render API action group item list UI
+ // Copyright (c) 2025. Jun Dev
+ // ============================= 
 
 import { tryGetUrlPath } from "../../utils/helpers.js";
 import { HttpMethods, MethodColors } from "../../data/constants.js";

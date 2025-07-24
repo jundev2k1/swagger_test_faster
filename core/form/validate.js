@@ -14,7 +14,7 @@ export const validator = (() => {
   /**
    * Validate if a value is required (not empty or null).
    * @param {string | null} value Value to validate
-   * @returns {[boolean, string]} Validation result.
+   * @returns {ValidateFieldResult} Validation result.
    */
   const isRequired = (value) => {
     const isValid = value && value.trim() !== '';
@@ -24,7 +24,7 @@ export const validator = (() => {
   /**
    * Validate if a value is a valid URL.
    * @param {string} value URL value to validate
-   * @returns {[boolean, string]} Validation result.
+   * @returns {ValidateFieldResult} Validation result.
    */
   const isValidUrl = (value) => {
     try {
@@ -38,7 +38,7 @@ export const validator = (() => {
   /**
    * Validate if a value is a valid HTTP method.
    * @param {string} value HTTP method value to validate
-   * @returns {[boolean, string]} Validation result.
+   * @returns {ValidateFieldResult} Validation result.
    */
   const isValidHttpMethod = (value) => {
     const isValid = Object.values(HttpMethods).includes(value);
@@ -48,7 +48,7 @@ export const validator = (() => {
   /**
    * Validate if a value is a valid color enum.
    * @param {string} value Color value to validate
-   * @returns {[boolean, string]} Validation result.
+   * @returns {ValidateFieldResult} Validation result.
    */
   const isValidColor = (value) => {
     const isValid = Object.values(ColorEnums).includes(value);
@@ -58,7 +58,7 @@ export const validator = (() => {
   /**
    * Validate if a value is a valid JSON string.
    * @param {string} value JSON string to validate
-   * @returns {[boolean, string]} Validation result.
+   * @returns {ValidateFieldResult} Validation result.
    */
   const isValidJson = (value) => {
     if (value.trim() === '') return [true, ''];
@@ -73,13 +73,20 @@ export const validator = (() => {
   /**
    * Validate if a value is a valid environment name.
    * @param {string} value Environment name to validate
-   * @returns {[boolean, string]} Validation result.
+   * @returns {ValidateFieldResult} Validation result.
    */
   const isValidEnvName = (value) => {
     const isValid = value && value.trim() !== '' && /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(value);
     return [isValid, isValid ? '' : t('validation.invalid-env-name')];
   }
 
+  /**
+   * Check if there is a duplicate value in a list of objects given a selector function.
+   * @param {any[]} dataSource List of objects to check for duplicate value.
+   * @param {function(any):any} selector Function that returns the value to check for duplicate.
+   * @returns {[boolean, number[]]} A tuple where the first element is a boolean indicating whether the list has duplicate value
+   *  and the second element is an array of indices of the duplicate values.
+   */
   const isDuplicateValue = (dataSource = [], selector) => {
     if (typeof (selector) !== 'function') throw Error('The `selector` parameter must be a function at `isDuplicateValue`.');
 
@@ -121,7 +128,7 @@ export const validator = (() => {
      * Validate a form data object against a set of validations.
      * @param {Object} formData Form input data to validate
      * @param {*} options Validation rules for each field in the form data
-     * @returns {[boolean, { field: string, message: string }[]]} Validation result.
+     * @returns {ValidateFormResult} Validation result.
      */
     validate(formData, options = {}) {
       const errors = Object.entries(formData)
@@ -140,7 +147,7 @@ export const validator = (() => {
      * Validate a list of items against a set of validations.
      * @param {Object} formData Form input data, an array of items to validate
      * @param {Object} validations Validation rules for each item in the list
-     * @returns {[boolean, { itemIndex: number, isError: boolean, errors: { field: string, message: string }[] }[]]} Validation result.
+     * @returns {[boolean, { itemIndex: number, isError: boolean, errors: ErrorInfo[] }[]]} Validation result.
      */
     validateList(formData = [], validations) {
       const errors = formData
@@ -157,9 +164,22 @@ export const validator = (() => {
       const hasError = errors.length > 0;
       return [hasError, errors];
     },
+    
+    /**
+     * Validate an API setting object against the default validation rules.
+     * @param {ApiSetting} formData Form input data to validate
+     * @returns {ValidateFormResult} Validation result.
+     */
     validateApiSetting(formData) {
       return this.validate(formData, apiSettingValidations);
     },
+    
+    /**
+     * Validate a single field of an API setting against the default validation rules.
+     * @param {string} name The name of the field to validate
+     * @param {*} value The value of the field to validate
+     * @returns {string} The concatenated error messages if the field is invalid, or an empty string if it is valid.
+     */
     validateApiSettingItem(name, value) {
       const result = apiSettingValidations[name]
         ?.map((callback) => callback(value)[1])
@@ -167,6 +187,11 @@ export const validator = (() => {
         .join(', ');
       return result;
     },
+    /**
+     * Validate a list of environment variable settings against the default validation rules.
+     * @param {EnvVariableItem[]} formData Form input data, an array of environment variable settings to validate
+     * @returns {[boolean, { itemIndex: number, isError: boolean, errors: ErrorInfo[] }[]]} Validation result.
+     */
     validateVariableSetting(formData) {
       const [isValid, duplicateRows] = isDuplicateValue(formData, item => item.name);
       if (!isValid) return [
@@ -175,6 +200,12 @@ export const validator = (() => {
 
       return this.validateList(formData, variableSettingValidations);
     },
+    /**
+     * Validate a single field of an environment variable setting against the default validation rules.
+     * @param {string} name The name of the field to validate
+     * @param {*} value The value of the field to validate
+     * @returns {string} The concatenated error messages if the field is invalid, or an empty string if it is valid.
+     */
     validateVariableSettingItem(name, value) {
       const result = variableSettingValidations[name]
         ?.map((callback) => callback(value)[1])
@@ -182,6 +213,18 @@ export const validator = (() => {
         .join(', ');
       return result;
     },
+    /**
+     * Validate a list of environment settings against the default validation rules.
+     * @param {EnvSetting[]} formData Form input data, an array of environment settings to validate
+     * @returns {[boolean, { itemIndex: number, isError: boolean, errors: ErrorInfo[] }[]]} Validation result.
+     * The first element of the array is a boolean value indicating whether the form is valid or not.
+     * The second element of the array is an array of objects, each object contains the following properties:
+     * - `itemIndex`: The index of the form item that has an error.
+     * - `isError`: A boolean value indicating whether the form item has an error or not.
+     * - `errors`: An array of objects, each object contains the following properties:
+     * - `field`: The name of the field that has an error.
+     * - `message`: The error message of the field.
+     */
     validateEnvSetting(formData) {
       const [isValid, duplicateRows] = isDuplicateValue(formData, item => item.value);
       if (!isValid)
@@ -191,6 +234,12 @@ export const validator = (() => {
 
       return this.validateList(formData, envSettingValidations);
     },
+    /**
+     * Validate a single field of an environment setting against the default validation rules.
+     * @param {string} name The name of the field to validate
+     * @param {*} value The value of the field to validate
+     * @returns {string} The concatenated error messages if the field is invalid, or an empty string if it is valid.
+     */
     validateEnvSettingItem(name, value) {
       const result = envSettingValidations[name]
         ?.map((callback) => callback(value)[1])

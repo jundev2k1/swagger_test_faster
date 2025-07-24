@@ -1,10 +1,8 @@
-/**
- * ==============================
- * File: RenderJson.js
- * Description: Contains functions for rendering JSON data
- * Copyright (c) 2025. Jun Dev
- * ==============================
- */
+// ==============================
+// File: RenderJson.js
+// Description: Contains functions for rendering JSON data
+// Copyright (c) 2025. Jun Dev
+// ==============================
 
 /**
  * Renders JSON data into a human-readable format with collapsible sections.

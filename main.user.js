@@ -73,15 +73,7 @@ export class SwaggerFaster {
 
   /**
    * Fetch API settings from the server.
-   * @param {{
-   *  id: string,
-   *  name: string,
-   *  desc: string,
-   *  endpoint: string,
-   *  method: httpMethods,
-   *  color: colorEnums,
-   *  request: Object,
-   *  isAuth: boolean }} apiSetting API setting object to fetch 
+   * @param {ApiSetting} apiSetting API setting object to fetch 
    */
   async #fetchApiSettings(apiSetting) {
     const { name, endpoint, method, request, isAuth } = apiSetting || {};
@@ -176,10 +168,10 @@ export class SwaggerFaster {
    * @returns {string} Resolved input string with environment variables replaced
    */
   resolveVars(input = '') {
-    if (!input || !DefaultFormData.envReplacer || DefaultFormData.envReplacer.length === 0) return input;
+    if (!input || !Store.envReplacer || Store.envReplacer.length === 0) return input;
 
     let result = input;
-    for (const [name, value] of DefaultFormData.envReplacer) {
+    for (const [name, value] of Store.envReplacer) {
       const regex = new RegExp(`\\$\\{${name}\\}`, 'g');
       result = result.replace(regex, value);
     }
@@ -276,7 +268,7 @@ export class SwaggerFaster {
 
   /**
    * Set error messages for environment settings in the form.
-   * @param {[{ itemIndex: number, errors: [{ field: string, message: string }]}]} errorMessages Error messages for each item 
+   * @param {[{ itemIndex: number, errors: ErrorInfo[]}]} errorMessages Error messages for each item 
    */
   #setEnvErrorMessage(errorMessages = []) {
     const formId = this.#modalFormIds[actionMode.ENVIRONMENT_SETTINGS];
@@ -302,7 +294,7 @@ export class SwaggerFaster {
 
   /**
    * Set error messages for environment variables in the form.
-   * @param {[{ itemIndex: number, errors: [{ field: string, message: string }]}]} errorMessages Error messages for each item 
+   * @param {[{ itemIndex: number, errors: ErrorInfo[]}]} errorMessages Error messages for each item 
    */
   #setVariableErrorMessage(errorMessages = []) {
     const formId = this.#modalFormIds[actionMode.ENVIRONMENT_VARIABLES];
@@ -329,7 +321,7 @@ export class SwaggerFaster {
 
   /**
    * Set error messages for API settings in the form.
-   * @param {[{ itemIndex: number, errors: [{ field: string, message: string }]}]} errorMessages Error messages for each item 
+   * @param {[{ itemIndex: number, errors: ErrorInfo[]}]} errorMessages Error messages for each item 
    */
   #setApiSettingErrorMessage(errorMessages = []) {
     const formId = this.#modalFormIds[actionMode.API_SETTING];

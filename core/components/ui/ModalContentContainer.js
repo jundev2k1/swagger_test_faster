@@ -1,14 +1,19 @@
-/**
- * ============================================
- * File: ModalContentContainer.js
- * Description: Modal content container for the application
- * Copyright (c) 2025. Jun Dev
- * ============================================
- */
+ // ============================================
+ // File: ModalContentContainer.js
+ // Description: Modal content container for the application
+ // Copyright (c) 2025. Jun Dev
+ // ============================================
 
 import { t } from '../../i18n/translate.js';
 import { actionMode } from '../../data/constants.js';
 
+/**
+ * Render the modal content container based on the current action mode.
+ * 
+ * @param {ActionMode} [action] - The current action mode of the application.
+ * @param {string} [innerHTML] - The HTML content to be inserted within the container.
+ * @returns {string} The HTML of the modal content container specific to the given action mode.
+ */
 const ModalContentContainer = (action = actionMode.LOBBY, innerHTML = '') => {
   switch (action) {
     case actionMode.API_LIST:

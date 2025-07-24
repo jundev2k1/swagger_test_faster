@@ -1,17 +1,15 @@
-/**
- * ============================================
- * File: TabSettings.js
- * Description: Tab settings for the application
- * Copyright (c) 2025. Jun Dev
- * ============================================
- */
+ // ============================================
+ // File: TabSettings.js
+ // Description: Tab settings for the application
+ // Copyright (c) 2025. Jun Dev
+ // ============================================
 
 import { t } from '../../i18n/translate.js';
 import { actionMode } from '../../data/constants.js';
 
 /**
  * Tab settings for the application
- * @param {actionMode} action - The current action
+ * @param {ActionMode} action - The current action
  * @returns {string} The tab setting HTML
  */
 const TabSettings = (action = actionMode.LOBBY) => {

@@ -1,10 +1,8 @@
-/**
- * =============================================
- * File: Translate (translate.js)
- * Description: Contains translations for the application
- * Copyright (c) 2025. Jun Dev
- * ============================================
- */
+// =============================================
+// File: Translate (translate.js)
+// Description: Contains translations for the application
+// Copyright (c) 2025. Jun Dev
+// ============================================
 
 import { config } from "../../config.js";
 

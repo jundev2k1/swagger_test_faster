@@ -1,10 +1,8 @@
-/**
- * =================================================
- * File: appForm.js
- * Description: Contains properties for default form data
- * Copyright (c) 2025. Jun Dev
- * =================================================
- */
+ // =================================================
+ // File: appForm.js
+ // Description: Contains properties for default form data
+ // Copyright (c) 2025. Jun Dev
+ // =================================================
 
 import { ColorEnums, HttpMethods } from "./constants.js";
 import { Store } from "./store.js";
