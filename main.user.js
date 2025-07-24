@@ -680,6 +680,9 @@ export class SwaggerFaster {
       this.wModal.classList.remove('d-none');
     }
 
+    // Show or hide the sidebar based on the current action
+    $('#tool-sidebar').classList.toggle('collapsed', Store.isCollabsedSidebar);
+
     // Handle after setting the current action
     this.#onPageChange();
 
@@ -689,7 +692,7 @@ export class SwaggerFaster {
 
     // Set the title and modal container based on the current action
     this.hTitleModal.innerText = UIBuilder.getHeaderModal(this.currentAction);
-    const tabHTML = UIBuilder.createTabSettingElement(this.currentAction);
+    const tabHTML = UIBuilder.createTabModalTabs(this.currentAction);
     this.wTabModal.innerHTML = tabHTML;
 
     // Set the content of the modal container based on the current action
@@ -948,8 +951,9 @@ export class SwaggerFaster {
   #setUiEvent() {
     this.btnToggleSidebar.addEventListener('click', (e) => {
       e.preventDefault();
-      const sidebar = $('#tool-sidebar');
-      sidebar.classList.toggle('collapsed');
+
+      Store.isCollabsedSidebar = !Store.isCollabsedSidebar;
+      this.#onPageBinding();
     });
 
     // Modal events

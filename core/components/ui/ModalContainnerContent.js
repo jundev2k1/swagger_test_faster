@@ -17,10 +17,9 @@ import { default as ModalEnvVariableForm } from '../form/EnvVariableForm.js';
  * Render Modal containner content
  * @param {ActionMode} [action] Current action for the modal
  * @param {ApiSetting[] | ApiSetting | EnvSetting[] | EnvVariableItem[]} [dataSource] Data source for the modal
- * @param {string} [selectedEnv] Selected environment
  * @returns {string} HTML content of the modal containner
  */
-const ModalContainnerContent = (action = actionMode.LOBBY, dataSource, selectedEnv) => {
+const ModalContainnerContent = (action = actionMode.LOBBY, dataSource) => {
   switch (action) {
     /**
      * Render API list for the modal containner
