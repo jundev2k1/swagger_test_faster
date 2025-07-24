@@ -6,7 +6,7 @@
 
 import { t } from "../i18n/translate.js";
 import { tryGetUrlPath } from "../utils/helpers.js";
-import { DefaultUI, EnvDropdownItems, TabSettings, ModalContainnerContent } from "../components/index.js";
+import { DefaultUI, EnvDropdownItems, TabSettings, ModalContainnerContent, ApiActionGroupItems } from "../components/index.js";
 import { actionMode, HttpMethods, MethodColors } from "../data/constants.js";
 
 export class UIBuilder {
@@ -39,15 +39,7 @@ export class UIBuilder {
    * @returns {string} The HTML of the API action group item list UI
    */
   static createApiActionGroupItems = (datasource = []) => {
-    return datasource.map(({ id, name, method, endpoint, color }) => `
-      <li class="api-action-group-item bg-${color} bg-${color}-hover">
-        <a href="javascript:void" class="btn-control api-action-control" data-api-id="${id}">
-          <span class="api-method badge ${MethodColors[method] || MethodColors[HttpMethods.GET]}">${method}</span>
-          ${name}
-        </a>
-        <p class="font-sm m-0 p-3 pt-0 truncate" title="${endpoint}">${t('modal.api-list-item.endpoint-to')}: ${tryGetUrlPath(endpoint)}</p>
-      </li>
-    `).join('') || '';
+    return ApiActionGroupItems(datasource);
   }
 
   /**

@@ -546,6 +546,22 @@
   font-size: var(--jun-tool-font-size-xxl);
 }
 
+#jun-tool .bold {
+  font-weight: bold;
+}
+
+#jun-tool .italic {
+  font-style: italic;
+}
+
+#jun-tool .uppercase {
+  text-transform: uppercase;
+}
+
+#jun-tool .lowercase {
+  text-transform: lowercase;
+}
+
 #jun-tool .text-center {
   text-align: center;
 }
