@@ -5,9 +5,8 @@
 // ============================================
 
 import { t } from "../i18n/translate.js";
-import { tryGetUrlPath } from "../utils/helpers.js";
 import { DefaultUI, EnvDropdownItems, TabSettings, ModalContainnerContent, ApiActionGroupItems } from "../components/index.js";
-import { actionMode, HttpMethods, MethodColors } from "../data/constants.js";
+import { actionMode } from "../data/constants.js";
 
 export class UIBuilder {
   /**

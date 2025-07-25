@@ -63,7 +63,8 @@
   --jun-tool-spacing-sm: 8px;
   --jun-tool-spacing-md: 12px;
   --jun-tool-spacing-lg: 16px;
-  --jun-tool-border-radius: 4px;
+  --jun-tool-border-rounded: 4px;
+  --jun-tool-border-pill: 9999px;
   --jun-tool-font-size-xs: 0.7rem;
   --jun-tool-font-size-sm: 0.875rem;
   --jun-tool-font-size-md: 0.9rem;
@@ -689,7 +690,7 @@
   display: inline-block;
   padding: 2px 6px;
   font-size: 0.75rem;
-  border-radius: var(--jun-tool-border-radius);
+  border-radius: var(--jun-tool-border-rounded);
   font-weight: 600;
   text-transform: uppercase;
   line-height: 1;
@@ -772,14 +773,14 @@
   border: none;
   padding: var(--jun-tool-spacing-sm) var(--jun-tool-spacing-md);
   cursor: pointer;
-  border-radius: var(--jun-tool-border-radius);
+  border-radius: var(--jun-tool-border-rounded);
   font-weight: 500;
   color: var(--jun-tool-black-color);
   transition: background 0.2s, color 0.2s;
 }
 
 #jun-tool .btn-control:hover {
-  border-radius: var(--jun-tool-border-radius);
+  border-radius: var(--jun-tool-border-rounded);
 }
 
 #jun-tool .btn-control:disabled {
@@ -973,7 +974,7 @@
 #jun-tool textarea {
   padding: var(--jun-tool-spacing-sm);
   border: 1px solid var(--jun-tool-secondary-color);
-  border-radius: var(--jun-tool-border-radius);
+  border-radius: var(--jun-tool-border-rounded);
   font-size: var(--jun-tool-font-size-md);
   width: 100%;
   box-sizing: border-box;
@@ -1029,4 +1030,77 @@
   accent-color: var(--jun-tool-primary-color);
   cursor: pointer;
   margin: 0;
+}
+
+#jun-tool .segmented-control-group {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#jun-tool .segmented-control {
+  position: relative;
+}
+
+#jun-tool .segmented-control input {
+  display: none;
+}
+
+#jun-tool .segmented-control label {
+  display: inline-block;
+  padding: var(--jun-tool-spacing-sm) var(--jun-tool-spacing-md);
+  font-size: var(--jun-tool-font-size-md);
+  font-weight: 500;
+  background-color: var(--jun-tool-subtle-bg);
+  border: 1px solid var(--jun-tool-border-color);
+  color: var(--jun-tool-black-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+#jun-tool .segmented-control-group .segmented-control:first-child label {
+  border-radius: var(--jun-tool-border-rounded) 0 0 var(--jun-tool-border-rounded);
+}
+
+#jun-tool .segmented-control-group .segmented-control:last-child label {
+  border-radius: 0 var(--jun-tool-border-rounded) var(--jun-tool-border-rounded) 0;
+}
+
+#jun-tool .segmented-control-group.pill .segmented-control:first-child label {
+  border-radius: var(--jun-tool-border-pill) 0 0 var(--jun-tool-border-pill);
+}
+
+#jun-tool .segmented-control-group.pill .segmented-control:last-child label {
+  border-radius: 0 var(--jun-tool-border-pill) var(--jun-tool-border-pill) 0;
+}
+
+#jun-tool .segmented-control input:checked+label {
+  background-color: var(--jun-tool-primary-bg);
+  border-color: var(--jun-tool-primary-color);
+  color: var(--jun-tool-primary-color);
+}
+
+#jun-tool .segmented-control input:checked+label:hover {
+  background-color: var(--jun-tool-primary-bg-hover);
+}
+
+#jun-tool .segmented-control label:hover {
+  background-color: var(--jun-tool-subtle-bg-light);
+}
+
+#jun-tool .segmented-control input:disabled+label {
+  background-color: var(--jun-tool-subtle-bg);
+  color: var(--jun-tool-secondary-color);
+  border-color: var(--jun-tool-secondary-disabled);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Variant for single selection (radio-like behavior) */
+#jun-tool .segmented-control-group.single-selection input:checked+label {
+  background-color: var(--jun-tool-primary-color);
+  color: #fff;
+}
+
+#jun-tool .segmented-control-group.single-selection input:checked+label:hover {
+  background-color: var(--jun-tool-primary-hover);
 }

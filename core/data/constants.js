@@ -1,8 +1,8 @@
- // ============================================
- // File: App Constants (constants.js)
- // Description: Contains constants used in the application
- // Copyright (c) 2025. Jun Dev
- // ============================================
+// ============================================
+// File: App Constants (constants.js)
+// Description: Contains constants used in the application
+// Copyright (c) 2025. Jun Dev
+// ============================================
 
 /** @type {StoreKeys} Store keys for the application. */
 export const storeKeys = Object.freeze({
@@ -71,4 +71,16 @@ export const ColorOptions = Object.freeze([
   { value: ColorEnums.Danger, translateKey: 'color.danger', },
   { value: ColorEnums.Warning, translateKey: 'color.warning', },
   { value: ColorEnums.Info, translateKey: 'color.info', },
+]);
+
+/** @type {ApiSettingMode} Api setting modes */
+export const ApiSettingMode = Object.freeze({
+  API: 'api',
+  HUB: 'hub',
+});
+
+/** @type {SegmentedInputOption[]} Api setting mode options */
+export const ApiSettingModeOptions = Object.freeze([
+  { value: ApiSettingMode.API, label: 'api.setting.mode.api', disabled: false },
+  { value: ApiSettingMode.HUB, label: 'api.setting.mode.hub', disabled: true },
 ]);

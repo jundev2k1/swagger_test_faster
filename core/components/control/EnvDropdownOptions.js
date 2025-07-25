@@ -8,6 +8,11 @@
 import { Store } from '../../data/store.js';
 import { t } from '../../i18n/translate.js';
 
+/**
+ * Render Environment dropdown options as HTML.
+ * @param {EnvSetting[]} [datasource=[]] - An array of objects that contain the information of the Environment dropdown options.
+ * @returns {string} The HTML string for the Environment dropdown options, including a default option, environment options, and an "add-new" option.
+ */
 const EnvDropdownItems = (datasource = []) => {
   const defaultOption = `
     <option value="" disabled ${!datasource || datasource.length == 0 ? 'selected' : ''}>

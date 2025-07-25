@@ -76,7 +76,7 @@
 #jun-tool .api-action-group-item {
   margin-top: var(--jun-tool-spacing-sm);
   margin-bottom: var(--jun-tool-spacing-sm);
-  border-radius: var(--jun-tool-border-radius);
+  border-radius: var(--jun-tool-border-rounded);
 }
 
 #jun-tool .api-action-group-item a {
@@ -125,7 +125,7 @@
 #jun-tool .card {
   background: var(--jun-tool-subtle-bg);
   padding: var(--jun-tool-spacing-md);
-  border-radius: var(--jun-tool-border-radius);
+  border-radius: var(--jun-tool-border-rounded);
   max-height: 30vh;
   overflow-y: auto;
 }
@@ -133,7 +133,7 @@
 #jun-tool .value.copyable {
   cursor: pointer;
   padding: 4px var(--jun-tool-spacing-sm);
-  border-radius: var(--jun-tool-border-radius);
+  border-radius: var(--jun-tool-border-rounded);
   transition: background 0.2s;
 }
 

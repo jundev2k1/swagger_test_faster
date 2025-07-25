@@ -30,7 +30,7 @@
 
 #jun-tool .modal-container {
   background: #fff;
-  border-radius: var(--jun-tool-border-radius);
+  border-radius: var(--jun-tool-border-rounded);
   max-width: 720px;
   width: 90%;
   max-height: 80vh;
@@ -71,7 +71,7 @@
 
 #jun-tool .modal-header .btn-back:hover {
   background: rgba(0, 123, 255, 0.1);
-  border-radius: var(--jun-tool-border-radius);
+  border-radius: var(--jun-tool-border-rounded);
 }
 
 #jun-tool .modal-tabs {
@@ -120,7 +120,7 @@
   display: flex;
   gap: 4px;
   filter: brightness(1.5);
-  border-radius: var(--jun-tool-border-radius);
+  border-radius: var(--jun-tool-border-rounded);
   transition: background 0.2s, box-shadow 0.2s;
 }
 
@@ -190,7 +190,7 @@
 #jun-tool .modal-footer button {
   padding: var(--jun-tool-spacing-sm) var(--jun-tool-spacing-lg);
   border: none;
-  border-radius: var(--jun-tool-border-radius);
+  border-radius: var(--jun-tool-border-rounded);
   cursor: pointer;
   font-size: var(--jun-tool-font-size-md);
 }

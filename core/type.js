@@ -27,6 +27,10 @@
  * @property {string} endpoint - The endpoint of the API.
  * @property {string} request - The request of the API.
  * @property {boolean} isAuth - Whether the API is authenticated or not.
+ * @property {string} mode - The mode of the API.
+ * @property {string} refTo - The ID of the API to reference.
+ * @property {number} callAfter - The delay time before calling the API.
+ * @property {string} successEvent - The event to execute when the API is successful.
  */
 
 /**
@@ -94,6 +98,11 @@
  * @typedef { Object } ColorOption
  * @property { ColorEnum } value ColorEnum (Primary, Secondary, Success, Danger, Warning, Info)
  * @property { string } translateKey Key of the translation
+ * 
+ * - API setting modes
+ * @typedef { Object } ApiSettingMode
+ * @property {'api'} API
+ * @property {'hub'} HUB
  */
 
 // ============ Page data type ====================

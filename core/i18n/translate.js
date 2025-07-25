@@ -42,6 +42,16 @@ export const translate = Object.freeze({
     'vi': 'Thông tin',
     'zh-TW': '資訊',
   },
+  'api.setting.mode.api': {
+    'en': 'Call API',
+    'vi': 'Gọi API',
+    'zh-TW': '呼叫 API',
+  },
+  'api.setting.mode.hub': {
+    'en': 'SignalR Hub',
+    'vi': 'Hub SignalR',
+    'zh-TW': 'SignalR Hub',
+  },
   'btn.back': {
     'en': 'Back',
     'vi': 'Trở lại',
@@ -192,11 +202,6 @@ export const translate = Object.freeze({
     'vi': 'Điểm cuối',
     'zh-TW': '端點',
   },
-  'modal.api-setting.response': {
-    'en': 'Response',
-    'vi': 'Phản hồi',
-    'zh-TW': '回應',
-  },
   'modal.api-setting.color': {
     'en': 'Color',
     'vi': 'Màu sắc',
@@ -211,6 +216,31 @@ export const translate = Object.freeze({
     'en': 'Auto-set token after successful request?',
     'vi': 'Tự động cài đặt token sau khi yêu cầu thành công?',
     'zh-TW': '請求成功後自動設置令牌？',
+  },
+  'modal.api-setting.mode': {
+    'en': 'Mode',
+    'vi': 'Chế độ',
+    'zh-TW': '模式',
+  },
+  'modal.api-setting.ref':{
+    'en': 'Reference API',
+    'vi': 'Tham chiếu đến API',
+    'zh-TW': '參考 API',
+  },
+  'modal.api-setting.ref.prefix': {
+    'en': 'API Name',
+    'vi': 'Tên API',
+    'zh-TW': 'API 名稱',
+  },
+  'modal.api-setting.ref.none': {
+    'en': 'None',
+    'vi': 'Không chỉ định',
+    'zh-TW': '無',
+  },
+  'modal.api-setting.call-after': {
+    'en': 'Call Again After (ms)',
+    'vi': 'Gọi lại sau (ms)',
+    'zh-TW': '再次呼叫 (毫秒)',
   },
   'modal.api-list.empty': {
     'en': 'No APIs found. Please add a new API.',

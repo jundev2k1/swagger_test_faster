@@ -4,7 +4,7 @@
  // Copyright (c) 2025. Jun Dev
  // =================================================
 
-import { ColorEnums, HttpMethods } from "./constants.js";
+import { ApiSettingMode, ColorEnums, HttpMethods } from "./constants.js";
 import { Store } from "./store.js";
 
 /** The default form data */
@@ -15,10 +15,14 @@ export class DefaultFormData {
       id: '',
       name: '',
       desc: '',
+      mode: ApiSettingMode.API,
       endpoint: '',
       method: HttpMethods.GET,
       color: ColorEnums.Primary,
       request: '',
+      refTo: '',
+      callAfter: 0,
+      successEvent: 'console.log(data)',
       isAuth: false,
     }
   };
