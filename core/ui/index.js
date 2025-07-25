@@ -5,5 +5,5 @@
 // ==============================
 
 export { renderJsonFormattedStrict } from './renderJson.js';
-export { Toast } from './Toast.js';
+export { Toast } from './toast.js';
 export { UIBuilder } from './uiBuilder.js';
