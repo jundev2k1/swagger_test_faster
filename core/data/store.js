@@ -40,4 +40,8 @@ export class Store {
   static get envReplacer() {
     return this.envVariables.find(env => env.envId === Store.currentEnv)?.items.map(env => [env.name, env.value]) || [];
   };
+
+  /** @type {boolean} Sidebar state */
+  static get isCollabsedSidebar() { return localStorage.getItem(storeKeys.sidebarStateKey) === 'true' || false; }
+  static set isCollabsedSidebar(value) { localStorage.setItem(storeKeys.sidebarStateKey, value); }
 }

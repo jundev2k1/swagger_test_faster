@@ -4,10 +4,10 @@
 // Copyright (c) 2025. Jun Dev
 // ============================================
 
-import { DefaultUI, EnvDropdownItems, TabSettings } from "../components/index.js";
-import { actionMode, HttpMethods, MethodColors } from "../data/constants.js";
 import { t } from "../i18n/translate.js";
 import { tryGetUrlPath } from "../utils/helpers.js";
+import { DefaultUI, EnvDropdownItems, TabSettings, ModalContainnerContent, ApiActionGroupItems } from "../components/index.js";
+import { actionMode, HttpMethods, MethodColors } from "../data/constants.js";
 
 export class UIBuilder {
   /**
@@ -18,11 +18,11 @@ export class UIBuilder {
     return DefaultUI();
   }
 
-/**
- * Get the header text for the modal based on the current action mode.
- * @param {actionMode} [action] - The current action mode of the application.
- * @returns {string} The translated header text for the modal.
- */
+  /**
+   * Get the header text for the modal based on the current action mode.
+   * @param {actionMode} [action] - The current action mode of the application.
+   * @returns {string} The translated header text for the modal.
+   */
   static getHeaderModal(action = actionMode.LOBBY) {
     const headers = Object.freeze({
       [actionMode.API_LIST]: t('modal.header.api-list'),
@@ -39,15 +39,7 @@ export class UIBuilder {
    * @returns {string} The HTML of the API action group item list UI
    */
   static createApiActionGroupItems = (datasource = []) => {
-    return datasource.map(({ id, name, method, endpoint, color }) => `
-      <li class="api-action-group-item bg-${color} bg-${color}-hover">
-        <a href="javascript:void" class="btn-control api-action-control" data-api-id="${id}">
-          <span class="api-method badge ${MethodColors[method] || MethodColors[HttpMethods.GET]}">${method}</span>
-          ${name}
-        </a>
-        <p class="font-sm m-0 p-3 pt-0 truncate" title="${endpoint}">${t('modal.api-list-item.endpoint-to')}: ${tryGetUrlPath(endpoint)}</p>
-      </li>
-    `).join('') || '';
+    return ApiActionGroupItems(datasource);
   }
 
   /**
@@ -66,6 +58,16 @@ export class UIBuilder {
    */
   static createTabModalTabs(action = actionMode.LOBBY) {
     return TabSettings(action);
+  }
+
+  /**
+   * Render the modal containner content based on the current action mode.
+   * @param {actionMode} [action] - The current action mode of the application.
+   * @param {ApiSetting[] | ApiSetting | EnvSetting[] | EnvVariableItem[]} [dataSource] - Data source for the modal containner content.
+   * @returns {string} The HTML of the modal containner content.
+   */
+  static createContainnerContent(action = actionMode.LOBBY, dataSource) {
+    return ModalContainnerContent(action, dataSource);
   }
 
   /**

@@ -11,6 +11,7 @@ export const storeKeys = Object.freeze({
   apiSettingsKey: 'juntool-api-settings',
   currentEnvKey: 'juntool-env',
   currentLangKey: 'juntool-lang',
+  sidebarStateKey: 'juntool-sidebar-state',
 });
 
 /** @type {ModalTab} Modal tabs for the application. */
