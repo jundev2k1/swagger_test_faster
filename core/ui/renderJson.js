@@ -54,7 +54,7 @@ export function renderJsonFormattedStrict(jsonData) {
         const jsonPropertyValue = jsonValue[key];
 
         if (typeof jsonPropertyValue === 'object' && jsonPropertyValue !== null) {
-          jsonLines.push(line); // key line
+          jsonLines.push(line);
           const childLines = renderJson(jsonPropertyValue, depth + 1);
           const last = childLines[childLines.length - 1];
           if (last) last.appendChild(document.createTextNode(index < keys.length - 1 ? ',' : ''));
@@ -75,7 +75,6 @@ export function renderJsonFormattedStrict(jsonData) {
       return jsonLines;
     }
 
-    // Primitive value (string, number, etc.)
     const jsonLine = makeLine('', depth);
     const valSpan = document.createElement('span');
     valSpan.className = 'value ' + getTypeClass(jsonValue);

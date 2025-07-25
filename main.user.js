@@ -996,7 +996,7 @@ export class SwaggerFaster {
       e.preventDefault();
       if (!this.apiResponse) return;
 
-      navigator.clipboard.writeText(JSON.stringify(this.apiResponse))
+      navigator.clipboard.writeText(JSON.stringify(this.apiResponse, null, 2))
         .then(() => {
           Toast.success(t('tooltip.copy.success'));
         }).catch(() => {
