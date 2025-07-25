@@ -6,7 +6,7 @@
 
 import { t } from './core/i18n/translate.js';
 import { $, $$ } from './core/utils/helpers.js';
-import { Toast, UIBuilder } from './core/ui/index.js';
+import { Toast, UIBuilder, renderJsonFormattedStrict } from './core/ui/index.js';
 import { validator } from './core/form/validate.js';
 import { HttpMethods, actionMode, modalTabs, DefaultFormData, Store } from './core/data/index.js';
 
@@ -139,7 +139,7 @@ export class SwaggerFaster {
       return;
     }
 
-    const jsonContent = renderJSONFormattedStrict(this.apiResponse);
+    const jsonContent = renderJsonFormattedStrict(this.apiResponse);
     this.wApiResponse.innerHTML = jsonContent.innerHTML;
     this.wApiResponse.querySelectorAll('.copyable').forEach(element => {
       element.addEventListener('click', (event) => {
