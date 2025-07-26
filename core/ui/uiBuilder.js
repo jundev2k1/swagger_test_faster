@@ -5,7 +5,7 @@
 // ============================================
 
 import { t } from "../i18n/translate.js";
-import { DefaultUI, EnvDropdownItems, TabSettings, ModalContainnerContent, ApiActionGroupItems } from "../components/index.js";
+import { DefaultUI, EnvDropdownItems, TabSettings, ModalContainnerContent, ApiActionGroupItems, ModalContentContainer } from "../components/index.js";
 import { actionMode } from "../data/constants.js";
 
 export class UIBuilder {
@@ -76,27 +76,6 @@ export class UIBuilder {
    * @returns {string} The HTML of the modal content container
    */
   static createModalContentContainer(action = actionMode.LOBBY, innerHTML = '') {
-    switch (action) {
-      case actionMode.API_LIST:
-        return `
-          <div id="api-list-layout">
-            <ul class="api-list">${innerHTML}</ul>
-            <button class="btn-control light" id="btn-add-new-api">${t('modal.api-list.add-new')}</button>
-          </div>
-        `;
-
-      case actionMode.API_SETTING:
-        return `<div id="api-setting-layout">${innerHTML}</div>`;
-
-      case actionMode.ENVIRONMENT_SETTINGS:
-        return `<div id="enviroment-setting-layout">${innerHTML}</div>`;
-
-      case actionMode.ENVIRONMENT_VARIABLES:
-        return `<div id="enviroment-setting-layout">${innerHTML}</div>`;
-
-      // Clear content
-      default:
-        return '';
-    }
+    return ModalContentContainer(action, innerHTML);
   }
 }

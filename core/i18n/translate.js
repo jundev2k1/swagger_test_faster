@@ -102,6 +102,11 @@ export const translate = Object.freeze({
     'vi': 'Sao chép vào clipboard thất bại.',
     'zh-TW': '無法複製到剪貼簿。',
   },
+  'tooltip.copy-insert': {
+    'en': 'Copy and insert',
+    'vi': 'Sao chép và thêm',
+    'zh-TW': '複製並插入',
+  },
   'dialog.confirm-save': {
     'en': 'Do you want to save changes before closing?',
     'vi': 'Bạn có muốn lưu thay đổi trước khi đóng không?',
@@ -232,7 +237,7 @@ export const translate = Object.freeze({
     'vi': 'Chế độ',
     'zh-TW': '模式',
   },
-  'modal.api-setting.ref':{
+  'modal.api-setting.ref': {
     'en': 'Reference API',
     'vi': 'Tham chiếu đến API',
     'zh-TW': '參考 API',
@@ -282,10 +287,110 @@ export const translate = Object.freeze({
     'vi': 'Hành động',
     'zh-TW': '操作',
   },
+  'modal.api-list.filter.search': {
+    'en': 'Search',
+    'vi': 'Tìm kiếm',
+    'zh-TW': '搜索',
+  },
+  'modal.api-list.filter-all': {
+    'en': 'All',
+    'vi': 'Tất cả',
+    'zh-TW': '全部',
+  },
+  'modal.api-list.filter.mode-api': {
+    'en': 'API',
+    'vi': 'API',
+    'zh-TW': 'API',
+  },
+  'modal.api-list.filter.mode-hub': {
+    'en': 'HUB',
+    'vi': 'HUB',
+    'zh-TW': 'HUB',
+  },
+  'modal.api-list.filter.mode-hub_method': {
+    'en': 'HUB Method',
+    'vi': 'HUB Phương thức',
+    'zh-TW': 'HUB 方法',
+  },
+  'modal.api-list.filter.method': {
+    'en': 'Method',
+    'vi': 'Phương thức',
+    'zh-TW': '方法',
+  },
+  'modal.api-list.order-by': {
+    'en': 'Order By',
+    'vi': 'Sắp xếp theo',
+    'zh-TW': '排序方式',
+  },
+  'modal.api-list.order-by.name': {
+    'en': 'Name',
+    'vi': 'Tên',
+    'zh-TW': '名稱',
+  },
+  'modal.api-list.order-by.endpoint': {
+    'en': 'Endpoint',
+    'vi': 'Điểm cuối',
+    'zh-TW': '端點',
+  },
+  'modal.api-list.order-by.priority': {
+    'en': 'Priority',
+    'vi': 'Thuật tố',
+    'zh-TW': '優先順序',
+  },
+  'modal.api-list.order-by.color': {
+    'en': 'Color',
+    'vi': 'Màu sắc',
+    'zh-TW': '顏色',
+  },
+  'modal.api-list.order-by.mode': {
+    'en': 'Mode',
+    'vi': 'Chế độ',
+    'zh-TW': '模式',
+  },
+  'modal.api-list.order-by.method': {
+    'en': 'Method',
+    'vi': 'Phương thức',
+    'zh-TW': '方法',
+  },
+  'modal.api-list.order.by-created': {
+    'en': 'Created At',
+    'vi': 'Ngày tạo',
+    'zh-TW': '創建時間',
+  },
+  'modal.api-list.order.by-updated': {
+    'en': 'Updated At',
+    'vi': 'Ngày cập nhật',
+    'zh-TW': '更新時間',
+  },
+  'modal.api-list.order-by.asc': {
+    'en': 'Ascending',
+    'vi': 'Tăng dần',
+    'zh-TW': '升序',
+  },
+  'modal.api-list.order-by.desc': {
+    'en': 'Descending',
+    'vi': 'Giảm dần',
+    'zh-TW': '降序',
+  },
   'modal.api-list-item.endpoint-to': {
     'en': 'To',
     'vi': 'Đến',
     'zh-TW': '至',
+  },
+  'modal.api-list-item.mode.api': {
+    'en': 'API',
+    'vi': 'API',
+    'zh-TW': 'API',
+  },
+  'modal.api-list-item.mode.hub': {
+    'en': 'HUB',
+    'vi': 'HUB',
+    'zh-TW': 'HUB',
+  },
+  'modal.api-list-item.mode.hub_method': {
+    'en': 'HUB METHOD',
+    'vi': 'HUB METHOD',
+    'zh-TW': 'HUB 方法',
   },
   'modal.api-setting.success-event': {
     'en': 'Success Event',

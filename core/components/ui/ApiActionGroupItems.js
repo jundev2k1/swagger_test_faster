@@ -7,7 +7,7 @@
 
 import { t } from "../../i18n/translate.js";
 import { escapeHTML, tryGetUrlPath } from "../../utils/helpers.js";
-import { HttpMethods, MethodColors } from "../../data/constants.js";
+import { ApiSettingMode, HttpMethods, MethodColors } from "../../data/constants.js";
 
 /**
  * Render API action group item list UI
@@ -35,7 +35,7 @@ const ApiActionGroupItems = (datasource = []) => {
     `;
   };
 
-  return datasource.map(generateApiActionGroupItemHtml).join('') || '';
+  return datasource.filter(s => s.mode === ApiSettingMode.API).map(generateApiActionGroupItemHtml).join('') || '';
 }
 
 export default ApiActionGroupItems;

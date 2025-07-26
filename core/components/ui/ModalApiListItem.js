@@ -15,8 +15,11 @@ import { HttpMethods, MethodColors } from '../../data/constants.js';
  * @returns {string} The HTML of the API list UI
  */
 const ModalApiListItem = (datasource = []) => {
-  return datasource.map(({ id, name, method, endpoint, color, desc }) => `
+  return datasource.map(({ id, name, mode, method, endpoint, color, desc }) => `
     <li class="api-list-item bg-${color || 'primary'} bg-${color || 'primary'}-hover">
+      <div class="api-setting-icon">
+        <span class="api-setting-mode">${t(`modal.api-list-item.mode.${mode}`) || mode}</span>
+      </div>
       <div class="api-setting-content">
         <a href="javascript:void" data-api-id="${id}">
           <span class="api-method badge ${MethodColors[method] || MethodColors[HttpMethods.GET]}">${method}</span>

@@ -103,6 +103,36 @@
   grid-template-columns: repeat(6, 1fr);
 }
 
+#jun-tool .grid-7 {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+#jun-tool .grid-8 {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+}
+
+#jun-tool .grid-9 {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+}
+
+#jun-tool .grid-10 {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+}
+
+#jun-tool .grid-11 {
+  display: grid;
+  grid-template-columns: repeat(11, 1fr);
+}
+
+#jun-tool .grid-12 {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+}
+
 #jun-tool .grid-cols-1-2 {
   display: grid;
   grid-template-columns: 1fr 2fr;
@@ -137,6 +167,38 @@
 
 #jun-tool .span-4 {
   grid-column: span 4;
+}
+
+#jun-tool .span-5 {
+  grid-column: span 5;
+}
+
+#jun-tool .span-6 {
+  grid-column: span 6;
+}
+
+#jun-tool .span-7 {
+  grid-column: span 7;
+}
+
+#jun-tool .span-8 {
+  grid-column: span 8;
+}
+
+#jun-tool .span-9 {
+  grid-column: span 9;
+}
+
+#jun-tool .span-10 {
+  grid-column: span 10;
+}
+
+#jun-tool .span-11 {
+  grid-column: span 11;
+}
+
+#jun-tool .span-12 {
+  grid-column: span 12;
 }
 
 #jun-tool .gap-0 {
@@ -588,6 +650,46 @@
 
 #jun-tool .d-block {
   display: block !important;
+}
+
+#jun-tool .d-flex {
+  display: flex !important;
+}
+
+#jun-tool .overflow-hidden {
+  overflow: hidden;
+}
+
+#jun-tool .overflow-auto {
+  overflow: auto;
+}
+
+#jun-tool .overflow-scroll {
+  overflow: scroll;
+}
+
+#jun-tool .overflow-x-hidden {
+  overflow-x: hidden;
+}
+
+#jun-tool .overflow-y-hidden {
+  overflow-y: hidden;
+}
+
+#jun-tool .overflow-x-auto {
+  overflow-x: auto;
+}
+
+#jun-tool .overflow-y-auto {
+  overflow-y: auto;
+}
+
+#jun-tool .overflow-x-scroll {
+  overflow-x: scroll;
+}
+
+#jun-tool .overflow-y-scroll {
+  overflow-y: scroll;
 }
 
 #jun-tool .bg-primary {

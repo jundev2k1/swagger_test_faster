@@ -157,7 +157,6 @@ export const validator = (() => {
      * @returns {ValidateFormResult} Validation result.
      */
     validate(formData, options = {}) {
-      debugger
       const errors = Object.entries(formData)
         .map(([key, value]) => {
           const errorMessage = options[key]

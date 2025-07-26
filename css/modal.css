@@ -128,6 +128,23 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
+#jun-tool .api-list-item .api-setting-icon {
+  width: 72px;
+  background: var(--jun-tool-dark-color);
+  border-radius: var(--jun-tool-border-rounded) 0 0 var(--jun-tool-border-rounded);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 600;
+  font-size: var(--jun-tool-font-size-md);
+}
+
+#jun-tool .api-list-item .api-setting-icon span {
+  text-wrap: wrap;
+  text-align: center;
+}
+
 #jun-tool .api-list-item button[data-action="copy-insert-api"]:hover,
 #jun-tool .api-list-item button[data-action="delete-api"]:hover {
   transform: none;
