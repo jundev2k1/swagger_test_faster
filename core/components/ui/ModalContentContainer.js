@@ -6,6 +6,7 @@
 
 import { t } from '../../i18n/translate.js';
 import { actionMode, ApiSettingMode, HttpMethods } from '../../data/constants.js';
+import { Store } from '../../data/store.js';
 
 /**
  * Render the modal content container based on the current action mode.
@@ -15,38 +16,49 @@ import { actionMode, ApiSettingMode, HttpMethods } from '../../data/constants.js
  * @returns {string} The HTML of the modal content container specific to the given action mode.
  */
 const ModalContentContainer = (action = actionMode.LOBBY, innerHTML = '') => {
+  const getSortOptions = () => {
+    const selectedField = Store.apiListFilter.sort;
+    const sortFields = ['name', 'endpoint', 'priority', 'color', 'mode', 'method', 'createdAt', 'updatedAt'];
+    return sortFields.map((field) => `
+        <option value="${field}" ${selectedField === field ? 'selected' : ''}>
+          ${t(`modal.api-list.order-by.${field}`)}
+        </option>
+      `).join('');
+  }
+  const getSortDirectionOptions = () => {
+    const selectedDirection = Store.apiListFilter.sortDirection;
+    const sortDirections = ['asc', 'desc'];
+    return sortDirections.map((direction) => `
+        <option value="${direction}" ${selectedDirection === direction ? 'selected' : ''}>
+          ${t(`modal.api-list.order-by.${direction}`)}
+        </option>
+      `).join('');
+  }
   switch (action) {
     case actionMode.API_LIST:
       return `
         <div id="api-list-layout">
           <div class="api-list-filter mb-3 grid-4 gap-1">
-            <input class="form-input span-4" placeholder="${t('modal.api-list.filter.search')}">
-            <select class="form-select">
+            <input id="api-list-filter-search" class="form-input span-4" placeholder="${t('modal.api-list.filter.search')}">
+            <select id="api-list-filter-mode" class="form-select">
               <option value="all">${t('modal.api-list.filter-all')}</option>
-              ${Object.entries(ApiSettingMode).map(([key]) => `
-                <option value="${key}">${t(`modal.api-list.filter.mode-${key.toLowerCase()}`)}</option>
+              ${Object.entries(ApiSettingMode).map(([key, value]) => `
+                <option value="${value}" ${value === Store.apiListFilter.mode ? 'selected' : ''}>
+                  ${t(`modal.api-list.filter.mode-${key.toLowerCase()}`)}
+                </option>
               `).join('')}
             </select>
-            <select class="form-select">
+            <select id="api-list-filter-method" class="form-select">
               <option value="all">${t('modal.api-list.filter.method')}</option>
               ${Object.entries(HttpMethods).map(([key, value]) => `
                 <option value="${value}">${key}</option>
               `).join('')}
             </select>
-            <select class="form-select">
-              <option value="">${t('modal.api-list.order-by')}</option>
-              <option value="name">${t('modal.api-list.order-by.name')}</option>
-              <option value="endpoint">${t('modal.api-list.order-by.endpoint')}</option>
-              <option value="priority">${t('modal.api-list.order-by.priority')}</option>
-              <option value="color">${t('modal.api-list.order-by.color')}</option>
-              <option value="mode">${t('modal.api-list.order-by.mode')}</option>
-              <option value="method">${t('modal.api-list.order-by.method')}</option>
-              <option value="createdAt">${t('modal.api-list.order.by-created')}</option>
-              <option value="updatedAt">${t('modal.api-list.order.by-updated')}</option>
+            <select id="api-list-order-by-key" class="form-select">
+              ${getSortOptions()}
             </select>
-            <select class="form-select">
-              <option value="asc">${t('modal.api-list.order-by.asc')}</option>
-              <option value="desc">${t('modal.api-list.order-by.desc')}</option>
+            <select id="api-list-order-by-direction" class="form-select">
+              ${getSortDirectionOptions()}
             </select>
           </div>
           <ul class="api-list">${innerHTML}</ul>

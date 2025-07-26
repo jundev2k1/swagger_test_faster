@@ -44,4 +44,8 @@ export class Store {
   /** @type {boolean} Sidebar state */
   static get isCollabsedSidebar() { return localStorage.getItem(storeKeys.sidebarStateKey) === 'true' || false; }
   static set isCollabsedSidebar(value) { localStorage.setItem(storeKeys.sidebarStateKey, value); }
+
+  /** @type {ApiFilter} API filter data */
+  static get apiListFilter() { return tryParseJSON(localStorage.getItem(storeKeys.apiListFilterKey), {}); }
+  static set apiListFilter(value) { localStorage.setItem(storeKeys.apiListFilterKey, JSON.stringify(value)); }
 }

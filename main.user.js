@@ -30,13 +30,20 @@ export class SwaggerFaster {
     this.targetId = null;
     /** @type {boolean} Page change state */
     this.isPageDataChange = false;
+    /** @type {number|null} Timeout ID */
     this.timeoutId = null;
+    /** @type {string|null} API response */
     this.apiResponse = null;
     /** @type {string} Pre-authentication token, used to store the token before login */
     this.preAuthToken = '';
     /** @type {string} Pre-session key, used to store the session key before login */
     this.preSessionKey = '';
+    /** @type {boolean} Fetching state */
     this.isFetching = false;
+    /** @type {boolean} Modal loading state */
+    this.isModalLoading = false;
+    /** @type {boolean} Sidebar loading state */
+    this.isSidebarLoading = false;
   }
 
   // ================================================
@@ -663,6 +670,7 @@ export class SwaggerFaster {
     if (this.isPageDataChange) {
       this.#setFormData();
       this.#clearErrorMessage();
+      Store.apiListFilter = { ...DefaultFormData.defaultApiFilter };
     }
 
     this.btnBack.classList.toggle(
@@ -718,7 +726,7 @@ export class SwaggerFaster {
   }
 
   // ================================================
-  // Binding Functions
+  // Set form Events
   // ================================================
 
   #setFormItemChanges() {
@@ -733,6 +741,56 @@ export class SwaggerFaster {
 
     const apiSettingControls = targetForm.querySelectorAll('[data-action="form-input"]');
     apiSettingControls.forEach(element => element.addEventListener('change', (e) => this.#onApiSettingInputChange(e)));
+  }
+
+  #setFormFilterChanges() {
+    const searchBox = this.wContentModal.querySelector('input#api-list-filter-search');
+    searchBox.addEventListener('keyup', (e) => {
+      e.preventDefault();
+      clearTimeout(this.timeoutId);
+      this.timeoutId = setTimeout(() => {
+        this.isModalLoading = true;
+        Store.apiListFilter.search = e.target.value.trim();
+        this.#onPageBinding();
+        this.isModalLoading = false;
+      }, 500);
+    });
+
+    const modeSelect = this.wContentModal.querySelector('select#api-list-filter-mode');
+    modeSelect.addEventListener('change', (e) => {
+      e.preventDefault();
+      this.isModalLoading = true;
+      Store.apiListFilter.mode = e.target.value.trim();
+      this.#onPageBinding();
+      this.isModalLoading = false;
+    });
+
+    const methodSelect = this.wContentModal.querySelector('select#api-list-filter-method');
+    methodSelect.addEventListener('change', (e) => {
+      e.preventDefault();
+      this.isModalLoading = true;
+      Store.apiListFilter.method = e.target.value.trim();
+      this.#onPageBinding();
+      this.isModalLoading = false;
+    });
+
+    const sortSelect = this.wContentModal.querySelector('select#api-list-filter-sort');
+    sortSelect.addEventListener('change', (e) => {
+      e.preventDefault();
+      this.isModalLoading = true;
+      Store.apiListFilter.sort = e.target.value.trim();
+      this.#onPageBinding();
+      this.isModalLoading = false;
+    });
+
+    const sortDirectionSelect = this.wContentModal.querySelector('select#api-list-filter-sort-direction');
+    sortDirectionSelect.addEventListener('change', (e) => {
+      e.preventDefault();
+      this.isModalLoading = true;
+      Store.apiListFilter.sortDirection = e.target.value.trim();
+      this.#onPageBinding();
+      this.isModalLoading = false;
+    });
   }
 
   /**
@@ -919,6 +977,7 @@ export class SwaggerFaster {
     });
 
     this.#setFormItemChanges();
+    this.#setFormFilterChanges();
   }
 
   /**

@@ -62,4 +62,15 @@ export class DefaultFormData {
       { id: crypto.randomUUID(), name: 'host', value: '', isHardSetting: true },
     ];
   }
+
+  /** @type {ApiFilter} The default api filter data */
+  static get defaultApiFilter() {
+    return {
+      search: '',
+      mode: '',
+      method: '',
+      sort: 'createdAt',
+      sortDirection: 'asc',
+    }
+  }
 }

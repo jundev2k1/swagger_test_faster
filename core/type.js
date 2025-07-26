@@ -110,6 +110,15 @@
 // ============ Page data type ====================
 
 /**
+ * @typedef {Object} ApiFilter
+ * @property {string} search - The search keyword.
+ * @property {string} mode - The mode of the API.
+ * @property {string} method - The HTTP method of the API.
+ * @property {string} sort - The field to order by.
+ * @property {string} sortDirection - The direction to order by.
+ */
+
+/**
  * @typedef {[isError: boolean, message: string]} ValidateFieldResult
  * @property { boolean } isError - Whether the form is valid or not.
  * @property { string } message - The error message.

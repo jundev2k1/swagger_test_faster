@@ -352,12 +352,12 @@ export const translate = Object.freeze({
     'vi': 'Phương thức',
     'zh-TW': '方法',
   },
-  'modal.api-list.order.by-created': {
+  'modal.api-list.order-by.createdAt': {
     'en': 'Created At',
     'vi': 'Ngày tạo',
     'zh-TW': '創建時間',
   },
-  'modal.api-list.order.by-updated': {
+  'modal.api-list.order-by.updatedAt': {
     'en': 'Updated At',
     'vi': 'Ngày cập nhật',
     'zh-TW': '更新時間',
