@@ -107,7 +107,7 @@ const ApiSettingForm = ({ id, name, desc, method, endpoint, request, color, isAu
         </div>
       `)}
       <div class="form-group">
-        <label for="api-setting-success-event" class="form-label">${t('modal.api-setting.response')}</label>
+        <label for="api-setting-success-event" class="form-label">${t('modal.api-setting.success-event')}</label>
         <div class="form-control">
           <textarea id="api-setting-success-event" name="successEvent" class="resize-none" data-action="form-input" required>${escapeHTML(successEvent || '')}</textarea>
           <span class="error-message"></span>

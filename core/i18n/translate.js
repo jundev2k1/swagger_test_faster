@@ -277,6 +277,11 @@ export const translate = Object.freeze({
     'vi': 'Đến',
     'zh-TW': '至',
   },
+  'modal.api-setting.success-event': {
+    'en': 'Success Event',
+    'vi': 'Sự kiện thành công',
+    'zh-TW': '成功事件',
+  },
   'modal.env-setting.name': {
     'en': 'Environment Name',
     'vi': 'Tên môi trường',
