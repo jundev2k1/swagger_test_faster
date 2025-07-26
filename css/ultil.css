@@ -1020,10 +1020,6 @@
   resize: none;
 }
 
-#jun-tool textarea#api-setting-request {
-  min-height: 12em;
-}
-
 #jun-tool .form-checkbox {
   width: 16px;
   height: 16px;

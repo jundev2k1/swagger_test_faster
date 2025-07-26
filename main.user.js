@@ -226,7 +226,7 @@ export class SwaggerFaster {
    * @param {actionMode} type Type of action to determine which default data to use
    * @returns {Object} Input object with default values set based on the action type
    */
-  mapToFormData(input, type) {
+  #mapToFormData(input, type) {
     const autoMapping = (input, defaultInput) => {
       const mappingInput = Object.entries(defaultInput)
         .reduce((preValue, [key, value]) => {
@@ -235,6 +235,7 @@ export class SwaggerFaster {
         }, {});
       return mappingInput;
     }
+
     switch (type) {
       case actionMode.API_SETTING:
         return autoMapping(input, DefaultFormData.defaultApiSettingData);
@@ -337,7 +338,7 @@ export class SwaggerFaster {
 
       const field = input.name || input.id;
       const errorMessage = errorMessages.find(err => err.field === field)?.message || '';
-      const errorElement = input.nextElementSibling;
+      const errorElement = input.closest('.form-group').querySelector('.error-message');
 
       if (errorElement && errorElement.classList.contains('error-message')) {
         errorElement.textContent = errorMessage;
@@ -537,19 +538,25 @@ export class SwaggerFaster {
         this.formData.dataSource[event.target.name] = event.target.checked;
         break;
 
+      case 'radio':
+        this.formData.dataSource[event.target.name] = event.target.value;
+        break;
+
       default:
         const value = this.resolveVars(event.target.value.trim());
         const missingReplacers = this.findMissingReplacers(value);
         if (missingReplacers.length > 0) {
           this.#setInputErrorMessage(event, t('validation.missing-replacer', missingReplacers.join(', ')));
-          return;
+          break;
         }
 
         const errorMessage = validator.validateApiSettingItem(event.target.name, value);
         this.#setInputErrorMessage(event, errorMessage);
         this.formData.dataSource[event.target.name] = event.target.value.trim();
-        break;
     }
+
+    if (event.target.name === 'mode')
+      this.#onPageBinding();
   }
 
   /**
@@ -583,7 +590,7 @@ export class SwaggerFaster {
    */
   #saveEnvChanges() {
     const envFormDatas = this.formData.dataSource
-      .map(item => this.mapToFormData(item, actionMode.ENVIRONMENT_SETTINGS));
+      .map(item => this.#mapToFormData(item, actionMode.ENVIRONMENT_SETTINGS));
     const [isEnvFormError, envErrorMessages] = validator.validateEnvSetting(envFormDatas);
     this.#setEnvErrorMessage(envErrorMessages);
     if (isEnvFormError) return;
@@ -604,7 +611,7 @@ export class SwaggerFaster {
    */
   #saveVariableChanges() {
     const varFormDatas = this.formData.dataSource
-      .map(item => this.mapToFormData(item, actionMode.ENVIRONMENT_VARIABLES));
+      .map(item => this.#mapToFormData(item, actionMode.ENVIRONMENT_VARIABLES));
     const [isVariableFormError, varErrorMessages] = validator.validateVariableSetting(varFormDatas);
     this.#setVariableErrorMessage(varErrorMessages);
     if (isVariableFormError) return;
@@ -628,7 +635,7 @@ export class SwaggerFaster {
    * Save API setting changes
    */
   #saveApiSettingChanges() {
-    const apiFormData = this.mapToFormData(this.formData.dataSource, actionMode.API_SETTING);
+    const apiFormData = this.#mapToFormData(this.formData.dataSource, actionMode.API_SETTING);
     const [isApiFormError, apiSettingErrorMessages] = validator.validateApiSetting(this.resolveObjectVars(apiFormData));
     this.#setApiSettingErrorMessage(apiSettingErrorMessages);
     if (isApiFormError) return;
@@ -786,14 +793,6 @@ export class SwaggerFaster {
         this.formData = {
           type: actionMode.ENVIRONMENT_VARIABLES,
           dataSource: [...Store.envVariables.find(item => item.envId === Store.currentEnv)?.items || []],
-        };
-        break;
-
-      default:
-        this.targetId = null;
-        this.formData = {
-          type: '',
-          datasource: {},
         };
         break;
     };

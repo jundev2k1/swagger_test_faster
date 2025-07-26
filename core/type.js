@@ -21,6 +21,7 @@
  * @typedef {Object} ApiSetting
  * @property {string} id - The ID of the API.
  * @property {string} name - The name of the API.
+ * @property {number} priority - The priority of the API.
  * @property {string} desc - The description of the API.
  * @property {string} method - The HTTP method of the API.
  * @property {string} color - The color of the API.
@@ -103,6 +104,7 @@
  * @typedef { Object } ApiSettingMode
  * @property {'api'} API
  * @property {'hub'} HUB
+ * @property {'hub_method'} HUB_METHOD
  */
 
 // ============ Page data type ====================

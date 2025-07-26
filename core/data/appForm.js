@@ -14,6 +14,7 @@ export class DefaultFormData {
     return {
       id: '',
       name: '',
+      priority: 0,
       desc: '',
       mode: ApiSettingMode.API,
       endpoint: '',
@@ -24,6 +25,8 @@ export class DefaultFormData {
       callAfter: 0,
       successEvent: 'console.log(data)',
       isAuth: false,
+      modifiedAt: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
     }
   };
 

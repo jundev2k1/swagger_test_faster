@@ -52,6 +52,11 @@ export const translate = Object.freeze({
     'vi': 'Hub SignalR',
     'zh-TW': 'SignalR Hub',
   },
+  'api.setting.mode.hub-method': {
+    'en': 'Hub Method',
+    'vi': 'Phương thức Hub',
+    'zh-TW': 'Hub 方法',
+  },
   'btn.back': {
     'en': 'Back',
     'vi': 'Trở lại',
@@ -192,6 +197,11 @@ export const translate = Object.freeze({
     'vi': 'Mô tả',
     'zh-TW': '描述',
   },
+  'modal.api-setting.priority': {
+    'en': 'Priority',
+    'vi': 'Độ ưu tiên',
+    'zh-TW': '優先度',
+  },
   'modal.api-setting.request': {
     'en': 'Request',
     'vi': 'Yêu cầu',
@@ -326,6 +336,16 @@ export const translate = Object.freeze({
     'en': 'This field is duplicated.',
     'vi': 'Trường này bị trùng lặp.',
     'zh-TW': '此欄位重複。',
+  },
+  'validation.invalid-value': {
+    'en': 'Invalid value.',
+    'vi': 'Giá trị không hợp lệ.',
+    'zh-TW': '無效的值。',
+  },
+  'validation.invalid-number': {
+    'en': 'Invalid number.',
+    'vi': ' Số không hợp lệ.',
+    'zh-TW': '無效的數字。',
   },
   'message.fetch-api.endpoint-empty': {
     'en': 'No API endpoint provided.',
