@@ -9,6 +9,7 @@ import { $, $$ } from './core/utils/helpers.js';
 import { Toast, UIBuilder, renderJsonFormattedStrict } from './core/ui/index.js';
 import { validator } from './core/form/validate.js';
 import { HttpMethods, actionMode, modalTabs, DefaultFormData, Store } from './core/data/index.js';
+import { config } from './config.js';
 
 export class SwaggerFaster {
   #modalFormIds = Object.freeze({
@@ -30,13 +31,20 @@ export class SwaggerFaster {
     this.targetId = null;
     /** @type {boolean} Page change state */
     this.isPageDataChange = false;
+    /** @type {number|null} Timeout ID */
     this.timeoutId = null;
+    /** @type {string|null} API response */
     this.apiResponse = null;
     /** @type {string} Pre-authentication token, used to store the token before login */
     this.preAuthToken = '';
     /** @type {string} Pre-session key, used to store the session key before login */
     this.preSessionKey = '';
+    /** @type {boolean} Fetching state */
     this.isFetching = false;
+    /** @type {boolean} Modal loading state */
+    this.isModalLoading = false;
+    /** @type {boolean} Sidebar loading state */
+    this.isSidebarLoading = false;
   }
 
   // ================================================
@@ -76,7 +84,7 @@ export class SwaggerFaster {
    * @param {ApiSetting} apiSetting API setting object to fetch 
    */
   async #fetchApiSettings(apiSetting) {
-    const { name, endpoint, method, request, isAuth } = apiSetting || {};
+    const { name, endpoint, method, request, successEvent, isAuth } = apiSetting || {};
     if (!endpoint) {
       console.warn('No API endpoint provided for fetching settings.');
       Toast.warning(t('message.fetch-api.endpoint-empty'));
@@ -91,13 +99,15 @@ export class SwaggerFaster {
           ...(isAuth ? { 'Authorization': `Bearer ${this.preAuthToken}` } : {})
         },
         body: request && method !== HttpMethods.GET
-          ? this.resolveObjectVars(request)
+          ? this.#resolveCookiePattern(this.#resolveObjectVars(request))
           : undefined,
       };
-      const response = await fetch(this.resolveVars(endpoint), option);
+      const response = await fetch(this.#resolveVars(endpoint), option);
       const data = await response.json();
       this.apiResponse = data;
       this.#displayResponseChange();
+
+      if (successEvent.trim()) this.#onFetchSuccess(successEvent);
 
       response.ok && isAuth && this.#autoSetToken(data?.data?.token || '');
 
@@ -113,6 +123,26 @@ export class SwaggerFaster {
     }
   }
 
+  /**
+   * Execute success event
+   * @param {string} successEvent Success event 
+   */
+  #onFetchSuccess(successEvent) {
+    this.apiResponse;
+    try {
+      const script = this.#resolveCookiePattern(this.#resolveVars(successEvent));
+      const onSuccess = new Function('data', 'setStore', script);
+      onSuccess(this.apiResponse, this.#setTempCookie);
+    } catch (error) {
+      console.error('Error executing success event:', error);
+    }
+  }
+
+  /**
+   * Set token
+   * @param {string} token Token 
+   * @param {boolean} isAuth Is auth 
+   */
   #autoSetToken(token = '', isAuth = true) {
     this.preAuthToken = token;
     const swaggerUi = window.ui;
@@ -131,6 +161,9 @@ export class SwaggerFaster {
     }
   }
 
+  /**
+   * Display API response
+   */
   #displayResponseChange() {
     this.btnCopyResponse.disabled = !this.apiResponse;
 
@@ -159,6 +192,71 @@ export class SwaggerFaster {
   }
 
   // ================================================
+  // Cookie Functions
+  // ================================================
+  #resolveObjectCookiePattern(input) {
+    const convert = (obj) => Object.fromEntries(
+      Object.entries(obj).map(([key, val]) => [
+        key,
+        typeof val === 'string' ? this.#resolveCookiePattern(val, '') :
+        typeof val === 'number' ? this.#resolveCookiePattern(val.toString(), 0) :
+        typeof val === 'boolean' ? this.#resolveCookiePattern(val.toString(), false) : val,
+      ])
+    );
+
+    switch (typeof input) {
+      case 'object':
+        return Array.isArray(input)
+          ? input.map(convert)
+          : convert(input);
+
+      case 'string':
+        return this.#resolveVars(input);
+
+      default:
+        return input;
+    }
+  }
+
+  /**
+   * Resolve cookie pattern
+   * @param {string} input Input string to resolve variables 
+   */
+  #resolveCookiePattern(input, defaultValue = '') {
+    return input.replace(/@@(.*?)@@/g, (_, key) => {
+      const raw = this.#getTempCookie(key);
+      if (!raw) return defaultValue;
+      try {
+        const decoded = decodeURIComponent(escape(atob(raw)));
+        return decoded;
+      } catch (e) {
+        return defaultValue;
+      }
+    });
+  }
+  
+  /**
+   * Set temporary cookie
+   * @param {string} key Cookie key
+   * @param {string} value Cookie value
+   */
+  #setTempCookie(key, value) {
+    const encoded = btoa(unescape(encodeURIComponent(value)));
+    const expire = new Date(Date.now() + config.tempCookieExpiry).toUTCString();
+    document.cookie = `${config.tempCookieKey}${key}=${encoded}; expires=${expire}; path=/`;
+  }
+  
+  /**
+   * Get temporary cookie
+   * @param {string} name Cookie name
+   * @returns {string} Cookie value
+   */ 
+  #getTempCookie(name) {
+    const match = document.cookie.match(new RegExp("(^| )" + config.tempCookieKey + name + "=([^;]+)"));
+    return match ? match[2] : '';
+  }
+
+  // ================================================
   // Common Functions
   // ================================================
 
@@ -167,7 +265,7 @@ export class SwaggerFaster {
    * @param {string} input Input string to resolve variables
    * @returns {string} Resolved input string with environment variables replaced
    */
-  resolveVars(input = '') {
+  #resolveVars(input = '') {
     if (!input || !Store.envReplacer || Store.envReplacer.length === 0) return input;
 
     let result = input;
@@ -183,11 +281,11 @@ export class SwaggerFaster {
    * @param {[] | {} | string} input Input array, object or string
    * @returns {string} Resolved input
    */
-  resolveObjectVars(input) {
+  #resolveObjectVars(input) {
     const convert = (obj) => Object.fromEntries(
       Object.entries(obj).map(([key, val]) => [
         key,
-        typeof val === 'string' ? this.resolveVars(val) : val,
+        typeof val === 'string' ? this.#resolveVars(val) : val,
       ])
     );
 
@@ -198,7 +296,7 @@ export class SwaggerFaster {
           : convert(input);
 
       case 'string':
-        return this.resolveVars(input);
+        return this.#resolveVars(input);
 
       default:
         return input;
@@ -210,7 +308,7 @@ export class SwaggerFaster {
    * @param {string} input Input string to search for missing replacers
    * @returns {string[]} Array of missing replacer names
    */
-  findMissingReplacers(input = '') {
+  #findMissingReplacers(input = '') {
     if (!input) return [];
 
     const matches = [...input.matchAll(/\$\{(.*?)\}/g)].map(m => m[1]);
@@ -226,7 +324,7 @@ export class SwaggerFaster {
    * @param {actionMode} type Type of action to determine which default data to use
    * @returns {Object} Input object with default values set based on the action type
    */
-  mapToFormData(input, type) {
+  #mapToFormData(input, type) {
     const autoMapping = (input, defaultInput) => {
       const mappingInput = Object.entries(defaultInput)
         .reduce((preValue, [key, value]) => {
@@ -235,6 +333,7 @@ export class SwaggerFaster {
         }, {});
       return mappingInput;
     }
+
     switch (type) {
       case actionMode.API_SETTING:
         return autoMapping(input, DefaultFormData.defaultApiSettingData);
@@ -337,7 +436,7 @@ export class SwaggerFaster {
 
       const field = input.name || input.id;
       const errorMessage = errorMessages.find(err => err.field === field)?.message || '';
-      const errorElement = input.nextElementSibling;
+      const errorElement = input.closest('.form-group').querySelector('.error-message');
 
       if (errorElement && errorElement.classList.contains('error-message')) {
         errorElement.textContent = errorMessage;
@@ -373,7 +472,16 @@ export class SwaggerFaster {
     if (!targetApi) return;
 
     this.isFetching = true;
-    await this.#fetchApiSettings(targetApi);
+    const refSetting = Store.apiSettings.find(api => api.id === targetApi.refTo);
+    if (!refSetting){
+      await this.#fetchApiSettings(targetApi);
+      return;
+    }
+
+    await this.#fetchApiSettings(refSetting);
+    setTimeout(() => {
+      this.#fetchApiSettings(targetApi);
+    }, targetApi.callAfter || 0);
   }
 
   /**
@@ -530,26 +638,33 @@ export class SwaggerFaster {
    * @param {InputEvent} event Input event for API settings
    */
   #onApiSettingInputChange(event) {
-    if (!event.target.name) return;
+    const inputName = event.target.name;
+    if (!inputName) return;
 
     switch (event.target.type) {
       case 'checkbox':
-        this.formData.dataSource[event.target.name] = event.target.checked;
+        this.formData.dataSource[inputName] = event.target.checked;
+        break;
+
+      case 'radio':
+        this.formData.dataSource[inputName] = event.target.value;
         break;
 
       default:
-        const value = this.resolveVars(event.target.value.trim());
-        const missingReplacers = this.findMissingReplacers(value);
+        const value = this.#resolveCookiePattern(this.#resolveVars(event.target.value.trim()));
+        const missingReplacers = this.#findMissingReplacers(value);
         if (missingReplacers.length > 0) {
           this.#setInputErrorMessage(event, t('validation.missing-replacer', missingReplacers.join(', ')));
-          return;
+          break;
         }
 
-        const errorMessage = validator.validateApiSettingItem(event.target.name, value);
+        const errorMessage = validator.validateApiSettingItem(inputName, value);
         this.#setInputErrorMessage(event, errorMessage);
-        this.formData.dataSource[event.target.name] = event.target.value.trim();
-        break;
+        this.formData.dataSource[inputName] = event.target.value.trim();
     }
+
+    if (inputName === 'mode' || inputName === 'refTo')
+      this.#onPageBinding();
   }
 
   /**
@@ -583,7 +698,7 @@ export class SwaggerFaster {
    */
   #saveEnvChanges() {
     const envFormDatas = this.formData.dataSource
-      .map(item => this.mapToFormData(item, actionMode.ENVIRONMENT_SETTINGS));
+      .map(item => this.#mapToFormData(item, actionMode.ENVIRONMENT_SETTINGS));
     const [isEnvFormError, envErrorMessages] = validator.validateEnvSetting(envFormDatas);
     this.#setEnvErrorMessage(envErrorMessages);
     if (isEnvFormError) return;
@@ -604,7 +719,7 @@ export class SwaggerFaster {
    */
   #saveVariableChanges() {
     const varFormDatas = this.formData.dataSource
-      .map(item => this.mapToFormData(item, actionMode.ENVIRONMENT_VARIABLES));
+      .map(item => this.#mapToFormData(item, actionMode.ENVIRONMENT_VARIABLES));
     const [isVariableFormError, varErrorMessages] = validator.validateVariableSetting(varFormDatas);
     this.#setVariableErrorMessage(varErrorMessages);
     if (isVariableFormError) return;
@@ -628,8 +743,9 @@ export class SwaggerFaster {
    * Save API setting changes
    */
   #saveApiSettingChanges() {
-    const apiFormData = this.mapToFormData(this.formData.dataSource, actionMode.API_SETTING);
-    const [isApiFormError, apiSettingErrorMessages] = validator.validateApiSetting(this.resolveObjectVars(apiFormData));
+    const apiFormData = this.#mapToFormData(this.formData.dataSource, actionMode.API_SETTING);
+    const [isApiFormError, apiSettingErrorMessages] = validator.validateApiSetting(
+      this.#resolveObjectCookiePattern(this.#resolveObjectVars(apiFormData)));
     this.#setApiSettingErrorMessage(apiSettingErrorMessages);
     if (isApiFormError) return;
 
@@ -637,6 +753,7 @@ export class SwaggerFaster {
     if (settingIndex < 0) {
       Store.apiSettings = [apiFormData, ...Store.apiSettings];
     } else {
+      apiFormData.modifiedAt = new Date().toISOString();
       const settings = [...Store.apiSettings];
       settings[settingIndex] = apiFormData;
       Store.apiSettings = [...settings];
@@ -656,6 +773,7 @@ export class SwaggerFaster {
     if (this.isPageDataChange) {
       this.#setFormData();
       this.#clearErrorMessage();
+      Store.apiListFilter = { ...DefaultFormData.defaultApiFilter };
     }
 
     this.btnBack.classList.toggle(
@@ -687,7 +805,7 @@ export class SwaggerFaster {
     this.#onPageChange();
 
     // Set the form data based on the current action
-    const apiActionItems = UIBuilder.createApiActionGroupItems(this.resolveObjectVars(Store.apiSettings));
+    const apiActionItems = UIBuilder.createApiActionGroupItems(this.#resolveObjectVars(Store.apiSettings));
     this.wApiActionGroup.innerHTML = apiActionItems;
 
     // Set the title and modal container based on the current action
@@ -698,7 +816,7 @@ export class SwaggerFaster {
     // Set the content of the modal container based on the current action
     const modalContent = UIBuilder.createContainnerContent(
       this.currentAction,
-      this.resolveObjectVars(this.formData.dataSource),
+      this.#resolveObjectVars(this.formData.dataSource),
       Store.currentEnv);
     const modalContainerUi = UIBuilder.createModalContentContainer(this.currentAction, modalContent);
     this.wContentModal.innerHTML = modalContainerUi;
@@ -711,7 +829,7 @@ export class SwaggerFaster {
   }
 
   // ================================================
-  // Binding Functions
+  // Set form Events
   // ================================================
 
   #setFormItemChanges() {
@@ -726,6 +844,56 @@ export class SwaggerFaster {
 
     const apiSettingControls = targetForm.querySelectorAll('[data-action="form-input"]');
     apiSettingControls.forEach(element => element.addEventListener('change', (e) => this.#onApiSettingInputChange(e)));
+  }
+
+  #setFormFilterChanges() {
+    const searchBox = this.wContentModal.querySelector('input#api-list-filter-search');
+    searchBox?.addEventListener('keyup', (e) => {
+      e.preventDefault();
+      clearTimeout(this.timeoutId);
+      this.timeoutId = setTimeout(() => {
+        this.isModalLoading = true;
+        Store.apiListFilter.search = e.target.value.trim();
+        this.#onPageBinding();
+        this.isModalLoading = false;
+      }, 500);
+    });
+
+    const modeSelect = this.wContentModal.querySelector('select#api-list-filter-mode');
+    modeSelect?.addEventListener('change', (e) => {
+      e.preventDefault();
+      this.isModalLoading = true;
+      Store.apiListFilter.mode = e.target.value.trim();
+      this.#onPageBinding();
+      this.isModalLoading = false;
+    });
+
+    const methodSelect = this.wContentModal.querySelector('select#api-list-filter-method');
+    methodSelect?.addEventListener('change', (e) => {
+      e.preventDefault();
+      this.isModalLoading = true;
+      Store.apiListFilter.method = e.target.value.trim();
+      this.#onPageBinding();
+      this.isModalLoading = false;
+    });
+
+    const sortSelect = this.wContentModal.querySelector('select#api-list-filter-sort');
+    sortSelect?.addEventListener('change', (e) => {
+      e.preventDefault();
+      this.isModalLoading = true;
+      Store.apiListFilter.sort = e.target.value.trim();
+      this.#onPageBinding();
+      this.isModalLoading = false;
+    });
+
+    const sortDirectionSelect = this.wContentModal.querySelector('select#api-list-filter-sort-direction');
+    sortDirectionSelect?.addEventListener('change', (e) => {
+      e.preventDefault();
+      this.isModalLoading = true;
+      Store.apiListFilter.sortDirection = e.target.value.trim();
+      this.#onPageBinding();
+      this.isModalLoading = false;
+    });
   }
 
   /**
@@ -786,14 +954,6 @@ export class SwaggerFaster {
         this.formData = {
           type: actionMode.ENVIRONMENT_VARIABLES,
           dataSource: [...Store.envVariables.find(item => item.envId === Store.currentEnv)?.items || []],
-        };
-        break;
-
-      default:
-        this.targetId = null;
-        this.formData = {
-          type: '',
-          datasource: {},
         };
         break;
     };
@@ -920,6 +1080,7 @@ export class SwaggerFaster {
     });
 
     this.#setFormItemChanges();
+    this.#setFormFilterChanges();
   }
 
   /**

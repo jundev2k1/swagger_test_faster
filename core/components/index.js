@@ -19,3 +19,4 @@ export { default as ApiSettingForm } from './form/ApiSettingForm.js';
 
 // Control
 export { default as EnvDropdownItems } from './control/EnvDropdownOptions.js';
+export { default as SegmentedInput } from './control/SegmentedInput.js';

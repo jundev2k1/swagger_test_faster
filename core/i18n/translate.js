@@ -42,6 +42,21 @@ export const translate = Object.freeze({
     'vi': 'Thông tin',
     'zh-TW': '資訊',
   },
+  'api.setting.mode.api': {
+    'en': 'Call API',
+    'vi': 'Gọi API',
+    'zh-TW': '呼叫 API',
+  },
+  'api.setting.mode.hub': {
+    'en': 'SignalR Hub',
+    'vi': 'Hub SignalR',
+    'zh-TW': 'SignalR Hub',
+  },
+  'api.setting.mode.hub-method': {
+    'en': 'Hub Method',
+    'vi': 'Phương thức Hub',
+    'zh-TW': 'Hub 方法',
+  },
   'btn.back': {
     'en': 'Back',
     'vi': 'Trở lại',
@@ -86,6 +101,11 @@ export const translate = Object.freeze({
     'en': 'Failed to copy to clipboard.',
     'vi': 'Sao chép vào clipboard thất bại.',
     'zh-TW': '無法複製到剪貼簿。',
+  },
+  'tooltip.copy-insert': {
+    'en': 'Copy and insert',
+    'vi': 'Sao chép và thêm',
+    'zh-TW': '複製並插入',
   },
   'dialog.confirm-save': {
     'en': 'Do you want to save changes before closing?',
@@ -182,6 +202,11 @@ export const translate = Object.freeze({
     'vi': 'Mô tả',
     'zh-TW': '描述',
   },
+  'modal.api-setting.priority': {
+    'en': 'Priority',
+    'vi': 'Độ ưu tiên',
+    'zh-TW': '優先度',
+  },
   'modal.api-setting.request': {
     'en': 'Request',
     'vi': 'Yêu cầu',
@@ -191,11 +216,6 @@ export const translate = Object.freeze({
     'en': 'Endpoint',
     'vi': 'Điểm cuối',
     'zh-TW': '端點',
-  },
-  'modal.api-setting.response': {
-    'en': 'Response',
-    'vi': 'Phản hồi',
-    'zh-TW': '回應',
   },
   'modal.api-setting.color': {
     'en': 'Color',
@@ -211,6 +231,31 @@ export const translate = Object.freeze({
     'en': 'Auto-set token after successful request?',
     'vi': 'Tự động cài đặt token sau khi yêu cầu thành công?',
     'zh-TW': '請求成功後自動設置令牌？',
+  },
+  'modal.api-setting.mode': {
+    'en': 'Mode',
+    'vi': 'Chế độ',
+    'zh-TW': '模式',
+  },
+  'modal.api-setting.ref': {
+    'en': 'Reference API',
+    'vi': 'Tham chiếu đến API',
+    'zh-TW': '參考 API',
+  },
+  'modal.api-setting.ref.prefix': {
+    'en': 'API Name',
+    'vi': 'Tên API',
+    'zh-TW': 'API 名稱',
+  },
+  'modal.api-setting.ref.none': {
+    'en': 'None',
+    'vi': 'Không chỉ định',
+    'zh-TW': '無',
+  },
+  'modal.api-setting.call-after': {
+    'en': 'Call Again After (ms)',
+    'vi': 'Gọi lại sau (ms)',
+    'zh-TW': '再次呼叫 (毫秒)',
   },
   'modal.api-list.empty': {
     'en': 'No APIs found. Please add a new API.',
@@ -242,10 +287,115 @@ export const translate = Object.freeze({
     'vi': 'Hành động',
     'zh-TW': '操作',
   },
+  'modal.api-list.filter.search': {
+    'en': 'Search',
+    'vi': 'Tìm kiếm',
+    'zh-TW': '搜索',
+  },
+  'modal.api-list.filter-all': {
+    'en': 'All',
+    'vi': 'Tất cả',
+    'zh-TW': '全部',
+  },
+  'modal.api-list.filter.mode-api': {
+    'en': 'API',
+    'vi': 'API',
+    'zh-TW': 'API',
+  },
+  'modal.api-list.filter.mode-hub': {
+    'en': 'HUB',
+    'vi': 'HUB',
+    'zh-TW': 'HUB',
+  },
+  'modal.api-list.filter.mode-hub_method': {
+    'en': 'HUB Method',
+    'vi': 'HUB Phương thức',
+    'zh-TW': 'HUB 方法',
+  },
+  'modal.api-list.filter.method': {
+    'en': 'Method',
+    'vi': 'Phương thức',
+    'zh-TW': '方法',
+  },
+  'modal.api-list.order-by': {
+    'en': 'Order By',
+    'vi': 'Sắp xếp theo',
+    'zh-TW': '排序方式',
+  },
+  'modal.api-list.order-by.name': {
+    'en': 'Name',
+    'vi': 'Tên',
+    'zh-TW': '名稱',
+  },
+  'modal.api-list.order-by.endpoint': {
+    'en': 'Endpoint',
+    'vi': 'Điểm cuối',
+    'zh-TW': '端點',
+  },
+  'modal.api-list.order-by.priority': {
+    'en': 'Priority',
+    'vi': 'Thuật tố',
+    'zh-TW': '優先順序',
+  },
+  'modal.api-list.order-by.color': {
+    'en': 'Color',
+    'vi': 'Màu sắc',
+    'zh-TW': '顏色',
+  },
+  'modal.api-list.order-by.mode': {
+    'en': 'Mode',
+    'vi': 'Chế độ',
+    'zh-TW': '模式',
+  },
+  'modal.api-list.order-by.method': {
+    'en': 'Method',
+    'vi': 'Phương thức',
+    'zh-TW': '方法',
+  },
+  'modal.api-list.order-by.createdAt': {
+    'en': 'Created At',
+    'vi': 'Ngày tạo',
+    'zh-TW': '創建時間',
+  },
+  'modal.api-list.order-by.updatedAt': {
+    'en': 'Updated At',
+    'vi': 'Ngày cập nhật',
+    'zh-TW': '更新時間',
+  },
+  'modal.api-list.order-by.asc': {
+    'en': 'Ascending',
+    'vi': 'Tăng dần',
+    'zh-TW': '升序',
+  },
+  'modal.api-list.order-by.desc': {
+    'en': 'Descending',
+    'vi': 'Giảm dần',
+    'zh-TW': '降序',
+  },
   'modal.api-list-item.endpoint-to': {
     'en': 'To',
     'vi': 'Đến',
     'zh-TW': '至',
+  },
+  'modal.api-list-item.mode.api': {
+    'en': 'API',
+    'vi': 'API',
+    'zh-TW': 'API',
+  },
+  'modal.api-list-item.mode.hub': {
+    'en': 'HUB',
+    'vi': 'HUB',
+    'zh-TW': 'HUB',
+  },
+  'modal.api-list-item.mode.hub_method': {
+    'en': 'HUB METHOD',
+    'vi': 'HUB METHOD',
+    'zh-TW': 'HUB 方法',
+  },
+  'modal.api-setting.success-event': {
+    'en': 'Success Event',
+    'vi': 'Sự kiện thành công',
+    'zh-TW': '成功事件',
   },
   'modal.env-setting.name': {
     'en': 'Environment Name',
@@ -291,6 +441,16 @@ export const translate = Object.freeze({
     'en': 'This field is duplicated.',
     'vi': 'Trường này bị trùng lặp.',
     'zh-TW': '此欄位重複。',
+  },
+  'validation.invalid-value': {
+    'en': 'Invalid value.',
+    'vi': 'Giá trị không hợp lệ.',
+    'zh-TW': '無效的值。',
+  },
+  'validation.invalid-number': {
+    'en': 'Invalid number.',
+    'vi': ' Số không hợp lệ.',
+    'zh-TW': '無效的數字。',
   },
   'message.fetch-api.endpoint-empty': {
     'en': 'No API endpoint provided.',

@@ -21,12 +21,19 @@
  * @typedef {Object} ApiSetting
  * @property {string} id - The ID of the API.
  * @property {string} name - The name of the API.
+ * @property {number} priority - The priority of the API.
  * @property {string} desc - The description of the API.
  * @property {string} method - The HTTP method of the API.
  * @property {string} color - The color of the API.
  * @property {string} endpoint - The endpoint of the API.
  * @property {string} request - The request of the API.
  * @property {boolean} isAuth - Whether the API is authenticated or not.
+ * @property {string} mode - The mode of the API.
+ * @property {string} refTo - The ID of the API to reference.
+ * @property {number} callAfter - The delay time before calling the API.
+ * @property {string} successEvent - The event to execute when the API is successful.
+ * @property {string} modifiedAt - The last modified date of the API.
+ * @property {string} createdAt - The created date of the API.
  */
 
 /**
@@ -94,9 +101,24 @@
  * @typedef { Object } ColorOption
  * @property { ColorEnum } value ColorEnum (Primary, Secondary, Success, Danger, Warning, Info)
  * @property { string } translateKey Key of the translation
+ * 
+ * - API setting modes
+ * @typedef { Object } ApiSettingMode
+ * @property {'api'} API
+ * @property {'hub'} HUB
+ * @property {'hub_method'} HUB_METHOD
  */
 
 // ============ Page data type ====================
+
+/**
+ * @typedef {Object} ApiFilter
+ * @property {string} search - The search keyword.
+ * @property {string} mode - The mode of the API.
+ * @property {string} method - The HTTP method of the API.
+ * @property {string} sort - The field to order by.
+ * @property {string} sortDirection - The direction to order by.
+ */
 
 /**
  * @typedef {[isError: boolean, message: string]} ValidateFieldResult

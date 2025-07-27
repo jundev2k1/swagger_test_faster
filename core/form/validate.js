@@ -5,7 +5,7 @@
 // ===============================================
 
 import { t } from '../i18n/translate.js';
-import { ColorEnums, HttpMethods } from '../data/constants.js';
+import { ApiSettingMode, ColorEnums, HttpMethods } from '../data/constants.js';
 
 /**
  * Validator for form inputs and settings.
@@ -22,11 +22,23 @@ export const validator = (() => {
   }
 
   /**
+   * Validate if a value is a number.
+   * @param {string} value Number value to validate
+   * @returns {ValidateFieldResult} Validation result.
+   */
+  const isNumber = (value) => {
+    const isValid = !isNaN(parseFloat(value)) && isFinite(value);
+    return [isValid, isValid ? '' : t('validation.invalid-number')];
+  }
+
+  /**
    * Validate if a value is a valid URL.
    * @param {string} value URL value to validate
    * @returns {ValidateFieldResult} Validation result.
    */
   const isValidUrl = (value) => {
+    if (value.trim() === '') return [true, ''];
+
     try {
       new URL(value);
       return [true, ''];
@@ -102,12 +114,26 @@ export const validator = (() => {
     return [duplicateRow.length === 0, duplicateRow];
   }
 
+  /**
+   * Check if a value does not exist in a data source array.
+   * @param {Array} dataSource - The array to check for the value.
+   * @param {*} value - The value to check for existence in the data source.
+   * @returns {[boolean, string]} A tuple where the first element is a boolean indicating whether the value does not exist
+   * in the data source, and the second element is an error message if the value exists.
+   */
+  const isNotExistValue = (dataSource = [], value) => {
+    const isNotExist = !dataSource.includes(value);
+    return [isNotExist, isNotExist ? t('validation.invalid-value') : ''];
+  }
+
   const apiSettingValidations = Object.freeze({
     name: [isRequired],
-    endpoint: [isRequired, isValidUrl],
+    priority: [isRequired, isNumber],
+    endpoint: [isValidUrl],
     method: [isValidHttpMethod],
     color: [isValidColor],
     request: [isValidJson],
+    mode: [isRequired, (value) => isNotExistValue(Object.values(ApiSettingMode), value)],
   });
   const envSettingValidations = Object.freeze({
     id: [isRequired],
@@ -164,7 +190,6 @@ export const validator = (() => {
       const hasError = errors.length > 0;
       return [hasError, errors];
     },
-    
     /**
      * Validate an API setting object against the default validation rules.
      * @param {ApiSetting} formData Form input data to validate
@@ -173,7 +198,6 @@ export const validator = (() => {
     validateApiSetting(formData) {
       return this.validate(formData, apiSettingValidations);
     },
-    
     /**
      * Validate a single field of an API setting against the default validation rules.
      * @param {string} name The name of the field to validate
@@ -185,7 +209,7 @@ export const validator = (() => {
         ?.map((callback) => callback(value)[1])
         .filter(error => error && error !== '')
         .join(', ');
-      return result;
+      return result || '';
     },
     /**
      * Validate a list of environment variable settings against the default validation rules.
