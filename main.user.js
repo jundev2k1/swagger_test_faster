@@ -651,6 +651,7 @@ export class SwaggerFaster {
     if (settingIndex < 0) {
       Store.apiSettings = [apiFormData, ...Store.apiSettings];
     } else {
+      apiFormData.modifiedAt = new Date().toISOString();
       const settings = [...Store.apiSettings];
       settings[settingIndex] = apiFormData;
       Store.apiSettings = [...settings];
@@ -745,7 +746,7 @@ export class SwaggerFaster {
 
   #setFormFilterChanges() {
     const searchBox = this.wContentModal.querySelector('input#api-list-filter-search');
-    searchBox.addEventListener('keyup', (e) => {
+    searchBox?.addEventListener('keyup', (e) => {
       e.preventDefault();
       clearTimeout(this.timeoutId);
       this.timeoutId = setTimeout(() => {
@@ -757,7 +758,7 @@ export class SwaggerFaster {
     });
 
     const modeSelect = this.wContentModal.querySelector('select#api-list-filter-mode');
-    modeSelect.addEventListener('change', (e) => {
+    modeSelect?.addEventListener('change', (e) => {
       e.preventDefault();
       this.isModalLoading = true;
       Store.apiListFilter.mode = e.target.value.trim();
@@ -766,7 +767,7 @@ export class SwaggerFaster {
     });
 
     const methodSelect = this.wContentModal.querySelector('select#api-list-filter-method');
-    methodSelect.addEventListener('change', (e) => {
+    methodSelect?.addEventListener('change', (e) => {
       e.preventDefault();
       this.isModalLoading = true;
       Store.apiListFilter.method = e.target.value.trim();
@@ -775,7 +776,7 @@ export class SwaggerFaster {
     });
 
     const sortSelect = this.wContentModal.querySelector('select#api-list-filter-sort');
-    sortSelect.addEventListener('change', (e) => {
+    sortSelect?.addEventListener('change', (e) => {
       e.preventDefault();
       this.isModalLoading = true;
       Store.apiListFilter.sort = e.target.value.trim();
@@ -784,7 +785,7 @@ export class SwaggerFaster {
     });
 
     const sortDirectionSelect = this.wContentModal.querySelector('select#api-list-filter-sort-direction');
-    sortDirectionSelect.addEventListener('change', (e) => {
+    sortDirectionSelect?.addEventListener('change', (e) => {
       e.preventDefault();
       this.isModalLoading = true;
       Store.apiListFilter.sortDirection = e.target.value.trim();

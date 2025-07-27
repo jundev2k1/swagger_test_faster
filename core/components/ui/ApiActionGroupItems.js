@@ -35,7 +35,18 @@ const ApiActionGroupItems = (datasource = []) => {
     `;
   };
 
-  return datasource.filter(s => s.mode === ApiSettingMode.API).map(generateApiActionGroupItemHtml).join('') || '';
+  return datasource.filter(s => s.mode === ApiSettingMode.API).sort((a, b) => {
+    if (a.priority < b.priority) return -1;
+    if (a.priority > b.priority) return 1;
+
+    debugger
+    const aDate = new Date(a.modifiedAt);
+    const bDate = new Date(b.modifiedAt);
+    if (aDate > bDate) return -1;
+    if (aDate < bDate) return 1;
+    
+    return 0;
+  }).map(generateApiActionGroupItemHtml).join('') || '';
 }
 
 export default ApiActionGroupItems;
