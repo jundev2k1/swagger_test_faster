@@ -39,7 +39,6 @@ const ApiActionGroupItems = (datasource = []) => {
     if (a.priority < b.priority) return -1;
     if (a.priority > b.priority) return 1;
 
-    debugger
     const aDate = new Date(a.modifiedAt);
     const bDate = new Date(b.modifiedAt);
     if (aDate > bDate) return -1;

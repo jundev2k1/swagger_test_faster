@@ -6,9 +6,10 @@
 
 import { t } from './core/i18n/translate.js';
 import { $, $$ } from './core/utils/helpers.js';
-import { Toast, UIBuilder } from './core/ui/index.js';
+import { Toast, UIBuilder, renderJsonFormattedStrict } from './core/ui/index.js';
 import { validator } from './core/form/validate.js';
 import { HttpMethods, actionMode, modalTabs, DefaultFormData, Store } from './core/data/index.js';
+import { config } from './config.js';
 
 export class SwaggerFaster {
   #modalFormIds = Object.freeze({
@@ -83,7 +84,7 @@ export class SwaggerFaster {
    * @param {ApiSetting} apiSetting API setting object to fetch 
    */
   async #fetchApiSettings(apiSetting) {
-    const { name, endpoint, method, request, isAuth } = apiSetting || {};
+    const { name, endpoint, method, request, successEvent, isAuth } = apiSetting || {};
     if (!endpoint) {
       console.warn('No API endpoint provided for fetching settings.');
       Toast.warning(t('message.fetch-api.endpoint-empty'));
@@ -98,13 +99,15 @@ export class SwaggerFaster {
           ...(isAuth ? { 'Authorization': `Bearer ${this.preAuthToken}` } : {})
         },
         body: request && method !== HttpMethods.GET
-          ? this.resolveObjectVars(request)
+          ? this.#resolveCookiePattern(this.#resolveObjectVars(request))
           : undefined,
       };
-      const response = await fetch(this.resolveVars(endpoint), option);
+      const response = await fetch(this.#resolveVars(endpoint), option);
       const data = await response.json();
       this.apiResponse = data;
       this.#displayResponseChange();
+
+      if (successEvent.trim()) this.#onFetchSuccess(successEvent);
 
       response.ok && isAuth && this.#autoSetToken(data?.data?.token || '');
 
@@ -120,6 +123,26 @@ export class SwaggerFaster {
     }
   }
 
+  /**
+   * Execute success event
+   * @param {string} successEvent Success event 
+   */
+  #onFetchSuccess(successEvent) {
+    this.apiResponse;
+    try {
+      const script = this.#resolveCookiePattern(this.#resolveVars(successEvent));
+      const onSuccess = new Function('data', 'setStore', script);
+      onSuccess(this.apiResponse, this.#setTempCookie);
+    } catch (error) {
+      console.error('Error executing success event:', error);
+    }
+  }
+
+  /**
+   * Set token
+   * @param {string} token Token 
+   * @param {boolean} isAuth Is auth 
+   */
   #autoSetToken(token = '', isAuth = true) {
     this.preAuthToken = token;
     const swaggerUi = window.ui;
@@ -138,6 +161,9 @@ export class SwaggerFaster {
     }
   }
 
+  /**
+   * Display API response
+   */
   #displayResponseChange() {
     this.btnCopyResponse.disabled = !this.apiResponse;
 
@@ -146,7 +172,7 @@ export class SwaggerFaster {
       return;
     }
 
-    const jsonContent = renderJSONFormattedStrict(this.apiResponse);
+    const jsonContent = renderJsonFormattedStrict(this.apiResponse);
     this.wApiResponse.innerHTML = jsonContent.innerHTML;
     this.wApiResponse.querySelectorAll('.copyable').forEach(element => {
       element.addEventListener('click', (event) => {
@@ -166,6 +192,71 @@ export class SwaggerFaster {
   }
 
   // ================================================
+  // Cookie Functions
+  // ================================================
+  #resolveObjectCookiePattern(input) {
+    const convert = (obj) => Object.fromEntries(
+      Object.entries(obj).map(([key, val]) => [
+        key,
+        typeof val === 'string' ? this.#resolveCookiePattern(val, '') :
+        typeof val === 'number' ? this.#resolveCookiePattern(val.toString(), 0) :
+        typeof val === 'boolean' ? this.#resolveCookiePattern(val.toString(), false) : val,
+      ])
+    );
+
+    switch (typeof input) {
+      case 'object':
+        return Array.isArray(input)
+          ? input.map(convert)
+          : convert(input);
+
+      case 'string':
+        return this.#resolveVars(input);
+
+      default:
+        return input;
+    }
+  }
+
+  /**
+   * Resolve cookie pattern
+   * @param {string} input Input string to resolve variables 
+   */
+  #resolveCookiePattern(input, defaultValue = '') {
+    return input.replace(/@@(.*?)@@/g, (_, key) => {
+      const raw = this.#getTempCookie(key);
+      if (!raw) return defaultValue;
+      try {
+        const decoded = decodeURIComponent(escape(atob(raw)));
+        return decoded;
+      } catch (e) {
+        return defaultValue;
+      }
+    });
+  }
+  
+  /**
+   * Set temporary cookie
+   * @param {string} key Cookie key
+   * @param {string} value Cookie value
+   */
+  #setTempCookie(key, value) {
+    const encoded = btoa(unescape(encodeURIComponent(value)));
+    const expire = new Date(Date.now() + config.tempCookieExpiry).toUTCString();
+    document.cookie = `${config.tempCookieKey}${key}=${encoded}; expires=${expire}; path=/`;
+  }
+  
+  /**
+   * Get temporary cookie
+   * @param {string} name Cookie name
+   * @returns {string} Cookie value
+   */ 
+  #getTempCookie(name) {
+    const match = document.cookie.match(new RegExp("(^| )" + config.tempCookieKey + name + "=([^;]+)"));
+    return match ? match[2] : '';
+  }
+
+  // ================================================
   // Common Functions
   // ================================================
 
@@ -174,7 +265,7 @@ export class SwaggerFaster {
    * @param {string} input Input string to resolve variables
    * @returns {string} Resolved input string with environment variables replaced
    */
-  resolveVars(input = '') {
+  #resolveVars(input = '') {
     if (!input || !Store.envReplacer || Store.envReplacer.length === 0) return input;
 
     let result = input;
@@ -190,11 +281,11 @@ export class SwaggerFaster {
    * @param {[] | {} | string} input Input array, object or string
    * @returns {string} Resolved input
    */
-  resolveObjectVars(input) {
+  #resolveObjectVars(input) {
     const convert = (obj) => Object.fromEntries(
       Object.entries(obj).map(([key, val]) => [
         key,
-        typeof val === 'string' ? this.resolveVars(val) : val,
+        typeof val === 'string' ? this.#resolveVars(val) : val,
       ])
     );
 
@@ -205,7 +296,7 @@ export class SwaggerFaster {
           : convert(input);
 
       case 'string':
-        return this.resolveVars(input);
+        return this.#resolveVars(input);
 
       default:
         return input;
@@ -217,7 +308,7 @@ export class SwaggerFaster {
    * @param {string} input Input string to search for missing replacers
    * @returns {string[]} Array of missing replacer names
    */
-  findMissingReplacers(input = '') {
+  #findMissingReplacers(input = '') {
     if (!input) return [];
 
     const matches = [...input.matchAll(/\$\{(.*?)\}/g)].map(m => m[1]);
@@ -381,7 +472,16 @@ export class SwaggerFaster {
     if (!targetApi) return;
 
     this.isFetching = true;
-    await this.#fetchApiSettings(targetApi);
+    const refSetting = Store.apiSettings.find(api => api.id === targetApi.refTo);
+    if (!refSetting){
+      await this.#fetchApiSettings(targetApi);
+      return;
+    }
+
+    await this.#fetchApiSettings(refSetting);
+    setTimeout(() => {
+      this.#fetchApiSettings(targetApi);
+    }, targetApi.callAfter || 0);
   }
 
   /**
@@ -538,31 +638,32 @@ export class SwaggerFaster {
    * @param {InputEvent} event Input event for API settings
    */
   #onApiSettingInputChange(event) {
-    if (!event.target.name) return;
+    const inputName = event.target.name;
+    if (!inputName) return;
 
     switch (event.target.type) {
       case 'checkbox':
-        this.formData.dataSource[event.target.name] = event.target.checked;
+        this.formData.dataSource[inputName] = event.target.checked;
         break;
 
       case 'radio':
-        this.formData.dataSource[event.target.name] = event.target.value;
+        this.formData.dataSource[inputName] = event.target.value;
         break;
 
       default:
-        const value = this.resolveVars(event.target.value.trim());
-        const missingReplacers = this.findMissingReplacers(value);
+        const value = this.#resolveCookiePattern(this.#resolveVars(event.target.value.trim()));
+        const missingReplacers = this.#findMissingReplacers(value);
         if (missingReplacers.length > 0) {
           this.#setInputErrorMessage(event, t('validation.missing-replacer', missingReplacers.join(', ')));
           break;
         }
 
-        const errorMessage = validator.validateApiSettingItem(event.target.name, value);
+        const errorMessage = validator.validateApiSettingItem(inputName, value);
         this.#setInputErrorMessage(event, errorMessage);
-        this.formData.dataSource[event.target.name] = event.target.value.trim();
+        this.formData.dataSource[inputName] = event.target.value.trim();
     }
 
-    if (event.target.name === 'mode')
+    if (inputName === 'mode' || inputName === 'refTo')
       this.#onPageBinding();
   }
 
@@ -643,7 +744,8 @@ export class SwaggerFaster {
    */
   #saveApiSettingChanges() {
     const apiFormData = this.#mapToFormData(this.formData.dataSource, actionMode.API_SETTING);
-    const [isApiFormError, apiSettingErrorMessages] = validator.validateApiSetting(this.resolveObjectVars(apiFormData));
+    const [isApiFormError, apiSettingErrorMessages] = validator.validateApiSetting(
+      this.#resolveObjectCookiePattern(this.#resolveObjectVars(apiFormData)));
     this.#setApiSettingErrorMessage(apiSettingErrorMessages);
     if (isApiFormError) return;
 
@@ -703,7 +805,7 @@ export class SwaggerFaster {
     this.#onPageChange();
 
     // Set the form data based on the current action
-    const apiActionItems = UIBuilder.createApiActionGroupItems(this.resolveObjectVars(Store.apiSettings));
+    const apiActionItems = UIBuilder.createApiActionGroupItems(this.#resolveObjectVars(Store.apiSettings));
     this.wApiActionGroup.innerHTML = apiActionItems;
 
     // Set the title and modal container based on the current action
@@ -714,7 +816,7 @@ export class SwaggerFaster {
     // Set the content of the modal container based on the current action
     const modalContent = UIBuilder.createContainnerContent(
       this.currentAction,
-      this.resolveObjectVars(this.formData.dataSource),
+      this.#resolveObjectVars(this.formData.dataSource),
       Store.currentEnv);
     const modalContainerUi = UIBuilder.createModalContentContainer(this.currentAction, modalContent);
     this.wContentModal.innerHTML = modalContainerUi;
@@ -1055,7 +1157,7 @@ export class SwaggerFaster {
       e.preventDefault();
       if (!this.apiResponse) return;
 
-      navigator.clipboard.writeText(JSON.stringify(this.apiResponse))
+      navigator.clipboard.writeText(JSON.stringify(this.apiResponse, null, 2))
         .then(() => {
           Toast.success(t('tooltip.copy.success'));
         }).catch(() => {

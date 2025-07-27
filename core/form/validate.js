@@ -190,7 +190,6 @@ export const validator = (() => {
       const hasError = errors.length > 0;
       return [hasError, errors];
     },
-
     /**
      * Validate an API setting object against the default validation rules.
      * @param {ApiSetting} formData Form input data to validate
@@ -199,7 +198,6 @@ export const validator = (() => {
     validateApiSetting(formData) {
       return this.validate(formData, apiSettingValidations);
     },
-
     /**
      * Validate a single field of an API setting against the default validation rules.
      * @param {string} name The name of the field to validate
@@ -211,7 +209,7 @@ export const validator = (() => {
         ?.map((callback) => callback(value)[1])
         .filter(error => error && error !== '')
         .join(', ');
-      return result;
+      return result || '';
     },
     /**
      * Validate a list of environment variable settings against the default validation rules.
