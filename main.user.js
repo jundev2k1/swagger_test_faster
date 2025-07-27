@@ -41,8 +41,8 @@ export class SwaggerFaster {
     this.preSessionKey = '';
     /** @type {boolean} Fetching state */
     this.isFetching = false;
-    /** @type {boolean} Modal loading state */
-    this.isModalLoading = false;
+    /** @type {boolean} Modal searching state */
+    this.isSearching = false;
     /** @type {boolean} Sidebar loading state */
     this.isSidebarLoading = false;
   }
@@ -852,47 +852,57 @@ export class SwaggerFaster {
       e.preventDefault();
       clearTimeout(this.timeoutId);
       this.timeoutId = setTimeout(() => {
-        this.isModalLoading = true;
-        Store.apiListFilter.search = e.target.value.trim();
+        this.isSearching = true;
+        const filter = {...Store.apiListFilter};
+        filter.search = e.target.value.trim();
+        Store.apiListFilter = filter;
         this.#onPageBinding();
-        this.isModalLoading = false;
+        this.isSearching = false;
       }, 500);
     });
 
     const modeSelect = this.wContentModal.querySelector('select#api-list-filter-mode');
     modeSelect?.addEventListener('change', (e) => {
       e.preventDefault();
-      this.isModalLoading = true;
-      Store.apiListFilter.mode = e.target.value.trim();
+      this.isSearching = true;
+      const filter = {...Store.apiListFilter};
+      filter.mode = e.target.value.trim();
+      Store.apiListFilter = filter;
       this.#onPageBinding();
-      this.isModalLoading = false;
+      this.isSearching = false;
     });
 
     const methodSelect = this.wContentModal.querySelector('select#api-list-filter-method');
     methodSelect?.addEventListener('change', (e) => {
       e.preventDefault();
-      this.isModalLoading = true;
-      Store.apiListFilter.method = e.target.value.trim();
+      this.isSearching = true;
+      const filter = {...Store.apiListFilter};
+      filter.method = e.target.value.trim();
+      Store.apiListFilter = filter;
       this.#onPageBinding();
-      this.isModalLoading = false;
+      this.isSearching = false;
     });
 
-    const sortSelect = this.wContentModal.querySelector('select#api-list-filter-sort');
+    const sortSelect = this.wContentModal.querySelector('select#api-list-order-by-key');
     sortSelect?.addEventListener('change', (e) => {
       e.preventDefault();
-      this.isModalLoading = true;
-      Store.apiListFilter.sort = e.target.value.trim();
+      this.isSearching = true;
+      const filter = {...Store.apiListFilter};
+      filter.sort = e.target.value.trim();
+      Store.apiListFilter = filter;
       this.#onPageBinding();
-      this.isModalLoading = false;
+      this.isSearching = false;
     });
 
-    const sortDirectionSelect = this.wContentModal.querySelector('select#api-list-filter-sort-direction');
+    const sortDirectionSelect = this.wContentModal.querySelector('select#api-list-order-by-direction');
     sortDirectionSelect?.addEventListener('change', (e) => {
       e.preventDefault();
-      this.isModalLoading = true;
-      Store.apiListFilter.sortDirection = e.target.value.trim();
+      this.isSearching = true;
+      const filter = {...Store.apiListFilter};
+      filter.sortDirection = e.target.value.trim();
+      Store.apiListFilter = filter;
       this.#onPageBinding();
-      this.isModalLoading = false;
+      this.isSearching = false;
     });
   }
 

@@ -17,7 +17,7 @@ import { Store } from '../../data/store.js';
  * @param {'asc' | 'desc'} direction - Direction (default: asc)
  * @returns {ApiSetting[]} Sorted API list
  */
-function sortApiList(apiList, orderByField, direction = 'asc') {
+function sortApiList(apiList, orderByField = 'createdAt', direction = 'desc') {
   if (!orderByField) return apiList;
 
   const multiplier = direction === 'desc' ? -1 : 1;
@@ -64,7 +64,7 @@ const getsByFilter = (dataSource) => {
         || s.desc.toLowerCase().includes(filter.search.toLowerCase()))
       && (filter.mode === '' || s.mode === filter.mode)
       && (filter.method === '' || s.method === filter.method));
-  return sortApiList(filteredDataSource, filter.orderBy, filter.orderDirection);
+  return sortApiList(filteredDataSource, filter.sort, filter.sortDirection);
 };
 
 /**

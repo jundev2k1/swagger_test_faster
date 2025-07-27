@@ -7,6 +7,7 @@
 import { t } from '../../i18n/translate.js';
 import { actionMode, ApiSettingMode, HttpMethods } from '../../data/constants.js';
 import { Store } from '../../data/store.js';
+import { escapeHTML } from '../../utils/helpers.js';
 
 /**
  * Render the modal content container based on the current action mode.
@@ -39,9 +40,9 @@ const ModalContentContainer = (action = actionMode.LOBBY, innerHTML = '') => {
       return `
         <div id="api-list-layout">
           <div class="api-list-filter mb-3 grid-4 gap-1">
-            <input id="api-list-filter-search" class="form-input span-4" placeholder="${t('modal.api-list.filter.search')}">
+            <input id="api-list-filter-search" class="form-input span-4" value="${escapeHTML(Store.apiListFilter.search)}" placeholder="${t('modal.api-list.filter.search')}">
             <select id="api-list-filter-mode" class="form-select">
-              <option value="all">${t('modal.api-list.filter-all')}</option>
+              <option value="">${t('modal.api-list.filter-all')}</option>
               ${Object.entries(ApiSettingMode).map(([key, value]) => `
                 <option value="${value}" ${value === Store.apiListFilter.mode ? 'selected' : ''}>
                   ${t(`modal.api-list.filter.mode-${key.toLowerCase()}`)}
@@ -49,9 +50,9 @@ const ModalContentContainer = (action = actionMode.LOBBY, innerHTML = '') => {
               `).join('')}
             </select>
             <select id="api-list-filter-method" class="form-select">
-              <option value="all">${t('modal.api-list.filter.method')}</option>
+              <option value="">${t('modal.api-list.filter.method')}</option>
               ${Object.entries(HttpMethods).map(([key, value]) => `
-                <option value="${value}">${key}</option>
+                <option value="${value}" ${value === Store.apiListFilter.method ? 'selected' : ''}>${key}</option>
               `).join('')}
             </select>
             <select id="api-list-order-by-key" class="form-select">
