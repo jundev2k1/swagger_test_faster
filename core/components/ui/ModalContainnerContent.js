@@ -19,14 +19,14 @@ import { default as ModalEnvVariableForm } from '../form/EnvVariableForm.js';
  * @param {ApiSetting[] | ApiSetting | EnvSetting[] | EnvVariableItem[]} [dataSource] Data source for the modal
  * @returns {string} HTML content of the modal containner
  */
-const ModalContainnerContent = (action = actionMode.LOBBY, dataSource) => {
+const ModalContainnerContent = (action = actionMode.SIDEBAR_API, dataSource) => {
   switch (action) {
     /**
      * Render API list for the modal containner
      * @param {ApiSetting[]} [dataSource] Data source for the API list
      * @returns {string} HTML content of the API list
      */
-    case actionMode.API_LIST:
+    case actionMode.MODAL_API_LIST:
       return ModalApiListItem(dataSource) || `<div class="empty-state">${t('modal.api-list.empty')}</div>`;
 
     /**
@@ -34,7 +34,7 @@ const ModalContainnerContent = (action = actionMode.LOBBY, dataSource) => {
      * @param {ApiSetting} [dataSource] Data source for the API setting form
      * @returns {string} HTML content of the API setting form
      */
-    case actionMode.API_SETTING:
+    case actionMode.MODAL_API_SETTING:
       return ModalApiSettingForm(dataSource);
 
     /**
@@ -42,7 +42,7 @@ const ModalContainnerContent = (action = actionMode.LOBBY, dataSource) => {
      * @param {EnvSetting[]} [dataSource] Data source for the Environment setting form
      * @returns {string} HTML content of the Environment setting form
      */
-    case actionMode.ENVIRONMENT_SETTINGS:
+    case actionMode.MODAL_ENVIRONMENT_SETTINGS:
       return ModalEnvSettingForm(dataSource);
 
     /**
@@ -50,7 +50,7 @@ const ModalContainnerContent = (action = actionMode.LOBBY, dataSource) => {
      * @param {EnvVariableItem[]} [dataSource] Data source for the Environment variable form
      * @returns {string} HTML content of the Environment variable form
      */
-    case actionMode.ENVIRONMENT_VARIABLES:
+    case actionMode.MODAL_ENVIRONMENT_VARIABLES:
       return ModalEnvVariableForm(dataSource);
 
     default:

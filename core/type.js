@@ -65,11 +65,13 @@
 /**
  * - Action modes for the application.
  * @typedef { Object } ActionMode
- * @property {'lobby'} LOBBY Lobby page
- * @property {'api_list'} API_LIST Modal: API list page
- * @property {'api_setting'} API_SETTING Modal: API setting page
- * @property {'environment_settings'} ENVIRONMENT_SETTINGS Modal: Environment settings page
- * @property {'environment_variables'} ENVIRONMENT_VARIABLES Modal: Environment variables page
+ * @property {'sidebar_setting'} SIDEBAR_SETTING Sidebar: Setting page
+ * @property {'sidebar_api'} SIDEBAR_API Sidebar: API list page
+ * @property {'sidebar_hub'} SIDEBAR_HUB Sidebar: HUB list page
+ * @property {'modal_api_list'} MODAL_API_LIST Modal: API list page
+ * @property {'modal_api_setting'} MODAL_API_SETTING Modal: API setting page
+ * @property {'modal_environment_settings'} MODAL_ENVIRONMENT_SETTINGS Modal: Environment settings page
+ * @property {'modal_environment_variables'} MODAL_ENVIRONMENT_VARIABLES Modal: Environment variables page
  *
  * - Modal tabs for the application.
  * @typedef { Object } ModalTab

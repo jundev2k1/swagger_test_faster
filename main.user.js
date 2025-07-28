@@ -12,9 +12,9 @@ import { HttpMethods, actionMode, modalTabs, DefaultFormData, Store } from './co
 
 export class SwaggerFaster {
   #modalFormIds = Object.freeze({
-    [actionMode.API_SETTING]: 'api-setting-form',
-    [actionMode.ENVIRONMENT_SETTINGS]: 'enviroment-setting-form',
-    [actionMode.ENVIRONMENT_VARIABLES]: 'enviroment-variable-form',
+    [actionMode.MODAL_API_SETTING]: 'api-setting-form',
+    [actionMode.MODAL_ENVIRONMENT_SETTINGS]: 'enviroment-setting-form',
+    [actionMode.MODAL_ENVIRONMENT_VARIABLES]: 'enviroment-variable-form',
   });
 
   // ================================================
@@ -25,7 +25,7 @@ export class SwaggerFaster {
      *  @type {{ type: string, dataSource: any }} */
     this.formData = { type: '', dataSource: {} };
     /** @type {actionMode} Current action mode */
-    this.currentAction = actionMode.LOBBY;
+    this.currentAction = actionMode.SIDEBAR_API;
     /** @type {string|null} Target API ID */
     this.targetId = null;
     /** @type {boolean} Page change state */
@@ -244,13 +244,13 @@ export class SwaggerFaster {
     }
 
     switch (type) {
-      case actionMode.API_SETTING:
+      case actionMode.MODAL_API_SETTING:
         return autoMapping(input, DefaultFormData.defaultApiSettingData);
 
-      case actionMode.ENVIRONMENT_SETTINGS:
+      case actionMode.MODAL_ENVIRONMENT_SETTINGS:
         return autoMapping(input, DefaultFormData.defaultEnvSettingData);
 
-      case actionMode.ENVIRONMENT_VARIABLES:
+      case actionMode.MODAL_ENVIRONMENT_VARIABLES:
         return autoMapping(input, DefaultFormData.defaultEnvVariableItem);
 
       default:
@@ -279,7 +279,7 @@ export class SwaggerFaster {
    * @param {[{ itemIndex: number, errors: ErrorInfo[]}]} errorMessages Error messages for each item 
    */
   #setEnvErrorMessage(errorMessages = []) {
-    const formId = this.#modalFormIds[actionMode.ENVIRONMENT_SETTINGS];
+    const formId = this.#modalFormIds[actionMode.MODAL_ENVIRONMENT_SETTINGS];
     const targetForm = $(`#jun-tool .modal #${formId}`);
     if (!targetForm) return;
 
@@ -305,7 +305,7 @@ export class SwaggerFaster {
    * @param {[{ itemIndex: number, errors: ErrorInfo[]}]} errorMessages Error messages for each item 
    */
   #setVariableErrorMessage(errorMessages = []) {
-    const formId = this.#modalFormIds[actionMode.ENVIRONMENT_VARIABLES];
+    const formId = this.#modalFormIds[actionMode.MODAL_ENVIRONMENT_VARIABLES];
     const targetForm = $(`#jun-tool .modal #${formId}`);
     if (!targetForm) return;
 
@@ -332,7 +332,7 @@ export class SwaggerFaster {
    * @param {[{ itemIndex: number, errors: ErrorInfo[]}]} errorMessages Error messages for each item 
    */
   #setApiSettingErrorMessage(errorMessages = []) {
-    const formId = this.#modalFormIds[actionMode.API_SETTING];
+    const formId = this.#modalFormIds[actionMode.MODAL_API_SETTING];
     const targetForm = $(`#jun-tool .modal #${formId}`);
     if (!targetForm) return;
 
@@ -388,7 +388,7 @@ export class SwaggerFaster {
    * Execute the event every time you open modal
    * @param {actionMode} mode The page will open
    */
-  #onOpenModal(mode = actionMode.API_LIST) {
+  #onOpenModal(mode = actionMode.MODAL_API_LIST) {
     if (mode)
       this.currentAction = mode;
 
@@ -399,7 +399,7 @@ export class SwaggerFaster {
    * Execute the event every time you close modal
    */
   #onCloseModal() {
-    this.currentAction = actionMode.LOBBY;
+    this.currentAction = actionMode.SIDEBAR_API;
     this.#onPageBinding();
   }
 
@@ -413,8 +413,8 @@ export class SwaggerFaster {
     if (isActiveTab) return;
 
     this.currentAction = event.target.dataset['modalTab'] === modalTabs.API
-      ? actionMode.API_LIST
-      : actionMode.ENVIRONMENT_VARIABLES;
+      ? actionMode.MODAL_API_LIST
+      : actionMode.MODAL_ENVIRONMENT_VARIABLES;
 
     this.isPageDataChange = true;
     this.#onPageBinding();
@@ -444,7 +444,7 @@ export class SwaggerFaster {
       || targetOption.attributes['command']?.value === 'add-new-env';
     if (isAddNewEnvCommand) {
       event.target.value = Store.currentEnv || '';
-      this.currentAction = actionMode.ENVIRONMENT_SETTINGS;
+      this.currentAction = actionMode.MODAL_ENVIRONMENT_SETTINGS;
     } else {
       Store.currentEnv = event.target.value;
     }
@@ -575,15 +575,15 @@ export class SwaggerFaster {
     if (!confirm(t('dialog.confirm-save'))) return;
 
     switch (this.formData.type) {
-      case actionMode.ENVIRONMENT_SETTINGS:
+      case actionMode.MODAL_ENVIRONMENT_SETTINGS:
         this.#saveEnvChanges();
         break;
 
-      case actionMode.ENVIRONMENT_VARIABLES:
+      case actionMode.MODAL_ENVIRONMENT_VARIABLES:
         this.#saveVariableChanges();
         break;
 
-      case actionMode.API_SETTING:
+      case actionMode.MODAL_API_SETTING:
         this.#saveApiSettingChanges();
         return;
 
@@ -597,7 +597,7 @@ export class SwaggerFaster {
    */
   #saveEnvChanges() {
     const envFormDatas = this.formData.dataSource
-      .map(item => this.#mapToFormData(item, actionMode.ENVIRONMENT_SETTINGS));
+      .map(item => this.#mapToFormData(item, actionMode.MODAL_ENVIRONMENT_SETTINGS));
     const [isEnvFormError, envErrorMessages] = validator.validateEnvSetting(envFormDatas);
     this.#setEnvErrorMessage(envErrorMessages);
     if (isEnvFormError) return;
@@ -618,7 +618,7 @@ export class SwaggerFaster {
    */
   #saveVariableChanges() {
     const varFormDatas = this.formData.dataSource
-      .map(item => this.#mapToFormData(item, actionMode.ENVIRONMENT_VARIABLES));
+      .map(item => this.#mapToFormData(item, actionMode.MODAL_ENVIRONMENT_VARIABLES));
     const [isVariableFormError, varErrorMessages] = validator.validateVariableSetting(varFormDatas);
     this.#setVariableErrorMessage(varErrorMessages);
     if (isVariableFormError) return;
@@ -642,7 +642,7 @@ export class SwaggerFaster {
    * Save API setting changes
    */
   #saveApiSettingChanges() {
-    const apiFormData = this.#mapToFormData(this.formData.dataSource, actionMode.API_SETTING);
+    const apiFormData = this.#mapToFormData(this.formData.dataSource, actionMode.MODAL_API_SETTING);
     const [isApiFormError, apiSettingErrorMessages] = validator.validateApiSetting(this.resolveObjectVars(apiFormData));
     this.#setApiSettingErrorMessage(apiSettingErrorMessages);
     if (isApiFormError) return;
@@ -658,7 +658,7 @@ export class SwaggerFaster {
 
     this.targetId = null;
     this.isPageDataChange = true;
-    this.currentAction = actionMode.API_LIST;
+    this.currentAction = actionMode.MODAL_API_LIST;
     this.#onPageBinding();
     Toast.success(t('message.save-changes.api-setting.success'));
   }
@@ -675,11 +675,11 @@ export class SwaggerFaster {
 
     this.btnBack.classList.toggle(
       'd-none',
-      this.currentAction === actionMode.API_LIST || this.currentAction === actionMode.ENVIRONMENT_VARIABLES);
+      this.currentAction === actionMode.MODAL_API_LIST || this.currentAction === actionMode.MODAL_ENVIRONMENT_VARIABLES);
 
     this.btnSaveChanges.classList.toggle(
       'd-none',
-      ![actionMode.API_SETTING, actionMode.ENVIRONMENT_SETTINGS, actionMode.ENVIRONMENT_VARIABLES].includes(this.currentAction));
+      ![actionMode.MODAL_API_SETTING, actionMode.MODAL_ENVIRONMENT_SETTINGS, actionMode.MODAL_ENVIRONMENT_VARIABLES].includes(this.currentAction));
 
     this.isPageDataChange = false;
   }
@@ -689,7 +689,7 @@ export class SwaggerFaster {
    */
   #onPageBinding() {
     // Show or hide the modal based on the current action
-    if (this.currentAction === actionMode.LOBBY) {
+    if (this.currentAction === actionMode.SIDEBAR_API) {
       this.wModal.classList.add('d-none');
     } else {
       this.wModal.classList.remove('d-none');
@@ -810,32 +810,32 @@ export class SwaggerFaster {
    */
   #setFormData() {
     switch (this.currentAction) {
-      case actionMode.API_LIST:
+      case actionMode.MODAL_API_LIST:
         this.targetId = null;
         this.formData = {
-          type: actionMode.API_LIST,
+          type: actionMode.MODAL_API_LIST,
           dataSource: [...Store.apiSettings],
         };
         break;
 
-      case actionMode.API_SETTING:
+      case actionMode.MODAL_API_SETTING:
         const targetSetting = Store.apiSettings.find(api => api.id === this.targetId) || DefaultFormData.defaultApiSettingData;
         targetSetting.id = this.targetId;
         this.formData = {
-          type: actionMode.API_SETTING,
+          type: actionMode.MODAL_API_SETTING,
           dataSource: targetSetting,
         };
         break;
 
-      case actionMode.ENVIRONMENT_SETTINGS:
+      case actionMode.MODAL_ENVIRONMENT_SETTINGS:
         this.targetId = null;
         this.formData = {
-          type: actionMode.ENVIRONMENT_SETTINGS,
+          type: actionMode.MODAL_ENVIRONMENT_SETTINGS,
           dataSource: [...Store.envSettings],
         };
         break;
 
-      case actionMode.ENVIRONMENT_VARIABLES:
+      case actionMode.MODAL_ENVIRONMENT_VARIABLES:
         this.targetId = null;
         const missingHardEnvs = DefaultFormData.defaultHardEnvVariableItems
           .filter(item => !Store.envVariables
@@ -849,7 +849,7 @@ export class SwaggerFaster {
         }
 
         this.formData = {
-          type: actionMode.ENVIRONMENT_VARIABLES,
+          type: actionMode.MODAL_ENVIRONMENT_VARIABLES,
           dataSource: [...Store.envVariables.find(item => item.envId === Store.currentEnv)?.items || []],
         };
         break;
@@ -880,7 +880,7 @@ export class SwaggerFaster {
         const apiId = e.target.closest('a').dataset['apiId'];
         if (apiId) {
           this.targetId = apiId;
-          this.currentAction = actionMode.API_SETTING;
+          this.currentAction = actionMode.MODAL_API_SETTING;
 
           this.isPageDataChange = true;
           this.#onPageBinding();
@@ -911,8 +911,8 @@ export class SwaggerFaster {
         if (!apiId) return;
 
         const targetItem = Store.apiSettings.find(setting => setting.id === apiId);
-        this.formData = { type: actionMode.API_SETTING, dataSource: { ...targetItem, id: crypto.randomUUID() } };
-        this.currentAction = actionMode.API_SETTING;
+        this.formData = { type: actionMode.MODAL_API_SETTING, dataSource: { ...targetItem, id: crypto.randomUUID() } };
+        this.currentAction = actionMode.MODAL_API_SETTING;
 
         this.#onPageBinding();
       });
@@ -920,7 +920,7 @@ export class SwaggerFaster {
 
     this.btnAddNewApi?.addEventListener('click', (e) => {
       e.preventDefault();
-      this.currentAction = actionMode.API_SETTING;
+      this.currentAction = actionMode.MODAL_API_SETTING;
       this.targetId = crypto.randomUUID();
       this.isPageDataChange = true;
 
@@ -1033,9 +1033,9 @@ export class SwaggerFaster {
       e.preventDefault();
 
       // Redirect to the previous action
-      const redirectAction = this.currentAction === actionMode.API_SETTING
-        ? actionMode.API_LIST
-        : actionMode.ENVIRONMENT_VARIABLES;
+      const redirectAction = this.currentAction === actionMode.MODAL_API_SETTING
+        ? actionMode.MODAL_API_LIST
+        : actionMode.MODAL_ENVIRONMENT_VARIABLES;
 
       // Refresh the modal with the new action
       this.isPageDataChange = true;

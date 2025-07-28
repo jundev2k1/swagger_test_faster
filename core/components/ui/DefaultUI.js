@@ -1,46 +1,42 @@
- // =============================
- // File: DefaultUI.js (defaultUI.js)
- // Description: Render default UI for the application
- // Copyright (c) 2025. Jun Dev
- // ============================= 
+// =============================
+// File: DefaultUI.js (defaultUI.js)
+// Description: Render default UI for the application
+// Copyright (c) 2025. Jun Dev
+// ============================= 
 
 import { config } from "../../../config.js";
+import { actionMode } from "../../data/constants.js";
 import { t, translate } from "../../i18n/translate.js";
+import { UIBuilder } from "../../ui/uiBuilder.js";
 
-/** Render default UI for the application. */
-const DefaultUI = () => {
+/** Render default UI for the application.
+ * @param {actionMode} [action] - The current action mode of the application.
+ * @returns {string} The HTML of the default UI
+ */
+const DefaultUI = (action) => {
+  const sidebarContent = UIBuilder.createSidebarContent(action);
   return `
     <aside id="tool-sidebar">
-      <div class="sidebar-header">
-        <button class="btn-control badge light" id="btn-toggle-sidebar">≡</button>
-        <h1>Jun's Tool</h1>
-        <div class="dropdown">
-          <button class="btn-control icon-badge light dropdown-toggle" id="btn-change-language">🌍</button>
-          <ul class="dropdown-menu" data-target-id="btn-change-language">
-            ${config.supportedLanguages.map(lang => `
-              <li><a href="javascript:void" data-lang="${lang}">${translate.lang[lang]}</a></li>
-            `).join('')}
-          </ul>
+      <div class="sidebar-wrapper">
+        <div class="sidebar-header">
+          <button class="btn-control badge light" id="btn-toggle-sidebar">≡</button>
+          <h1>Jun's Tool</h1>
+          <div class="dropdown">
+            <button class="btn-control icon-badge light dropdown-toggle" id="btn-change-language">🌍</button>
+            <ul class="dropdown-menu" data-target-id="btn-change-language">
+              ${config.supportedLanguages.map(lang => `
+                <li><a href="javascript:void" data-lang="${lang}">${translate.lang[lang]}</a></li>
+              `).join('')}
+            </ul>
+          </div>
+        </div>
+        <div class="sidebar-content">
+          ${sidebarContent}
         </div>
       </div>
-      <div class="sidebar-content">
-        <h3>${t('sidebar.env.title')}</h3>
-        <div class="form-group">
-          <select name="environment" class="form-select" control="ddl-select-environment"></select>
-        </div>
-  
-        <h3>${t('sidebar.api.title')}</h3>
-        <ul class="api-action-group overflow-scroll-y mh-50vh"></ul>
-        <div class="response-result">
-          <h3>
-            ${t('sidebar.response.title')}
-            <button class="btn-control icon-badge light" id="btn-copy-response" title="${t('sidebar.response.copy')}">📃</button>
-          </h3>
-          <div class="card json-viewer"></div>
-        </div>
-        <div class="tool-setting">
-          <a href="javascript:void" id="btn-open-setting" class="btn-control secondary action-control">${t('btn.setting')}</a>
-        </div>
+      <div class="sidebar-tab">
+        <div class="sidebar-tab-item" data-tab="tab-env">${t('sidebar.tab.env')}</div>
+        <div class="sidebar-tab-item active" data-tab="tab-api">${t('sidebar.tab.api')}</div>
       </div>
     </aside>
     

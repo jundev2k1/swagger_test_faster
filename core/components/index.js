@@ -4,6 +4,9 @@
  // Copyright (c) 2025. Jun Dev
  // ============================= 
 
+// Sidebar
+export * from './sidebar/index.js';
+
 // UI
 export { default as DefaultUI } from './ui/DefaultUI.js';
 export { default as TabSettings } from './ui/TabSettings.js';

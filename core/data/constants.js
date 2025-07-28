@@ -23,11 +23,13 @@ export const modalTabs = Object.freeze({
 
 /** @type {ActionMode} Action modes for the application. */
 export const actionMode = Object.freeze({
-  LOBBY: "lobby",
-  API_LIST: "api_list",
-  API_SETTING: "api_setting",
-  ENVIRONMENT_SETTINGS: "environment_settings",
-  ENVIRONMENT_VARIABLES: "environment_variables",
+  SIDEBAR_SETTING: "sidebar_setting",
+  SIDEBAR_API: "sidebar_api",
+  SIDEBAR_HUB: "sidebar_hub",
+  MODAL_API_LIST: "modal_api_list",
+  MODAL_API_SETTING: "modal_api_setting",
+  MODAL_ENVIRONMENT_SETTINGS: "modal_environment_settings",
+  MODAL_ENVIRONMENT_VARIABLES: "modal_environment_variables",
 });
 
 /** @type {HttpMethod} HTTP methods used in API requests. */

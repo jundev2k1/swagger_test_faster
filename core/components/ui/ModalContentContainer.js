@@ -15,7 +15,7 @@ import { Store } from '../../data/store.js';
  * @param {string} [innerHTML] - The HTML content to be inserted within the container.
  * @returns {string} The HTML of the modal content container specific to the given action mode.
  */
-const ModalContentContainer = (action = actionMode.LOBBY, innerHTML = '') => {
+const ModalContentContainer = (action = actionMode.SIDEBAR_API, innerHTML = '') => {
   const getSortOptions = () => {
     const selectedField = Store.apiListFilter.sort;
     const sortFields = ['name', 'endpoint', 'priority', 'color', 'mode', 'method', 'createdAt', 'updatedAt'];
@@ -35,7 +35,7 @@ const ModalContentContainer = (action = actionMode.LOBBY, innerHTML = '') => {
       `).join('');
   }
   switch (action) {
-    case actionMode.API_LIST:
+    case actionMode.MODAL_API_LIST:
       return `
         <div id="api-list-layout">
           <div class="api-list-filter mb-3 grid-4 gap-1">
@@ -66,13 +66,13 @@ const ModalContentContainer = (action = actionMode.LOBBY, innerHTML = '') => {
         </div>
       `;
 
-    case actionMode.API_SETTING:
+    case actionMode.MODAL_API_SETTING:
       return `<div id="api-setting-layout">${innerHTML}</div>`;
 
-    case actionMode.ENVIRONMENT_SETTINGS:
+    case actionMode.MODAL_ENVIRONMENT_SETTINGS:
       return `<div id="enviroment-setting-layout">${innerHTML}</div>`;
 
-    case actionMode.ENVIRONMENT_VARIABLES:
+    case actionMode.MODAL_ENVIRONMENT_VARIABLES:
       return `<div id="enviroment-setting-layout">${innerHTML}</div>`;
 
     // Clear content

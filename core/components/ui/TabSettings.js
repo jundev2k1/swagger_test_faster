@@ -12,11 +12,11 @@ import { actionMode } from '../../data/constants.js';
  * @param {ActionMode} action - The current action
  * @returns {string} The tab setting HTML
  */
-const TabSettings = (action = actionMode.LOBBY) => {
-  const isApiSetting = action === actionMode.API_SETTING
-    || action === actionMode.API_LIST;
-  const isEnvSetting = action === actionMode.ENVIRONMENT_SETTINGS
-    || action === actionMode.ENVIRONMENT_VARIABLES;
+const TabSettings = (action = actionMode.SIDEBAR_API) => {
+  const isApiSetting = action === actionMode.MODAL_API_SETTING
+    || action === actionMode.MODAL_API_LIST;
+  const isEnvSetting = action === actionMode.MODAL_ENVIRONMENT_SETTINGS
+    || action === actionMode.MODAL_ENVIRONMENT_VARIABLES;
 
   return `
     <button class="tab-button ${isApiSetting ? 'active' : ''}" data-modal-tab="api">

@@ -5,16 +5,38 @@
 // ============================================
 
 import { t } from "../i18n/translate.js";
-import { DefaultUI, EnvDropdownItems, TabSettings, ModalContainnerContent, ApiActionGroupItems, ModalContentContainer } from "../components/index.js";
+import { DefaultUI, EnvDropdownItems, TabSettings, ModalContainnerContent, ApiActionGroupItems, ModalContentContainer, SidebarSettingPage, SidebarApiListPage, SidebarHubListPage } from "../components/index.js";
 import { actionMode } from "../data/constants.js";
 
 export class UIBuilder {
   /**
    * Create the default UI for the application.
+   * @param {actionMode} [action] - The current action mode of the application.
    * @returns {string} The HTML of the default UI.
    */
-  static createDefaultUI() {
-    return DefaultUI();
+  static createDefaultUI(action = actionMode.SIDEBAR_API) {
+    return DefaultUI(action);
+  }
+
+  /**
+   * Create the sidebar content for the application.
+   * @param {actionMode} [action] - The current action mode of the application.
+   * @returns {string} The HTML of the sidebar content.
+   */
+  static createSidebarContent(action = actionMode.SIDEBAR_API) {
+    switch (action) {
+      case actionMode.SIDEBAR_SETTING:
+        return SidebarSettingPage();
+
+      case actionMode.SIDEBAR_API:
+        return SidebarApiListPage();
+
+      case actionMode.SIDEBAR_HUB:
+        return SidebarHubListPage();
+
+      default:
+        return SidebarApiListPage();
+    }
   }
 
   /**
@@ -22,12 +44,12 @@ export class UIBuilder {
    * @param {actionMode} [action] - The current action mode of the application.
    * @returns {string} The translated header text for the modal.
    */
-  static getHeaderModal(action = actionMode.LOBBY) {
+  static getHeaderModal(action = actionMode.SIDEBAR_API) {
     const headers = Object.freeze({
-      [actionMode.API_LIST]: t('modal.header.api-list'),
-      [actionMode.API_SETTING]: t('modal.header.api-setting'),
-      [actionMode.ENVIRONMENT_SETTINGS]: t('modal.header.env-setting'),
-      [actionMode.ENVIRONMENT_VARIABLES]: t('modal.header.env-variable'),
+      [actionMode.MODAL_API_LIST]: t('modal.header.api-list'),
+      [actionMode.MODAL_API_SETTING]: t('modal.header.api-setting'),
+      [actionMode.MODAL_ENVIRONMENT_SETTINGS]: t('modal.header.env-setting'),
+      [actionMode.MODAL_ENVIRONMENT_VARIABLES]: t('modal.header.env-variable'),
     });
     return headers[action] || t('modal.header.default');
   }
@@ -55,7 +77,7 @@ export class UIBuilder {
    * @param {actionMode} [action] - The current action mode of the application
    * @returns {string} The HTML of the tab setting buttons
    */
-  static createTabModalTabs(action = actionMode.LOBBY) {
+  static createTabModalTabs(action = actionMode.SIDEBAR_API) {
     return TabSettings(action);
   }
 
@@ -65,7 +87,7 @@ export class UIBuilder {
    * @param {ApiSetting[] | ApiSetting | EnvSetting[] | EnvVariableItem[]} [dataSource] - Data source for the modal containner content.
    * @returns {string} The HTML of the modal containner content.
    */
-  static createContainnerContent(action = actionMode.LOBBY, dataSource) {
+  static createContainnerContent(action = actionMode.SIDEBAR_API, dataSource) {
     return ModalContainnerContent(action, dataSource);
   }
 
@@ -75,7 +97,7 @@ export class UIBuilder {
    * @param {string} [innerHTML] - The HTML content of the modal content container
    * @returns {string} The HTML of the modal content container
    */
-  static createModalContentContainer(action = actionMode.LOBBY, innerHTML = '') {
+  static createModalContentContainer(action = actionMode.SIDEBAR_API, innerHTML = '') {
     return ModalContentContainer(action, innerHTML);
   }
 }
