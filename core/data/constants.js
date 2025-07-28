@@ -86,6 +86,6 @@ export const ApiSettingMode = Object.freeze({
 /** @type {SegmentedInputOption[]} Api setting mode options */
 export const ApiSettingModeOptions = Object.freeze([
   { value: ApiSettingMode.API, label: 'api.setting.mode.api', disabled: false },
-  { value: ApiSettingMode.HUB, label: 'api.setting.mode.hub', disabled: false },
-  { value: ApiSettingMode.HUB_METHOD, label: 'api.setting.mode.hub-method', disabled: false },
+  { value: ApiSettingMode.HUB, label: 'api.setting.mode.hub', disabled: true },
+  { value: ApiSettingMode.HUB_METHOD, label: 'api.setting.mode.hub-method', disabled: true },
 ]);

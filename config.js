@@ -7,4 +7,6 @@
 export const config = Object.freeze({
   defaultLang: 'vi',
   supportedLanguages: ['en', 'vi', 'zh-TW'],
+  tempCookieKey: 'juntool_', // prefix
+  tempCookieExpiry: 5 * 60 * 1000, // 3 minutes
 });

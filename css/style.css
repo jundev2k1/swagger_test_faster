@@ -126,7 +126,7 @@
   background: var(--jun-tool-subtle-bg);
   padding: var(--jun-tool-spacing-md);
   border-radius: var(--jun-tool-border-rounded);
-  max-height: 30vh;
+  max-height: 20vh;
   overflow-y: auto;
 }
 

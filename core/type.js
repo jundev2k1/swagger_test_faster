@@ -32,6 +32,8 @@
  * @property {string} refTo - The ID of the API to reference.
  * @property {number} callAfter - The delay time before calling the API.
  * @property {string} successEvent - The event to execute when the API is successful.
+ * @property {string} modifiedAt - The last modified date of the API.
+ * @property {string} createdAt - The created date of the API.
  */
 
 /**
