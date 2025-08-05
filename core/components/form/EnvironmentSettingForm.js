@@ -1,20 +1,18 @@
 // ============================================
-// File: EnvSettingForm.js
+// File: EnvironmentSettingForm.js
 // Type UI: Form
 // Description: Environment Setting Form
 // Copyright (c) 2025. Jun Dev
 // ============================================
 
-
 import { t } from '../../i18n/translate.js';
-
 
 /**
  * @description Environment Setting Form
  * @param {EnvSetting[]} settings - Environment settings array
  * @returns {string} HTML string of the form
  */
-const EnvSettingForm = (settings = []) => {
+const EnvironmentSettingForm = (settings = []) => {
   return `
     <form id="enviroment-setting-form">
       <div class="enviroment-manager mb-2">
@@ -34,4 +32,4 @@ const EnvSettingForm = (settings = []) => {
   `;
 }
 
-export default EnvSettingForm;
+export default EnvironmentSettingForm;

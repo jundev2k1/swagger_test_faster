@@ -127,10 +127,30 @@ export const translate = Object.freeze({
     'vi': 'Môi trường',
     'zh-TW': '環境',
   },
+  'sidebar.tab.env': {
+    'en': 'Environment',
+    'vi': 'Môi trường',
+    'zh-TW': '環境',
+  },
+  'sidebar.tab.api': {
+    'en': 'API',
+    'vi': 'API',
+    'zh-TW': 'API',
+  },
+  'sidebar.tab.hub': {
+    'en': 'HUB',
+    'vi': 'HUB',
+    'zh-TW': 'HUB',
+  },
   'sidebar.api.title': {
     'en': 'API Actions',
     'vi': 'Hành động API',
     'zh-TW': 'API 操作',
+  },
+  'sidebar.hub.title': {
+    'en': 'HUB Actions',
+    'vi': 'Hành động HUB',
+    'zh-TW': 'HUB 操作',
   },
   'sidebar.response.title': {
     'en': 'Response Result',

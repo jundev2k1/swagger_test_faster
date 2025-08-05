@@ -15,7 +15,7 @@ import { Store } from '../../data/store.js';
  * @param {string} [innerHTML] - The HTML content to be inserted within the container.
  * @returns {string} The HTML of the modal content container specific to the given action mode.
  */
-const ModalContentContainer = (action = actionMode.SIDEBAR_API, innerHTML = '') => {
+const ModalContentContainer = (action = actionMode.LOBBY, innerHTML = '') => {
   const getSortOptions = () => {
     const selectedField = Store.apiListFilter.sort;
     const sortFields = ['name', 'endpoint', 'priority', 'color', 'mode', 'method', 'createdAt', 'updatedAt'];

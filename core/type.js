@@ -67,7 +67,7 @@
 /**
  * - Action modes for the application.
  * @typedef { Object } ActionMode
- * @property {'sidebar_setting'} SIDEBAR_SETTING Sidebar: Setting page
+ * @property {'sidebar_env'} SIDEBAR_ENV Sidebar: Environment settings page
  * @property {'sidebar_api'} SIDEBAR_API Sidebar: API list page
  * @property {'sidebar_hub'} SIDEBAR_HUB Sidebar: HUB list page
  * @property {'modal_api_list'} MODAL_API_LIST Modal: API list page

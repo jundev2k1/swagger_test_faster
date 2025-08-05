@@ -1,15 +1,15 @@
 // ============================================
-// File: ApiSettingForm.js
+// File: ActionSettingForm.js
 // Type UI: Form
-// Description: API Setting Form
+// Description: Action Setting Form
 // Copyright (c) 2025. Jun Dev
 // ============================================
 
 import { t } from '../../i18n/translate.js';
+import { Store } from '../../data/store.js';
 import { escapeHTML } from '../../utils/helpers.js';
 import { HttpMethods, ColorEnums, ApiSettingModeOptions, ApiSettingMode } from '../../data/constants.js';
 import SegmentedInput from '../control/SegmentedInput.js';
-import { Store } from '../../data/store.js';
 
 const displayOrHide = (isDisplay, innerHTML) => isDisplay ? innerHTML : '';
 
@@ -18,7 +18,7 @@ const displayOrHide = (isDisplay, innerHTML) => isDisplay ? innerHTML : '';
  * @param {ApiSetting} [option] The options for the API Setting Form.
  * @returns {string} The HTML of the API Setting Form.
  */
-const ApiSettingForm = ({
+const ActionSettingForm = ({
   id,
   name,
   priority,
@@ -178,4 +178,4 @@ const ApiSettingForm = ({
   `;
 }
 
-export default ApiSettingForm;
+export default ActionSettingForm;

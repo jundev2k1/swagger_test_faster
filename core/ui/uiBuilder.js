@@ -5,7 +5,7 @@
 // ============================================
 
 import { t } from "../i18n/translate.js";
-import { DefaultUI, EnvDropdownItems, TabSettings, ModalContainnerContent, ApiActionGroupItems, ModalContentContainer, SidebarSettingPage, SidebarApiListPage, SidebarHubListPage } from "../components/index.js";
+import { DefaultUI, EnvDropdownItems, TabSettings, ModalContainnerContent, ApiActionGroupItems, ModalContentContainer } from "../components/index.js";
 import { actionMode } from "../data/constants.js";
 
 export class UIBuilder {
@@ -16,27 +16,6 @@ export class UIBuilder {
    */
   static createDefaultUI(action = actionMode.SIDEBAR_API) {
     return DefaultUI(action);
-  }
-
-  /**
-   * Create the sidebar content for the application.
-   * @param {actionMode} [action] - The current action mode of the application.
-   * @returns {string} The HTML of the sidebar content.
-   */
-  static createSidebarContent(action = actionMode.SIDEBAR_API) {
-    switch (action) {
-      case actionMode.SIDEBAR_SETTING:
-        return SidebarSettingPage();
-
-      case actionMode.SIDEBAR_API:
-        return SidebarApiListPage();
-
-      case actionMode.SIDEBAR_HUB:
-        return SidebarHubListPage();
-
-      default:
-        return SidebarApiListPage();
-    }
   }
 
   /**

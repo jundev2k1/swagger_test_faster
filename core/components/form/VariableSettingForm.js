@@ -1,7 +1,7 @@
 // ============================================
-// File: EnvVariableForm.js
+// File: VariableSettingForm.js
 // Type UI: Form
-// Description: Environment Variable Form
+// Description: Variable setting Form
 // Copyright (c) 2025. Jun Dev
 // ============================================
 
@@ -14,7 +14,7 @@ import { escapeHTML } from '../../utils/helpers.js';
  * @param {EnvVariableItem[]} variables The options for the Environment Variable Form.
  * @returns {string} The HTML of the Environment Variable Form.
  */
-const EnvVariableForm = (variables = []) => {
+const VariableSettingForm = (variables = []) => {
   const hardSettings = variables.filter(item => item.isHardSetting);
   const hostSetting = hardSettings.find(item => item.name === 'host')?.value || '';
   const softSettings = variables.filter(item => !item.isHardSetting);
@@ -56,4 +56,4 @@ const EnvVariableForm = (variables = []) => {
   `;
 }
 
-export default EnvVariableForm;
+export default VariableSettingForm;

@@ -7,14 +7,11 @@
 import { config } from "../../../config.js";
 import { actionMode } from "../../data/constants.js";
 import { t, translate } from "../../i18n/translate.js";
-import { UIBuilder } from "../../ui/uiBuilder.js";
 
 /** Render default UI for the application.
- * @param {actionMode} [action] - The current action mode of the application.
  * @returns {string} The HTML of the default UI
  */
-const DefaultUI = (action) => {
-  const sidebarContent = UIBuilder.createSidebarContent(action);
+const DefaultUI = () => {
   return `
     <aside id="tool-sidebar">
       <div class="sidebar-wrapper">
@@ -30,13 +27,21 @@ const DefaultUI = (action) => {
             </ul>
           </div>
         </div>
-        <div class="sidebar-content">
-          ${sidebarContent}
+        <div class="sidebar-content"></div>
+        <div class="tool-setting">
+          <a href="javascript:void" id="btn-open-setting" class="btn-control secondary action-control">Settings</a>
         </div>
       </div>
       <div class="sidebar-tab">
-        <div class="sidebar-tab-item" data-tab="tab-env">${t('sidebar.tab.env')}</div>
-        <div class="sidebar-tab-item active" data-tab="tab-api">${t('sidebar.tab.api')}</div>
+        <div class="sidebar-tab-item" data-tab="${actionMode.SIDEBAR_ENV}">
+          ${t('sidebar.tab.env')}
+        </div>
+        <div class="sidebar-tab-item" data-tab="${actionMode.SIDEBAR_API}">
+          ${t('sidebar.tab.api')}
+        </div>
+        <div class="sidebar-tab-item" data-tab="${actionMode.SIDEBAR_HUB}">
+          ${t('sidebar.tab.hub')}
+        </div>
       </div>
     </aside>
     

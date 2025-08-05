@@ -54,6 +54,7 @@ export class SwaggerFaster {
   get btnCopyResponse() { return $('#jun-tool .response-result #btn-copy-response'); }
   get wApiResponse() { return $('#jun-tool .response-result .card'); }
   get wApiActionGroup() { return $('#jun-tool .api-action-group'); }
+  get wHubActionGroup() { return $('#jun-tool .hub-action-group'); }
   get wModal() { return $('#jun-tool .modal'); }
   get wHeaderModal() { return $('#jun-tool .modal .modal-header'); }
   get hTitleModal() { return $('#jun-tool .modal #title-modal'); }
@@ -165,7 +166,9 @@ export class SwaggerFaster {
    * Display API response
    */
   #displayResponseChange() {
-    this.btnCopyResponse.disabled = !this.apiResponse;
+    if (!this.wApiResponse) return;
+
+    if (this.btnCopyResponse) this.btnCopyResponse.disabled = !this.apiResponse;
 
     if (!this.apiResponse) {
       this.wApiResponse.textContent = t('message.api-response.empty');
@@ -792,7 +795,7 @@ export class SwaggerFaster {
    */
   #onPageBinding() {
     // Show or hide the modal based on the current action
-    if (this.currentAction === actionMode.SIDEBAR_API) {
+    if ([actionMode.SIDEBAR_ENV, actionMode.SIDEBAR_API, actionMode.SIDEBAR_HUB].includes(this.currentAction)) {
       this.wModal.classList.add('d-none');
     } else {
       this.wModal.classList.remove('d-none');
@@ -802,11 +805,17 @@ export class SwaggerFaster {
     $('#tool-sidebar').classList.toggle('collapsed', Store.isCollabsedSidebar);
 
     // Handle after setting the current action
+
     this.#onPageChange();
 
     // Set the form data based on the current action
-    const apiActionItems = UIBuilder.createApiActionGroupItems(this.#resolveObjectVars(Store.apiSettings));
-    this.wApiActionGroup.innerHTML = apiActionItems;
+    if (this.currentAction === actionMode.SIDEBAR_API) {
+      const apiActionItems = UIBuilder.createApiActionGroupItems(this.#resolveObjectVars(Store.apiSettings));
+      if (this.wApiActionGroup) this.wApiActionGroup.innerHTML = apiActionItems;
+    } else if (this.currentAction === actionMode.SIDEBAR_HUB) {
+      const hubActionItems = UIBuilder.createEnvDropdownItems(this.#resolveObjectVars(Store.apiSettings));
+      if (this.wHubActionGroup) this.wHubActionGroup.innerHTML = hubActionItems;
+    }
 
     // Set the title and modal container based on the current action
     this.hTitleModal.innerText = UIBuilder.getHeaderModal(this.currentAction);
@@ -963,7 +972,7 @@ export class SwaggerFaster {
    * Set event for lobby API action items.
    */
   #setLobbyEvent() {
-    this.wApiActionGroup.querySelectorAll('.api-action-group-item .api-action-control').forEach((element) => {
+    this.wApiActionGroup?.querySelectorAll('.api-action-group-item .api-action-control').forEach((element) => {
       element.addEventListener('click', (event) => this.#onLobbyApiItemClick(event));
     });
   }
@@ -1110,7 +1119,17 @@ export class SwaggerFaster {
    * Set UI events for the sidebar and modal.
    */
   #setUiEvent() {
-    this.btnToggleSidebar.addEventListener('click', (e) => {
+    $$('#jun-tool .sidebar-tab .sidebar-tab-item:not(.active)').forEach((item) => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        this.currentAction = e.target.dataset['tab'] || actionMode.SIDEBAR_API;
+        this.refreshPage();
+      });
+    });
+
+    this.btnToggleSidebar?.addEventListener('click', (e) => {
       e.preventDefault();
 
       Store.isCollabsedSidebar = !Store.isCollabsedSidebar;
@@ -1118,21 +1137,21 @@ export class SwaggerFaster {
     });
 
     // Modal events
-    this.btnOpenSetting.addEventListener('click', (e) => {
+    this.btnOpenSetting?.addEventListener('click', (e) => {
       e.preventDefault();
 
       this.isPageDataChange = true;
       this.#onOpenModal();
     });
-    this.btnClose.addEventListener('click', (e) => {
+    this.btnClose?.addEventListener('click', (e) => {
       e.preventDefault();
       this.#onCloseModal();
     });
-    this.wOverlayModal.addEventListener('click', (e) => {
+    this.wOverlayModal?.addEventListener('click', (e) => {
       e.preventDefault();
       this.#onCloseModal();
     });
-    this.btnBack.addEventListener('click', (e) => {
+    this.btnBack?.addEventListener('click', (e) => {
       e.preventDefault();
 
       // Redirect to the previous action
@@ -1144,7 +1163,7 @@ export class SwaggerFaster {
       this.isPageDataChange = true;
       this.#onOpenModal(redirectAction);
     });
-    this.btnSaveChanges.addEventListener('click', (e) => {
+    this.btnSaveChanges?.addEventListener('click', (e) => {
       clearTimeout(this.timeoutId);
       this.timeoutId = setTimeout(() => {
         this.#onSaveChanges(e)
@@ -1173,7 +1192,7 @@ export class SwaggerFaster {
     const rootElement = $('#jun-tool');
     const rootNode = rootElement || document.createElement('div');
     rootNode.id = 'jun-tool';
-    rootNode.innerHTML = UIBuilder.createDefaultUI();
+    rootNode.innerHTML = UIBuilder.createDefaultUI(this.currentAction);
 
     if (!rootElement) document.body.appendChild(rootNode);
   }

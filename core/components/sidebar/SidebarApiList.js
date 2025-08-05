@@ -1,19 +1,24 @@
 // =============================
-// File: SidebarApiListPage.js (sidebarApiListPage.js)
-// Description: Render sidebar api list page UI
+// File: SidebarApiList.js
+// Description: Render sidebar api list content UI
 // Copyright (c) 2025. Jun Dev
 // =============================
 
+import { Store } from "../../data/store.js";
 import { t } from "../../i18n/translate.js";
+import { resolveObjectVars } from "../../utils/helpers.js";
+import ApiActionGroupItems from "../ui/ApiActionGroupItems.js";
 
 /**
  * Render sidebar api list page UI
  * @returns {string} Sidebar api list page UI
  */
-const SidebarApiListPage = () => {
+const SidebarApiList = () => {
   return `
     <h3>${t('sidebar.api.title')}</h3>
-    <ul class="api-action-group overflow-scroll-y mh-50vh"></ul>
+    <ul class="api-action-group overflow-scroll-y mh-50vh">
+      ${ApiActionGroupItems(resolveObjectVars(Store.apiSettings))}
+    </ul>
     <div class="response-result">
       <h3>
         ${t('sidebar.response.title')}
@@ -21,10 +26,7 @@ const SidebarApiListPage = () => {
       </h3>
       <div class="card json-viewer"></div>
     </div>
-    <div class="tool-setting">
-      <a href="javascript:void" id="btn-open-setting" class="btn-control secondary action-control">${t('btn.setting')}</a>
-    </div>
   `;
 }
 
-export default SidebarApiListPage;
+export default SidebarApiList;

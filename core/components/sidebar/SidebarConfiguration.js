@@ -1,6 +1,6 @@
 // =============================
-// File: SidebarSettingPage.js (sidebarSettingPage.js)
-// Description: Render sidebar setting page UI
+// File: SidebarConfiguration.js
+// Description: Render sidebar configuration content UI
 // Copyright (c) 2025. Jun Dev
 // =============================
 
@@ -10,7 +10,7 @@ import { t } from "../../i18n/translate.js";
  * Render sidebar setting page UI
  * @returns {string} Sidebar setting page UI
  */
-const SidebarSettingPage = () => {
+const SidebarConfiguration = () => {
   return `
     <h3>${t('sidebar.env.title')}</h3>
     <div class="form-group">
@@ -19,4 +19,4 @@ const SidebarSettingPage = () => {
   `;
 }
 
-export default SidebarSettingPage;
+export default SidebarConfiguration;

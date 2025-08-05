@@ -8,9 +8,9 @@
 import { t } from '../../i18n/translate.js';
 import { actionMode } from '../../data/constants.js';
 import { default as ModalApiListItem } from './ModalApiListItem.js';
-import { default as ModalApiSettingForm } from '../form/ApiSettingForm.js';
-import { default as ModalEnvSettingForm } from '../form/EnvSettingForm.js';
-import { default as ModalEnvVariableForm } from '../form/EnvVariableForm.js';
+import { default as ModalApiSettingForm } from '../form/ActionSettingForm.js';
+import { default as ModalEnvSettingForm } from '../form/EnvironmentSettingForm.js';
+import { default as ModalEnvVariableForm } from '../form/VariableSettingForm.js';
 
 
 /**
