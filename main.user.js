@@ -5,7 +5,7 @@
 // ================================================
 
 import { t } from './core/i18n/translate.js';
-import { $, $$ } from './core/utils/helpers.js';
+import { $, $$, generateUniqueDateId } from './core/utils/helpers.js';
 import { Toast, UIBuilder, renderJsonFormattedStrict } from './core/ui/index.js';
 import { validator } from './core/form/validate.js';
 import { HttpMethods, actionMode, modalTabs, DefaultFormData, Store } from './core/data/index.js';
@@ -625,7 +625,7 @@ export class SwaggerFaster {
 
         // Create a new hard setting item if it doesn't exist
         const newItem = {
-          id: crypto.randomUUID(),
+          id: generateUniqueDateId(),
           isHardSetting: true,
           name,
           value,
@@ -1023,7 +1023,7 @@ export class SwaggerFaster {
         if (!apiId) return;
 
         const targetItem = Store.apiSettings.find(setting => setting.id === apiId);
-        this.formData = { type: actionMode.MODAL_API_SETTING, dataSource: { ...targetItem, id: crypto.randomUUID() } };
+        this.formData = { type: actionMode.MODAL_API_SETTING, dataSource: { ...targetItem, id: generateUniqueDateId() } };
         this.currentAction = actionMode.MODAL_API_SETTING;
 
         this.#onPageBinding();
@@ -1033,7 +1033,7 @@ export class SwaggerFaster {
     this.btnAddNewApi?.addEventListener('click', (e) => {
       e.preventDefault();
       this.currentAction = actionMode.MODAL_API_SETTING;
-      this.targetId = crypto.randomUUID();
+      this.targetId = generateUniqueDateId();
       this.isPageDataChange = true;
 
       this.#onPageBinding();
@@ -1063,7 +1063,7 @@ export class SwaggerFaster {
     this.btnAddNewVariable?.addEventListener('click', (e) => {
       e.preventDefault();
       const newItem = {
-        id: crypto.randomUUID(),
+        id: generateUniqueDateId(),
         isHardSetting: false,
         name: '',
         value: '',

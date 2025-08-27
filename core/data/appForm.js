@@ -4,6 +4,7 @@
  // Copyright (c) 2025. Jun Dev
  // =================================================
 
+import { generateUniqueDateId } from "../utils/helpers.js";
 import { ApiSettingMode, ColorEnums, HttpMethods } from "./constants.js";
 import { Store } from "./store.js";
 
@@ -33,7 +34,7 @@ export class DefaultFormData {
   /** @type {EnvSetting} The default environment setting data */
   static get defaultEnvSettingData() {
     return {
-      id: crypto.randomUUID(),
+      id: generateUniqueDateId(),
       value: '',
     };
   }
@@ -49,7 +50,7 @@ export class DefaultFormData {
   /** @type {EnvVariableItem} The default environment variable item data */
   static get defaultEnvVariableItem() {
     return {
-      id: crypto.randomUUID(),
+      id: generateUniqueDateId(),
       name: '',
       value: '',
       isHardSetting: false,
@@ -59,7 +60,7 @@ export class DefaultFormData {
   /** @type {EnvVariableItem[]} The default environment variable item data list for hard settings */
   static get defaultHardEnvVariableItems() {
     return [
-      { id: crypto.randomUUID(), name: 'host', value: '', isHardSetting: true },
+      { id: generateUniqueDateId(), name: 'host', value: '', isHardSetting: true },
     ];
   }
 

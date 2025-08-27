@@ -5,7 +5,7 @@
 // ============================================
 
 import { t } from "../../i18n/translate.js";
-import { escapeHTML } from "../../utils/helpers.js";
+import { escapeHTML, generateUniqueDateId } from "../../utils/helpers.js";
 
 /**
  * A pill combobox UI component.
@@ -13,7 +13,7 @@ import { escapeHTML } from "../../utils/helpers.js";
  * @returns {string} The HTML markup for the segmented input component.
  */
 const SegmentedInput = ({ options, name, selectedValue, isCheckbox, isPill }) => {
-  const randomId = escapeHTML(crypto.randomUUID());
+  const randomId = escapeHTML(generateUniqueDateId());
   const optionsHtml = options.map(({ label, value, disabled }, index) => `
     <div class="segmented-control">
       <input type="${isCheckbox ? 'checkbox' : 'radio'}"
