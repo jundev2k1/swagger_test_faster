@@ -56,15 +56,16 @@ function isDateField(field) {
  * @returns {ApiSetting[]} An array of objects that contain the information of the API items
  */
 const getsByFilter = (dataSource) => {
-  const filter = {...Store.apiListFilter};
+  const filter = { ...Store.apiListFilter };
   const filteredDataSource = dataSource
     .filter(s =>
-      (s.name.toLowerCase().includes(filter.search.toLowerCase())
+      (filter.search === ''
+        || s.name.toLowerCase().includes(filter.search.toLowerCase())
         || s.endpoint.toLowerCase().startsWith(filter.search.toLowerCase())
         || s.desc.toLowerCase().includes(filter.search.toLowerCase()))
-      && (filter.mode === '' || s.mode === filter.mode)
-      && (filter.method === '' || s.method === filter.method));
-  return sortApiList(filteredDataSource, filter.orderBy, filter.orderDirection);
+      && (filter.mode === 'all' || s.mode === filter.mode)
+      && (filter.method === 'all' || s.method === filter.method));
+  return sortApiList(filteredDataSource, filter.sort, filter.sortDirection);
 };
 
 /**

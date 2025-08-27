@@ -11,8 +11,44 @@ export class ModalActionListPage {
 
   get wContainer() { return $('#jun-tool .modal-container .modal-content'); }
 
-  setEvent() {
+  setFilterEvent() {
+    let timeout = null;
+    this.wContainer.querySelector('#api-list-filter-search')?.addEventListener('input', (e) => {
+      const filter = Store.apiListFilter;
+      filter.search = e.target.value.trim();
+      Store.apiListFilter = filter;
+      clearTimeout(timeout);
+      timeout = setTimeout(() => this.loadData(), 300);
+    });
 
+    this.wContainer.querySelector('#api-list-filter-mode')?.addEventListener('change', (e) => {
+      const filter = Store.apiListFilter;
+      filter.mode = e.target.value;
+      Store.apiListFilter = filter;
+      this.loadData();
+    });
+
+    this.wContainer.querySelector('#api-list-filter-method')?.addEventListener('change', (e) => {
+      debugger
+      const filter = Store.apiListFilter;
+      filter.method = e.target.value;
+      Store.apiListFilter = filter;
+      this.loadData();
+    });
+
+    this.wContainer.querySelector('#api-list-order-by-key')?.addEventListener('change', (e) => {
+      const filter = Store.apiListFilter;
+      filter.sort = e.target.value;
+      Store.apiListFilter = filter;
+      this.loadData();
+    });
+
+    this.wContainer.querySelector('#api-list-order-by-direction')?.addEventListener('change', (e) => {
+      const filter = Store.apiListFilter;
+      filter.sortDirection = e.target.value;
+      Store.apiListFilter = filter;
+      this.loadData();
+    });
   }
 
   getSortOptions = () => {
@@ -24,6 +60,7 @@ export class ModalActionListPage {
         </option>
       `).join('');
   }
+
   getSortDirectionOptions = () => {
     const selectedDirection = Store.apiListFilter.sortDirection;
     const sortDirections = ['asc', 'desc'];
@@ -32,6 +69,11 @@ export class ModalActionListPage {
           ${t(`modal.api-list.order-by.${direction}`)}
         </option>
       `).join('');
+  }
+
+  loadData() {
+    this.wContainer.querySelector('ul.api-list').innerHTML =
+      ModalApiListItem(this.dataSource) || `<div class="empty-state">${t('modal.api-list.empty')}</div>`;
   }
 
   render() {
@@ -60,9 +102,7 @@ export class ModalActionListPage {
             ${this.getSortDirectionOptions()}
           </select>
         </div>
-        <ul class="api-list">
-          ${ModalApiListItem(this.dataSource) || `<div class="empty-state">${t('modal.api-list.empty')}</div>`}
-        </ul>
+        <ul class="api-list"></ul>
         <button class="btn-control light" id="btn-add-new-api">${t('modal.api-list.add-new')}</button>
       </div>`;
   }
@@ -70,6 +110,7 @@ export class ModalActionListPage {
   static init(props) {
     const instance = new ModalActionListPage(props);
     instance.render();
-    instance.setEvent();
+    instance.setFilterEvent();
+    instance.loadData();
   }
 }
