@@ -32,6 +32,15 @@ export const actionMode = Object.freeze({
   MODAL_ENVIRONMENT_VARIABLES: "modal_environment_variables",
 });
 
+/** @type {FormActionMode} Form action modes for the application. */
+export const formActionMode = Object.freeze({
+  READ: "read",
+  CREATE: "create",
+  UPDATE: "update",
+  COPY_INSERT: "copyinsert",
+  DELETE: "delete",
+});
+
 /** @type {HttpMethod} HTTP methods used in API requests. */
 export const HttpMethods = Object.freeze({
   GET: "GET",

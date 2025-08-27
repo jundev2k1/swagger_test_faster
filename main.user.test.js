@@ -1,5 +1,5 @@
 import { $, $$ } from "./core/utils/helpers.js";
-import { actionMode, modalTabs, Store } from "./core/data/index.js";
+import { actionMode, formActionMode, modalTabs, Store } from "./core/data/index.js";
 import { UIBuilder } from "./core/ui/index.js";
 import {
   ModalActionListPage,
@@ -18,6 +18,8 @@ class SwaggerFaster {
     this.currentModalMode = '';
     /** @type {string|null} Target API ID */
     this.targetId = null;
+    /** @type {FormActionMode} Target Action */
+    this.targetAction = formActionMode.READ;
     /** @type {boolean} Modal open state */
     this.isOpenModal = false;
     /** @type {number|null} Timeout ID */
@@ -45,17 +47,17 @@ class SwaggerFaster {
     switch (mode) {
       case actionMode.SIDEBAR_API:
         this.currentSidebarTab = actionMode.SIDEBAR_API;
-        SidebarApiPage.init({ onRefresh: this.refreshPage });
+        SidebarApiPage.init({ onRefresh: (mode) => this.refreshPage(mode) });
         break;
 
       case actionMode.SIDEBAR_ENV:
         this.currentSidebarTab = actionMode.SIDEBAR_ENV;
-        SidebarConfigurationPage.init({ onRefresh: this.refreshPage });
+        SidebarConfigurationPage.init({ onRefresh: (mode) => this.refreshPage(mode) });
         break;
 
       case actionMode.SIDEBAR_HUB:
         this.currentSidebarTab = actionMode.SIDEBAR_HUB;
-        SidebarHubPage.init({ onRefresh: this.refreshPage });
+        SidebarHubPage.init({ onRefresh: (mode) => this.refreshPage(mode) });
         break;
     };
   }
@@ -86,22 +88,22 @@ class SwaggerFaster {
     switch (mode) {
       case actionMode.MODAL_API_LIST:
         this.currentModalMode = actionMode.MODAL_API_LIST;
-        ModalActionListPage.init({ onRefresh: this.refreshPage });
+        ModalActionListPage.init({ onRefresh: (mode) => this.refreshPage(mode) });
         break;
 
       case actionMode.MODAL_API_SETTING:
         this.currentModalMode = actionMode.MODAL_API_SETTING;
-        ModalActionSettingPage.init({ targetId: this.targetId, onRefresh: this.refreshPage });
+        ModalActionSettingPage.init({ targetId: this.targetId, onRefresh: (mode) => this.refreshPage(mode) });
         break;
 
       case actionMode.MODAL_ENVIRONMENT_SETTINGS:
         this.currentModalMode = actionMode.MODAL_ENVIRONMENT_SETTINGS;
-        ModalEnvironmentSettingPage.init({ onRefresh: this.refreshPage });
+        ModalEnvironmentSettingPage.init({ onRefresh: (mode) => this.refreshPage(mode) });
         break;
 
       case actionMode.MODAL_ENVIRONMENT_VARIABLES:
         this.currentModalMode = actionMode.MODAL_ENVIRONMENT_VARIABLES;
-        ModalVariableSettingPage.init({ onRefresh: this.refreshPage });
+        ModalVariableSettingPage.init({ onRefresh: (mode) => this.refreshPage(mode) });
         // Binding data for controls and set events
         this.loadEnvDropdownList();
         break;
@@ -263,8 +265,10 @@ class SwaggerFaster {
     if (!rootElement) document.body.appendChild(rootNode);
   }
 
-  refreshPage(modalMode = '') {
+  refreshPage(modalMode = '', targetActionMode = formActionMode.READ, targetId = null) {
     this.currentModalMode = modalMode;
+    this.targetId = targetId;
+    this.targetAction = targetActionMode;
 
     this.renderUI();
     this.setUiEvent();

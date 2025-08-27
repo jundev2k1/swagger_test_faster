@@ -75,6 +75,14 @@
  * @property {'modal_environment_settings'} MODAL_ENVIRONMENT_SETTINGS Modal: Environment settings page
  * @property {'modal_environment_variables'} MODAL_ENVIRONMENT_VARIABLES Modal: Environment variables page
  *
+ * - Form Action modes for the application.
+ * @typedef { Object } FormActionMode
+ * @property {'read'} READ Read mode
+ * @property {'create'} CREATE Create mode
+ * @property {'update'} UPDATE Update mode
+ * @property {'copyinsert'} COPY_INSERT Copy insert mode
+ * @property {'delete'} DELETE Delete mode
+ * 
  * - Modal tabs for the application.
  * @typedef { Object } ModalTab
  * @property {'api'} API modalTab
