@@ -69,7 +69,7 @@ export class ModalActionListPage {
     this.btnApiSettingItems?.forEach(btn => {
       btn.addEventListener('click', (event) => {
         event.preventDefault();
-        const targetId = event.target.dataset['apiId'];
+        const targetId = event.currentTarget.dataset['apiId'];
         this.onRefresh(actionMode.MODAL_API_SETTING, formActionMode.UPDATE, targetId);
       });
     });
@@ -77,7 +77,7 @@ export class ModalActionListPage {
     this.btnCopyApiSettingItems?.forEach(icon => {
       icon.addEventListener('click', (event) => {
         event.preventDefault();
-        const targetId = event.target.closest('.api-list-item').querySelector('a[data-api-id]')?.dataset['apiId'];
+        const targetId = event.currentTarget.closest('.api-list-item').querySelector('a[data-api-id]')?.dataset['apiId'];
         if (!targetId) return;
 
         this.onRefresh(actionMode.MODAL_API_SETTING, formActionMode.COPY_INSERT, targetId);
@@ -86,7 +86,6 @@ export class ModalActionListPage {
 
     this.btnRemoveApiSettingItems?.forEach(icon => {
       icon.addEventListener('click', (event) => {
-        debugger
         event.preventDefault();
         const targetId = event.target.closest('.api-list-item').querySelector('a[data-api-id]')?.dataset['apiId'];
         if (!targetId) return;
