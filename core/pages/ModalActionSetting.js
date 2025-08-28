@@ -1,6 +1,9 @@
-import { $, generateUniqueDateId } from "../utils/helpers.js";
-import { actionMode, DefaultFormData, formActionMode, Store } from "../data/index.js";
+import { $, $$, generateUniqueDateId, resolveObjectCookiePattern, resolveObjectVars } from "../utils/helpers.js";
+import { actionMode, ApiSettingMode, DefaultFormData, formActionMode, Store } from "../data/index.js";
 import { ModalActionSettingForm } from "../components/index.js";
+import { validator } from "../form/validate.js";
+import { Toast } from "../ui/toast.js";
+import { t } from "../i18n/translate.js";
 
 export class ModalActionSettingPage {
   constructor({ targetId, targetAction, onRefresh }) {
@@ -24,18 +27,89 @@ export class ModalActionSettingPage {
         alert('Invalid form action mode');
     }
 
-    this.settingMode = this.dataSource.mode;
     this.onRefresh = onRefresh;
   }
 
   get wContainer() { return $('#jun-tool .modal-container .modal-content'); }
+  get cblMode() { return this.wContainer.querySelectorAll('.segmented-control-group input[data-action="form-input"]'); }
+  get btnSaveChanges() { return $('#jun-tool .modal-container #btn-savechanges'); }
+  
+  /**
+   * Map the form data to the default form data.
+   * @param {ApiSetting} input The form data.
+   * @returns {ApiSetting} The default form data.
+   */
+  mapToFormData = (input) => {
+    const mappingInput = Object.entries(DefaultFormData.defaultApiSettingData)
+      .reduce((preValue, [key, value]) => {
+        preValue[key] = input[key] || value;
+        return preValue;
+      }, {});
+    return mappingInput;
+  }
+
+  setApiSettingErrorMessage(errorMessages = []) {
+    const targetForm = $(`#jun-tool .modal #api-setting-form`);
+    if (!targetForm) return;
+
+    // Clear previous error messages
+    this.clearErrorMessage();
+
+    $$('#jun-tool .modal .form-group').forEach(el => {
+      const input = el.querySelector('input, textarea, select');
+      if (!input) return;
+
+      const field = input.name || input.id;
+      const errorMessage = errorMessages.find(err => err.field === field)?.message || '';
+      const errorElement = input.closest('.form-group').querySelector('.error-message');
+
+      if (errorElement && errorElement.classList.contains('error-message')) {
+        errorElement.textContent = errorMessage;
+        input.classList.toggle('has-error', !!errorMessage);
+      }
+    });
+  }
+
+  clearErrorMessage() {
+    $$('#jun-tool .modal #api-setting-form .error-message').forEach(el => {
+      el.textContent = '';
+      el.previousElementSibling.classList.remove('has-error');
+    });
+  }
+
+  onModeChange(newMode) {
+    if (this.settingMode === newMode) return;
+
+    this.dataSource.mode = newMode;
+    this.render();
+    this.setEvent();
+  }
 
   onSaveChanges() {
+    const apiFormData = this.mapToFormData(this.dataSource);
+    const [isApiFormError, apiSettingErrorMessages] = validator.validateApiSetting(
+      resolveObjectCookiePattern(resolveObjectVars(apiFormData)));
+    this.setApiSettingErrorMessage(apiSettingErrorMessages);
+    if (isApiFormError) return;
 
+    const settingIndex = Store.apiSettings.findIndex(setting => setting.id === this.targetId);
+    if (settingIndex < 0) {
+      Store.apiSettings = [apiFormData, ...Store.apiSettings];
+    } else {
+      apiFormData.modifiedAt = new Date().toISOString();
+      const settings = [...Store.apiSettings];
+      settings[settingIndex] = apiFormData;
+      Store.apiSettings = [...settings];
+    }
+
+    Toast.success(t('message.save-changes.api-setting.success'));
+    this.render();
   }
 
   setEvent() {
-
+    this.btnSaveChanges?.addEventListener('click', () => this.onSaveChanges());
+    this.cblMode.forEach(input =>
+      input?.addEventListener('change', (e) => this.onModeChange(e.target.value)));
   }
 
   render() {
